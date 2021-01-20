@@ -32,68 +32,99 @@ const CountriesTable = ({ countries }) => {
   );
   const orderedCountries=orderBy(countries);
   return (
-    <div className="block-two">
-      <div className="continent">
+
+    <div className="block-two container-fluid">
+<div className="row ">
+      <div className="continent col-lg-4 col-md-4 col-sm-6 col-xs-12">
       <Link href={`/continent/Africa`} key="Africa">
         <div className="btn">
           <h1>Africa</h1>
           </div>
           </Link>
+          <div>
         {africa.map((countries) =>(
+          <div>
+            <Link href={`/country/${countries.name}`} key={countries.name}>
+              <div className="btn">{countries.name}</div>
+          </Link>
+          </div>
+        ))}
+          </div>
+      </div>
+      <div className="continent col-lg-4 col-md-4 col-sm-6 col-xs-12">
+      <Link href={`/continent/Asia`} key="Asia">
+        <div className="btn">
+          <h1>Asia</h1>
+          </div>
+          </Link>
+          <div>
+        {asia.map((countries) =>(
+          
+            <Link href={`/country/${countries.name}`} key={countries.name}>
+
+              <div className="btn">{countries.name}</div>
+          </Link>
+        ))}
+        </div>
+      </div>
+      <div className="continent col-lg-4 col-md-4 col-sm-6 col-xs-12">
+      <Link href={`/continent/Australia`} key="Australia">
+        <div className="btn">
+          <h1>Australia/Oceania</h1>
+          </div>
+          </Link>
+          <div>
+        {australia.map((countries) =>(
             <Link href={`/country/${countries.name}`} key={countries.name}>
               <div className="btn">{countries.name}</div>
           </Link>
         ))}
+        </div>
       </div>
-      <div className="continent">
-        <h1>Asia</h1>
-        {asia.map((countries) =>(
-            <Link href={`/country/${countries.name}`} key={countries.name}>
-            <div className={styles.row}>
-              <div className={styles.name}>{countries.name}</div>
-            </div>
+      <div className="continent col-lg-4 col-md-4 col-sm-6 col-xs-12">
+      <Link href={`/continent/Europe`} key="Europe">
+        <div className="btn">
+          <h1>Europe</h1>
+          </div>
           </Link>
-        ))}
-      </div>
-      <div className="continent">
-        <h1>Australia / Oceania</h1>
-        {australia.map((countries) =>(
-            <Link href={`/country/${countries.name}`} key={countries.name}>
-            <div className={styles.row}>
-              <div className={styles.name}>{countries.name}</div>
-            </div>
-          </Link>
-        ))}
-      </div>
-      <div className="continent">
-        <h1>Europe</h1>
+          <div>
         {europe.map((countries) =>(
+          <div>
             <Link href={`/country/${countries.name}`} key={countries.name}>
-            <div className={styles.row}>
-              <div className={styles.name}>{countries.name}</div>
-            </div>
+              <div className="btn">{countries.name}</div>
           </Link>
+          </div>
         ))}
+        </div>
       </div>
-      <div className="continent">
-        <h1>North America</h1>
+      <div className="continent col-lg-4 col-md-4 col-sm-6 col-xs-12">
+      <Link href={`/continent/North America`} key="North America">
+        <div className="btn">
+          <h1>North America</h1>
+          </div>
+          </Link>
+          <div>
         {northamerica.map((countries) =>(
-            <Link href={`/country/${countries.name}`} key={countries.name,countries.continent}>
-            <div className={styles.row}>
-              <div className={styles.name}>{countries.name}</div>
-            </div>
+            <Link href={`/country/${countries.name}`} key={countries.name}>
+              <div className="btn">{countries.name}</div>
           </Link>
         ))}
+        </div>
       </div>
-      <div className="continent">
-        <h1>South America</h1>
+      <div className="continent col-lg-4 col-md-4 col-sm-6 col-xs-12">
+      <Link href={`/continent/South America`} key="South America">
+        <div className="btn">
+          <h1>South America</h1>
+          </div>
+          </Link>
+          <div>
         {southamerica.map((countries) =>(
             <Link href={`/country/${countries.name}`} key={countries.name}>
-            <div className={styles.row}>
-              <div className={styles.name}>{countries.name}</div>
-            </div>
+              <div className="btn">{countries.name}</div>
           </Link>
         ))}
+        </div>
+      </div>
       </div>
     </div>
      );

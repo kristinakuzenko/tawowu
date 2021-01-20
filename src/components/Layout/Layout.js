@@ -3,8 +3,40 @@ import Link from "next/link";
 import React from 'react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; 
 import { faSearch } from "@fortawesome/free-solid-svg-icons"; 
-import styles from './layout.module.css'
-const Layout=({children, title = "Tawowu"})=>{
+import styles from './layout.module.css';
+
+
+const orderBy = (countries) => {
+  return countries.sort((a, b) => (a.name> b.name ? 1 : -1));
+};
+
+const Layout=({countries,children, title = "Tawowu"})=>{
+  console.log(countries);
+  const europe = countries.filter(
+    (country) =>
+      country.continent.toLowerCase().includes("europe") 
+  );
+  const australia = countries.filter(
+    (country) =>
+      country.continent.toLowerCase().includes("australia") 
+  );
+  const africa = countries.filter(
+    (country) =>
+      country.continent.toLowerCase().includes("africa") 
+  );
+  const northamerica = countries.filter(
+    (country) =>
+      country.continent.toLowerCase().includes("north america") 
+  );
+  const southamerica = countries.filter(
+    (country) =>
+      country.continent.toLowerCase().includes("south america") 
+  );
+  const asia = countries.filter(
+    (country) =>
+      country.continent.toLowerCase().includes("asia") 
+  );
+  const orderedCountries=orderBy(countries);
   return(
     <div>
       <Head>
@@ -25,12 +57,24 @@ const Layout=({children, title = "Tawowu"})=>{
   <div className="modal-dialog">
     <div className="modal-content">
         <input className="input-search" type="text" placeholder=" Search for cities, countries, ..." ></input>
+        <Link href={`/continent/Africa`} key="Africa">
         <p className="btn">Africa</p>
-        <p className="btn">America</p>
+        </Link>
+        <Link href={`/continent/Asia`} key="Asia">
         <p className="btn">Asia</p>
-        <p className="btn">Australia</p>
+        </Link>
+        <Link href={`/continent/Australia`} key="Australia">
+        <p className="btn">Australia/Oceania</p>
+        </Link>
+        <Link href={`/continent/Europe`} key="Europe">
         <p className="btn">Europe</p>
-        <p className="btn">Oceania</p>
+        </Link>
+        <Link href={`/continent/North America`} key="North America">
+        <p className="btn">North America</p>
+        </Link>
+        <Link href={`/continent/South America`} key="South America">
+        <p className="btn">South America</p>
+        </Link>
         <br></br>
         <p className="btn">About</p>
         <br></br>
@@ -45,45 +89,76 @@ const Layout=({children, title = "Tawowu"})=>{
         <div className="collapse navbar-collapse " id="navbarResponsive">
             <ul className="navbar-nav ">
             <li className="nav-item dropdown">
-            <Link href="/posts/africa"><a className="nav-link " href="#" data-toggle="dropdown"> Africa </a></Link>
+            <Link href={`/continent/Africa`} key="Africa">
+              <a className="nav-link " data-toggle="dropdown"> Africa </a>
+            </Link>
                     <ul className="dropdown-menu">
-                      <li><a className="dropdown-item" href="#"> Submenu item 1</a></li>
-                      <li><a className="dropdown-item" href="#"> Submenu item 2 </a></li>
+                    {africa.map((countries) =>(
+            <Link href={`/country/${countries.name}`} key={countries.name}>
+              <li><a className="dropdown-item btn"> {countries.name}</a></li>
+          </Link>
+        ))}
                     </ul>
               </li>
               <li className="nav-item dropdown">
+              <Link href={`/continent/Asia`} key="Asia">
                   <a className="nav-link " href="#" data-toggle="dropdown"> Asia </a>
+              </Link>
                     <ul className="dropdown-menu">
-                      <li><a className="dropdown-item" href="#"> Submenu item 1</a></li>
-                      <li><a className="dropdown-item" href="#"> Submenu item 2 </a></li>
+                    {asia.map((countries) =>(
+            <Link href={`/country/${countries.name}`} key={countries.name}>
+              <li><a className="dropdown-item btn"> {countries.name}</a></li>
+          </Link>
+        ))}
                     </ul>
               </li>
               <li className="nav-item dropdown">
-                  <a className="nav-link " href="#" data-toggle="dropdown"> Australia </a>
+              <Link href={`/continent/Australia`} key="Australia">
+                  <a className="nav-link " href="#" data-toggle="dropdown"> Australia/Oceania </a>
+              </Link>
                     <ul className="dropdown-menu">
-                      <li><a className="dropdown-item" href="#"> Submenu item 1</a></li>
-                      <li><a className="dropdown-item" href="#"> Submenu item 2 </a></li>
+                    {australia.map((countries) =>(
+            <Link href={`/country/${countries.name}`} key={countries.name}>
+              <li><a className="dropdown-item btn"> {countries.name}</a></li>
+          </Link>
+        ))}
                     </ul>
               </li>
+            
               <li className="nav-item dropdown">
+              <Link href={`/continent/Europe`} key="Europe">
                   <a className="nav-link " href="#" data-toggle="dropdown"> Europe </a>
+              </Link>
                     <ul className="dropdown-menu">
-                      <li><a className="dropdown-item" href="#"> Austria</a></li>
-                      <li><a className="dropdown-item" href="#"> Submenu item 2 </a></li>
+                    {europe.map((countries) =>(
+            <Link href={`/country/${countries.name}`} key={countries.name}>
+              <li><a className="dropdown-item btn"> {countries.name}</a></li>
+          </Link>
+        ))}
                     </ul>
               </li>
               <li className="nav-item dropdown">
+              <Link href={`/continent/North America`} key="North America">
                   <a className="nav-link " href="#" data-toggle="dropdown"> NorthAmerica </a>
+              </Link>
                     <ul className="dropdown-menu">
-                      <li><a className="dropdown-item" href="#"> Submenu item 1</a></li>
-                      <li><a className="dropdown-item" href="#"> Submenu item 2 </a></li>
+                    {northamerica.map((countries) =>(
+            <Link href={`/country/${countries.name}`} key={countries.name}>
+              <li><a className="dropdown-item btn"> {countries.name}</a></li>
+          </Link>
+        ))}
                     </ul>
               </li>
               <li className="nav-item dropdown">
+              <Link href={`/continent/South America`} key="South America">
                   <a className="nav-link " href="#" data-toggle="dropdown"> SouthAmerica </a>
+                </Link>
                     <ul className="dropdown-menu">
-                      <li><a className="dropdown-item" href="#"> Submenu item 1</a></li>
-                      <li><a className="dropdown-item" href="#"> Submenu item 2 </a></li>
+                    {southamerica.map((countries) =>(
+            <Link href={`/country/${countries.name}`} key={countries.name}>
+              <li><a className="dropdown-item btn"> {countries.name}</a></li>
+          </Link>
+        ))}
                     </ul>
               </li>
               <li className="nav-item">
@@ -111,4 +186,7 @@ const Layout=({children, title = "Tawowu"})=>{
     </div>
   );
 };
-export default Layout
+
+export default Layout;
+
+

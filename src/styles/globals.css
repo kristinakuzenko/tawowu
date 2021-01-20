@@ -12,7 +12,7 @@
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
- height: 100vh;
+ height: 97vh;
  display: flex;
  align-items: center; 
  justify-content: center;
@@ -73,6 +73,7 @@
 .navbar .nav-item .dropdown-menu{ margin-top:0; }
 }
 .dropdown-menu{
+  text-align: center;
   background-image: linear-gradient(#a0481c   0%, #eb9f79 140%);
 }
 .dropdown-item:hover{
@@ -118,11 +119,57 @@ textarea:focus, input:focus{
 
 .block-two{
   background-image: linear-gradient(315deg, #fc935f  0%, #5e2c2c 120%);
-  height: 100vh;
+  height: 94vh;
 }
-.country{
-  margin-top: 100px;
+.image{
+  width: 15vh;
+  height: 15vh;
 }
+
+.main-header2{
+  float: left;
+  font-family: SangbleuSans,serif;
+  color: black;
+  font-size: 100px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  width: 80%;
+  padding: 20px;
+  letter-spacing: -.02em;
+  text-align: right;
+}
+.discover2{
+  padding-top: 80px;
+  font-family: Helvetica,sans-serif;
+  color: black;
+  font-size: 20px;
+
+}
+.main2{
+  overflow: hidden;
+}
+.contour{
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+.countries{
+  background-image: linear-gradient(370deg,  #fc935f  0%, #5e2c2c 120%);
+}
+.continent2{
+  margin-top: 60px;
+  height: 97vh;
+  background-image: linear-gradient( 150deg,#fc935f  0%, #5e2c2c 120%);
+}
+.continent-row{
+margin-top: 100px;
+}
+
 
 
 

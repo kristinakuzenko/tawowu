@@ -1,15 +1,15 @@
 import Layout from "../../components/Layout/Layout";
 const Country=({country,countries})=>{
-  const australia = countries.filter(
+  const myCountry = countries.filter(
     (country1) =>
       country1.name.includes(country) 
   );
-  console.log(australia);
-  return <Layout title={country}>
+  return <Layout countries={countries} title={country}>
 
-        {australia.map((countries) =>(
+        {myCountry.map((countries) =>(
             <div className="country">
-              <div >{countries.name}</div>
+              <div>{countries.name}</div>
+              <img className="image"  src={countries.image} ></img>
             </div>
         ))}
   </Layout>;

@@ -22,7 +22,7 @@ export default function Home({ countries }) {
   };
 
   return (
-    <Layout>
+    <Layout countries={countries}>
 <SearchInput></SearchInput>
 
       <CountriesTable countries={countries} />
