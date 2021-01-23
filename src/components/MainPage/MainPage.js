@@ -1,6 +1,4 @@
-
-
-const SearchInput = ({ ...rest }) => {
+const MainPage = ({ ...rest }) => {
   return (
    <div>
       <div className="main-block ">        </div>
@@ -23,4 +21,4 @@ const SearchInput = ({ ...rest }) => {
   );
 };
 
-export default SearchInput;
+export default MainPage;

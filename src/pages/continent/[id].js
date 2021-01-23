@@ -1,5 +1,5 @@
 import Layout from "../../components/Layout/Layout";
-
+import Link from "next/link";
 const orderBy = (countries) => {
   return countries.sort((a, b) => (a.name> b.name ? 1 : -1));
 };
@@ -14,7 +14,10 @@ const Continent=({continent, continents, countries})=>{
   );
   const orderedCountries=orderBy(countries);
   return <Layout countries={countries} title={continent}>
+
+
 <div className="continent2">
+
 {myContinent.map((continents) =>(
             <div >   
         <div className="main-header2">
@@ -38,14 +41,19 @@ const Continent=({continent, continents, countries})=>{
 <div className="countries container-fluid">
 <div className="row">
         {myCountry.map((countries) =>(
-          <div className="one-country col-lg-2 col-md-4 col-sm-6 col-xs-12">
+           <Link href={`/country/${countries.name}`} key={countries.name}>
+          <div className="btn one-country col-lg-2 col-md-4 col-sm-6 col-xs-12">
               <div>{countries.name}</div>
-              <img className="image"  src={countries.image} ></img>
+              <img className="image"  src={countries.icon} ></img>
            </div>
+           </Link>
           
         ))}
          </div>
+
+         
 </div>
+
   </Layout>;
 
 }

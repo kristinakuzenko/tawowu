@@ -2,7 +2,7 @@ import Head from "next/head";
 import { useState } from "react";
 import CountriesTable from "../components/CountriesTable/CountriesTable";
 import Layout from "../components/Layout/Layout";
-import SearchInput from "../components/MainPage/MainPage";
+import MainPage from "../components/MainPage/MainPage";
 import styles from "../styles/Home.module.css";
 
 export default function Home({ countries }) {
@@ -23,7 +23,7 @@ export default function Home({ countries }) {
 
   return (
     <Layout countries={countries}>
-<SearchInput></SearchInput>
+<MainPage></MainPage>
 
       <CountriesTable countries={countries} />
     </Layout>

@@ -38,14 +38,14 @@ const CountriesTable = ({ countries }) => {
       <div className="continent col-lg-4 col-md-4 col-sm-6 col-xs-12">
       <Link href={`/continent/Africa`} key="Africa">
         <div className="btn">
-          <h1>Africa</h1>
+          <h1 className="continent-table">Africa</h1>
           </div>
           </Link>
           <div>
         {africa.map((countries) =>(
           <div>
             <Link href={`/country/${countries.name}`} key={countries.name}>
-              <div className="btn">{countries.name}</div>
+              <div className="btn country-table">{countries.name}</div>
           </Link>
           </div>
         ))}
@@ -54,7 +54,7 @@ const CountriesTable = ({ countries }) => {
       <div className="continent col-lg-4 col-md-4 col-sm-6 col-xs-12">
       <Link href={`/continent/Asia`} key="Asia">
         <div className="btn">
-          <h1>Asia</h1>
+          <h1 className="continent-table">Asia</h1>
           </div>
           </Link>
           <div>
@@ -62,7 +62,7 @@ const CountriesTable = ({ countries }) => {
           
             <Link href={`/country/${countries.name}`} key={countries.name}>
 
-              <div className="btn">{countries.name}</div>
+              <div className="btn country-table">{countries.name}</div>
           </Link>
         ))}
         </div>
@@ -70,13 +70,13 @@ const CountriesTable = ({ countries }) => {
       <div className="continent col-lg-4 col-md-4 col-sm-6 col-xs-12">
       <Link href={`/continent/Australia`} key="Australia">
         <div className="btn">
-          <h1>Australia/Oceania</h1>
+          <h1 className="continent-table">Australia/Oceania</h1>
           </div>
           </Link>
           <div>
         {australia.map((countries) =>(
             <Link href={`/country/${countries.name}`} key={countries.name}>
-              <div className="btn">{countries.name}</div>
+              <div className="btn country-table">{countries.name}</div>
           </Link>
         ))}
         </div>
@@ -84,14 +84,14 @@ const CountriesTable = ({ countries }) => {
       <div className="continent col-lg-4 col-md-4 col-sm-6 col-xs-12">
       <Link href={`/continent/Europe`} key="Europe">
         <div className="btn">
-          <h1>Europe</h1>
+          <h1 className="continent-table">Europe</h1>
           </div>
           </Link>
           <div>
         {europe.map((countries) =>(
           <div>
             <Link href={`/country/${countries.name}`} key={countries.name}>
-              <div className="btn">{countries.name}</div>
+              <div className="btn country-table">{countries.name}</div>
           </Link>
           </div>
         ))}
@@ -100,13 +100,13 @@ const CountriesTable = ({ countries }) => {
       <div className="continent col-lg-4 col-md-4 col-sm-6 col-xs-12">
       <Link href={`/continent/North America`} key="North America">
         <div className="btn">
-          <h1>North America</h1>
+          <h1 className="continent-table">North America</h1>
           </div>
           </Link>
           <div>
         {northamerica.map((countries) =>(
             <Link href={`/country/${countries.name}`} key={countries.name}>
-              <div className="btn">{countries.name}</div>
+              <div className="btn country-table">{countries.name}</div>
           </Link>
         ))}
         </div>
@@ -114,13 +114,13 @@ const CountriesTable = ({ countries }) => {
       <div className="continent col-lg-4 col-md-4 col-sm-6 col-xs-12">
       <Link href={`/continent/South America`} key="South America">
         <div className="btn">
-          <h1>South America</h1>
+          <h1 className="continent-table">South America</h1>
           </div>
           </Link>
           <div>
         {southamerica.map((countries) =>(
             <Link href={`/country/${countries.name}`} key={countries.name}>
-              <div className="btn">{countries.name}</div>
+              <div className="btn country-table">{countries.name}</div>
           </Link>
         ))}
         </div>

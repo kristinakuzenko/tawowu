@@ -109,6 +109,10 @@ textarea:focus, input:focus{
 .close-btn{
   color: #faccb6;
 }
+.dropdown-item{
+  font-size: 16px;
+}
+
 
 
 
@@ -169,8 +173,70 @@ textarea:focus, input:focus{
 .continent-row{
 margin-top: 100px;
 }
+.country-table{
+  font-size: 16px;
+}
+.continent-table{
+  font-size: 50px;
+}
 
 
+/*country*/
+.carousel-inner{
+  height: 97vh;
+  width: 100%;
+}
+.carousel-img{
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+ height: 97vh;
+ display: flex;
+ align-items: center; 
+ justify-content: center;
+ filter: blur(3px);
+ -webkit-filter: blur(3px);
+}
+.carousel-caption{
+  top: 50%;
+transform: translateY(-50%);
+}
+.city-descr{
+  float: right;
+}
+.image-city{
+  width: 50vh;
+  height: 35vh;
+}
+.city-block{
+  width: 100%;
+}
+/*input*/
+.wrapper {
+  width: 100%;
+  display: flex;
+  align-items: center;
+
+  background-color: var(--background-color-dark);
+  border-radius: 8px;
+  padding-left: 16px;
+
+  color: var(--text-color-secondary);
+}
+
+.input {
+  border: none;
+  background-color: transparent;
+  padding: 16px;
+  width: 100%;
+  height: 100%;
+  outline: none;
+}
+
+.input::placeholder {
+  color: var(--text-color-secondary);
+}
 
 
 
