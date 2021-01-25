@@ -26,7 +26,7 @@ const Country=({country,countries, cities})=>{
   };
 
   return <Layout countries={countries} title={country}>
-<div>
+<div className="country-page">
 
 
         {myCountry.map((countries) =>(
@@ -102,31 +102,48 @@ const Country=({country,countries, cities})=>{
 </div>
 </div>
         ))}
-      <div>
-      <SearchInput
+      <div className="country-page2">
+        <div className="before-input"> </div>
+        <div className="input-div">
+        <SearchInput
           placeholder="Search for city"
           onChange={onInputChange}
           />
-      </div>
-                 
-        <div className="countries">
+        </div>
+        <div className="before-input"> </div>
+        <div className="btn">
+        <span type="button" className="nav-link search" href="#" data-toggle="modal" data-target="#exampleModal2">Filter</span>
+    <div className="modal fade " id="exampleModal2" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div className="modal-dialog">
+    <div className="modal-content">
+        
+        <span className="btn close-btn modal-item" data-dismiss="modal">Close</span>
+    </div>
+  </div>
+</div>
+        </div>
+          <div className="">
 
-        {filteredCities.map((cities) =>(
-          <div >
+
+{filteredCities.map((cities) =>(
 
 <Link href={`/city/${cities.city}`} key={cities.city}>
-            <div className="btn city-block">
-              <img className="image-city "  src={cities.image} ></img>
-              <div className="city-descr ">
-                <h1>{cities.city}</h1>
-                <p>{cities.description}</p>
-              </div>
-           </div>
-           </Link>
-           </div>
-        ))}
+<div className="container-fluid btn">
+      <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+      <img className="image-city "  src={cities.image} ></img>
+      </div>
+     
+      <div className="city-descr col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9">
+        <h1>{cities.city}</h1>
+        <p>{cities.description}</p>
+      </div>
+   </div>
+   </Link>
+))}
+ </div>
+      </div>
+                 
         
-         </div>
 </div>
   </Layout>;
 }

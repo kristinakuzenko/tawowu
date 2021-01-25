@@ -38,7 +38,7 @@ const Layout=({countries,children, title = "Tawowu"})=>{
   );
   const orderedCountries=orderBy(countries);
   return(
-    <div>
+    <div className="layout-main">
       <Head>
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -49,7 +49,7 @@ const Layout=({countries,children, title = "Tawowu"})=>{
          <title>{title}</title>
     
       </Head>
-      <header className={styles.header}>
+      <header className="header">
       <nav className="navbar navbar-expand-lg navbar-dark fixed-top">
     <div className="">
     <span type="button" className="nav-link search" href="#" data-toggle="modal" data-target="#exampleModal"><FontAwesomeIcon icon={faSearch}></FontAwesomeIcon> </span>
@@ -58,27 +58,27 @@ const Layout=({countries,children, title = "Tawowu"})=>{
     <div className="modal-content">
         <input className="input-search" type="text" placeholder=" Search for cities, countries, ..." ></input>
         <Link href={`/continent/Africa`} key="Africa">
-        <p className="btn">Africa</p>
+        <p className="btn modal-item">Africa</p>
         </Link>
         <Link href={`/continent/Asia`} key="Asia">
-        <p className="btn">Asia</p>
+        <p className="btn modal-item">Asia</p>
         </Link>
         <Link href={`/continent/Australia`} key="Australia">
-        <p className="btn">Australia/Oceania</p>
+        <p className="btn modal-item">Australia/Oceania</p>
         </Link>
         <Link href={`/continent/Europe`} key="Europe">
-        <p className="btn">Europe</p>
+        <p className="btn modal-item">Europe</p>
         </Link>
         <Link href={`/continent/North America`} key="North America">
-        <p className="btn">North America</p>
+        <p className="btn modal-item">North America</p>
         </Link>
         <Link href={`/continent/South America`} key="South America">
-        <p className="btn">South America</p>
+        <p className="btn modal-item">South America</p>
         </Link>
         <br></br>
-        <p className="btn">About</p>
+        <p className="btn modal-item">About</p>
         <br></br>
-        <span className="btn close-btn" data-dismiss="modal">Close</span>
+        <span className="btn close-btn modal-item" data-dismiss="modal">Close</span>
     </div>
   </div>
 </div>
@@ -179,9 +179,9 @@ const Layout=({countries,children, title = "Tawowu"})=>{
 
           <main className={styles.main}>{children}</main>
 
-      <footer>
-
-      </footer>
+          <footer className="footer">
+            Thank you for using Tawowu!
+          </footer>
 
     </div>
   );
