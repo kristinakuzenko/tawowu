@@ -43,7 +43,7 @@ const Country=({country,countries, cities})=>{
     <div className="carousel-inner">
       <div className="item active">
         <img className="w-100 carousel-img" src={countries.images[0]} ></img>
-        <div className="carousel-caption d-none d-md-block">
+        <div className="carousel-caption  carousel-caption-center d-none d-md-block">
         <div className="main-header">
           <div>
           <span>Welcome </span>
@@ -59,7 +59,7 @@ const Country=({country,countries, cities})=>{
 
       <div className="item">
         <img className="w-100 carousel-img" src={countries.images[1]}  ></img>
-        <div className="carousel-caption d-none d-md-block">
+        <div className="carousel-caption carousel-caption-center d-none d-md-block">
         <div className="main-header">
           <div>
           <span>Welcome </span>
@@ -75,7 +75,7 @@ const Country=({country,countries, cities})=>{
     
       <div className="item">
         <img className="w-100 carousel-img" src={countries.images[2]}  ></img>
-        <div className="carousel-caption d-none d-md-block">
+        <div className="carousel-caption carousel-caption-center d-none d-md-block">
         <div className="main-header">
           <div>
           <span>Welcome </span>
