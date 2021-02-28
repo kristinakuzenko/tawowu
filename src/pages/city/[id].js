@@ -1,5 +1,7 @@
 import Layout from "../../components/Layout/Layout";
 import Link from "next/link";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; 
+import {  faMapMarkedAlt } from "@fortawesome/free-solid-svg-icons"; 
 const orderBy = (countries) => {
   return countries.sort((a, b) => (a.name> b.name ? 1 : -1));
 };
@@ -39,6 +41,7 @@ const City=({city,cities,countries,places})=>{
         </div>
     </div>
     <div className="city-filter container-fluid ">
+    
       <div className="col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2 filter-item "> 
       <p className="filter-name">Sightseeing</p>
       </div>
@@ -64,7 +67,19 @@ const City=({city,cities,countries,places})=>{
       <div className="sightseeing-div">
 <h1 className="sightseeing-h">Things to do in {city}</h1>
       </div>
+
       <div className="places-div">
+        
+      <div className=" container-fluid ">
+      <div className="col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  "> 
+      <img className="image-city "  src=".../../public/background.jpg" ></img>
+      </div>
+
+
+    </div>
+      <div className="btn filter-btn">
+        <p className="filter-p">Filter</p>
+      </div>
       {sightseeing.map((places) =>(
       <div className="one-place">
         <h1> {places.name} </h1> 

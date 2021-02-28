@@ -12,7 +12,7 @@ const Continent=({continent, continents, countries})=>{
     (country1) =>
       country1.name.includes(continent) 
   );
-  const orderedCountries=orderBy(countries);
+  const orderedCountries=orderBy(myCountry);
   return <Layout countries={countries} title={continent}>
 
 
@@ -38,20 +38,18 @@ const Continent=({continent, continents, countries})=>{
         ))}
       
 </div>
-<div className="countries container-fluid">
-<div className="row">
-        {myCountry.map((countries) =>(
+<div className="countries container-fluid btn">
+        {orderedCountries.map((countries) =>(
            <Link href={`/country/${countries.name}`} key={countries.name}>
-          <div className="btn one-country col-lg-2 col-md-4 col-sm-6 col-xs-12">
-              <div>{countries.name}</div>
-              <img className="image"  src={countries.icon} ></img>
-           </div>
+      <div className="city-descr col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4">
+      <img src={countries.icon}/>
+        <h1 className="country-city">{countries.name}</h1>
+      </div>
            </Link>
           
         ))}
-         </div>
 
-         
+
 </div>
 
   </Layout>;
