@@ -16,7 +16,7 @@ const Country=({country,countries, cities})=>{
 
   const filteredCities = myCities.filter(
     (cities) =>
-      cities.city.toLowerCase().includes(keyword) 
+      cities.city.toLowerCase().startsWith(keyword.toLowerCase()) 
   );
 
   const onInputChange = (e) => {
@@ -64,9 +64,9 @@ const Country=({country,countries, cities})=>{
 <Link href={`/city/${cities.city}`} key={cities.city}>
 
       <div className="city-descr col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4">
-      <img className="city-icon" src={cities.icon}/>
+      <img className="city-icon" src={cities.icon}></img>
         <h1 className="country-city">{cities.city}</h1>
-        <div className="country-desc">{cities.description}</div>
+        <h1 className="country-desc">{cities.description}</h1>
         
       </div>
 

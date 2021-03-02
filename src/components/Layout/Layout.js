@@ -9,33 +9,37 @@ import styles from './layout.module.css';
 const orderBy = (countries) => {
   return countries.sort((a, b) => (a.name> b.name ? 1 : -1));
 };
-
 const Layout=({countries,children, title = "Tawowu"})=>{
   console.log(countries);
-  const europe = countries.filter(
+  const e = countries.filter(
     (country) =>
       country.continent.toLowerCase().includes("europe") 
   );
+  const europe=orderBy(e);
   const australia = countries.filter(
     (country) =>
       country.continent.toLowerCase().includes("australia") 
   );
-  const africa = countries.filter(
+  const a = countries.filter(
     (country) =>
       country.continent.toLowerCase().includes("africa") 
   );
-  const northamerica = countries.filter(
+  const africa=orderBy(a);
+  const n = countries.filter(
     (country) =>
       country.continent.toLowerCase().includes("north america") 
   );
-  const southamerica = countries.filter(
+  const northamerica=orderBy(n);
+  const s = countries.filter(
     (country) =>
       country.continent.toLowerCase().includes("south america") 
   );
-  const asia = countries.filter(
+  const southamerica=orderBy(s);
+  const as = countries.filter(
     (country) =>
       country.continent.toLowerCase().includes("asia") 
   );
+  const asia=orderBy(as);
   const orderedCountries=orderBy(countries);
   return(
     <div className="layout-main">
