@@ -26,7 +26,7 @@ const City=({city,cities,countries,places})=>{
     (city1) =>
     city1.city.includes(city) 
   );
-  const myPlaces = places.filter(
+  let myPlaces = places.filter(
     (places) =>
     places.city.includes(city) 
   );
@@ -46,8 +46,10 @@ const City=({city,cities,countries,places})=>{
     (places) =>
     places.type.includes(4) 
   );
-
-
+ let filterValue=null;
+const handleClick = (value)=>{
+  filterValue=value;
+}
   return <Layout countries={countries} title={city}>
 
 {myCity.map((cities) =>(
@@ -91,7 +93,7 @@ const City=({city,cities,countries,places})=>{
       <div className="container-fluid ">
         <div className="icon-container" >
         <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  " > 
-        <img className="small-icon "  src="../art.png" ></img>
+        <img className="small-icon "  src="../art.png" onClick={handleClick(4)} />
     </div>
 
       <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  "> 
@@ -111,12 +113,12 @@ const City=({city,cities,countries,places})=>{
       </div>
       </div>
       </div>
-      {sightseeing.map((places) =>(
+      {myPlaces.filter((s)=>filterValue ? s.filter.includes(filterValue) : true).map((places) =>(
       <div className="one-place">
         <h1 className="place-name"> {places.name} </h1> 
         <p className="place-desc">{places.description} </p>
         <div className="container-fluid ">
-        <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+        <div className="image-city-div col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
       <img className="image-city "  src={places.image} ></img>
       </div>
      
