@@ -296,6 +296,8 @@ transform: translateY(-15%);
 .city-filter{
   height: 70px;
  background-color: #faccb6;
+  position: relative;
+  z-index: 99;
 }
 .filter-item{
   padding-top: 10px;
