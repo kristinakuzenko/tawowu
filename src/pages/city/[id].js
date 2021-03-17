@@ -8,7 +8,7 @@ import {faMapMarkedAlt} from "@fortawesome/free-solid-svg-icons";
 const City = ({city, cities, countries, places}) => {
 
   const [placeType, setPlaceType] = useState(-1);
-  const [placeFilter, setPlaceFilter] = useState("");
+  const [placeFilter, setPlaceFilter] = useState(-1);
 
   const currentCity = cities.filter(cityItem => cityItem.city.toLowerCase() === city.toLowerCase());
 
@@ -29,6 +29,8 @@ const City = ({city, cities, countries, places}) => {
     [...cityPlaces().filter(place => place.type.indexOf(4) !== -1)]
   ]
 
+  // [[1,2], [3,4]].flat() => [1,2,3,4]
+
   // console.log('placesByType', cityPlacesByType);
 
   const cityPlacesFilteredByActiveType = () => {
@@ -36,6 +38,13 @@ const City = ({city, cities, countries, places}) => {
       return cityPlacesByType.flat();
     }
     return cityPlacesByType[placeType - 1];
+  }
+
+  const cityPlacesFilteredByActiveFilter = () => {
+    if (placeFilter === -1) {
+      return cityPlacesByType.flat();
+    }
+    return cityPlacesByType[placeFilter - 1];
   }
 
   // console.log('cityPlacesFilteredByActiveType', cityPlacesFilteredByActiveType());
@@ -48,6 +57,8 @@ const City = ({city, cities, countries, places}) => {
     }
     setPlaceType(filterValue);
   }
+
+  const mySortingFunction = (a, b) => a.name.localeCompare(b.name);
 
   return <Layout countries={countries} title={city}>
     {currentCity.map((cityItem) => (
@@ -111,7 +122,7 @@ const City = ({city, cities, countries, places}) => {
                 </div>
               </div>
             </div>
-            {cityPlacesFilteredByActiveType().map((place) => (
+            {cityPlacesFilteredByActiveType().sort(mySortingFunction).map((place) => (
                 <div className="one-place">
                   <h1 className="place-name"> {place.name} </h1>
                   <p className="place-desc">{place.description} </p>
