@@ -29,30 +29,28 @@ const Country = ({country, countries, cities}) => {
   return <Layout countries={countries} title={country}>
     <div className="country-page">
       <div className="country-page2">
-        {filteredCountries().map((country) => (
-            <div className="country-h" key="{country.name}">
+      <div className="country-h" key="{country.name}">
               <div>
-                Discover {country.name}
+                Discover {country}
               </div>
             </div>
-        ))}
-        <div className="input-div">
+        <div>
           <SearchInput
               placeholder="Search for city"
               onChange={onInputChange}
           />
         </div>
-
         <div className="container-fluid cities">
           <div className="row">
           {filteredCities().map((city) => (
+                 <Link href={`/city/${city.city}`} key={city.city}>
             <div className="city-descr col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4" key={city.city}>
-              <Link href={`/city/${city.city}`} key={city.city}>
                 <img className="city-icon" src={city.icon} />
-              </Link>
+              
               <h1 className="country-city">{city.city}</h1>
               <p className="country-desc">{city.description}</p>
             </div>
+            </Link>
           ))}
           </div>
         </div>

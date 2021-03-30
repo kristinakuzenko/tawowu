@@ -3,6 +3,7 @@ import Link from "next/link";
 import React from 'react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; 
 import { faSearch } from "@fortawesome/free-solid-svg-icons"; 
+import { faUser } from "@fortawesome/free-solid-svg-icons"; 
 import styles from './layout.module.css';
 
 
@@ -57,6 +58,9 @@ const Layout=({countries,children, title = "Tawowu"})=>{
       <nav className="navbar navbar-expand-lg navbar-dark fixed-top">
     <div className="">
     <span type="button" className="nav-link search" href="#" data-toggle="modal" data-target="#exampleModal"><FontAwesomeIcon icon={faSearch}></FontAwesomeIcon> </span>
+    <Link href={`/my-places`}>
+    <span type="button" className="nav-link search" ><FontAwesomeIcon icon={faUser}></FontAwesomeIcon> </span>
+    </Link>
     <div className="modal fade " id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div className="modal-dialog">
     <div className="modal-content">
@@ -151,7 +155,7 @@ const Layout=({countries,children, title = "Tawowu"})=>{
               <li><a className="dropdown-item btn"> {countries.name}</a></li>
           </Link>
         ))}
-                    </ul>
+                     </ul>
               </li>
               <li className="nav-item dropdown">
               <Link href={`/continent/South America`} key="South America">

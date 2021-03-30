@@ -48,8 +48,7 @@
 
 }
 .logo{
-  margin-left: 50%;
-  float: left;
+  margin-left: 10px;
   font-family: Menlo, monospace;
   font-size: 24px;
   letter-spacing: 4px;
@@ -191,6 +190,11 @@ margin-top: 100px;
 
 
 /*country*/
+.city-descr{
+  padding-top: 100px;
+  cursor: pointer;
+  text-align: center;
+}
 .filter-cntry{
   margin-bottom: 50px;
   text-align: center;
@@ -296,6 +300,7 @@ font-size: 30px;
 transform: translateY(-15%);
 }
 .city-filter{
+  padding-left: 10vh;
   height: 70px;
  background-color: #faccb6;
   position: relative;
@@ -330,26 +335,19 @@ transform: translateY(-15%);
   font-family: SangbleuSans,serif;
   color: #faccb6;
   font-size: 80px;
-  width: 80%;
+  width: 100vw;
   letter-spacing: -.02em;
   display: table-cell;
   vertical-align: middle;
-}
-.sightseeing-div{
-  text-align: center;
-  height: 110px;
   background-color: #6c3535;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-left: 5vw;
 }
-@media screen and (max-width: 790px){
-  .sightseeing-div{
-    text-align: center;
-    height: 220px;
-    background-color:  #6c3535;
-  }
-}
+
 .places-div{
   padding-bottom: 50px;
-  background-image: linear-gradient( 370deg,#fc935fb9  0%, #5e2c2c 120%);
+  background-image: linear-gradient( 370deg,#fc935fb9  0%,  #6c3535 150%);
 }
 .one-place{
   text-align: center;
@@ -403,10 +401,11 @@ margin: 40px 50px 150px 50px;
   font-size: 30px;
   font-family: Arial, Helvetica, sans-serif;
 }
-
-.input-div {
-  padding-top:100px;
+.modal-f{
+  padding-top: 20px;
 }
+
+
 
 
 
