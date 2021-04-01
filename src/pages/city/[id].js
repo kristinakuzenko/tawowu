@@ -86,10 +86,8 @@ const City = ({city, cities, countries, places}) => {
     {currentCity.map((cityItem) => (
       <div className="city-block" key={cityItem.city}>
         <img className="city-main-img" src={cityItem.image}/>
-        <div className=" city-main-caption carousel-caption d-none d-md-block">
-          <div className="main-header">
+          <div className="city-main-caption">
             {cityItem.city}
-          </div>
         </div>
         <div className="city-filter container-fluid ">
 

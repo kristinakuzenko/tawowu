@@ -3,9 +3,12 @@ import { useState } from "react";
 import CountriesTable from "../components/CountriesTable/CountriesTable";
 import Layout from "../components/Layout/Layout";
 import MainPage from "../components/MainPage/MainPage";
+import MapChart from "../components/MapChart/MapChart";
+import ReactTooltip from "react-tooltip";
+import Highcharts from "highcharts/highmaps";
 import styles from "../styles/Home.module.css";
 
-export default function Home({ countries }) {
+export default  function Home({ countries }) {
   const [keyword, setKeyword] = useState("");
 
   const filteredCountries = countries.filter(
@@ -20,12 +23,16 @@ export default function Home({ countries }) {
 
     setKeyword(e.target.value.toLowerCase());
   };
-
+  const [content, setContent] = useState("");
   return (
     <Layout countries={countries}>
 <MainPage></MainPage>
-
       <CountriesTable countries={countries} />
+      <div className="map">
+      <MapChart setTooltipContent={setContent} />
+      <ReactTooltip>{content}</ReactTooltip>
+      </div>
+
     </Layout>
   );
 }
