@@ -23,7 +23,6 @@ export default function Home({ countries }) {
 
   return (
     <Layout countries={countries}>
-aaa
     </Layout>
   );
 }

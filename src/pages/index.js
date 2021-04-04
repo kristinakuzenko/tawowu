@@ -1,11 +1,13 @@
 import Head from "next/head";
 import { useState } from "react";
 import CountriesTable from "../components/CountriesTable/CountriesTable";
+import SearchInput from "../components/SearchInput/SearchInput";
 import Layout from "../components/Layout/Layout";
 import MainPage from "../components/MainPage/MainPage";
 import MapChart from "../components/MapChart/MapChart";
 import ReactTooltip from "react-tooltip";
-import Highcharts from "highcharts/highmaps";
+
+
 import styles from "../styles/Home.module.css";
 
 export default  function Home({ countries }) {
@@ -18,20 +20,16 @@ export default  function Home({ countries }) {
       country.subregion.toLowerCase().includes(keyword)
   );
 
-  const onInputChange = (e) => {
-    e.preventDefault();
-
-    setKeyword(e.target.value.toLowerCase());
-  };
   const [content, setContent] = useState("");
   return (
     <Layout countries={countries}>
 <MainPage></MainPage>
-      <CountriesTable countries={countries} />
-      <div className="map">
+<div className="map">
       <MapChart setTooltipContent={setContent} />
-      <ReactTooltip>{content}</ReactTooltip>
+      <ReactTooltip  place='right' className="tooltip">{content}</ReactTooltip>
       </div>
+      <CountriesTable countries={countries} />
+
 
     </Layout>
   );

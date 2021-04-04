@@ -1,5 +1,9 @@
 import React, { memo } from "react";
+import { useEffect, useState } from "react";
+import { useHistory } from 'react-router-dom';
+
 import {
+  Sphere,
   ZoomableGroup,
   ComposableMap,
   Geographies,
@@ -9,21 +13,27 @@ import {
 const geoUrl =
   "https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json";
 
-const rounded = num => {
-  if (num > 1000000000) {
-    return Math.round(num / 100000000) / 10 + "Bn";
-  } else if (num > 1000000) {
-    return Math.round(num / 100000) / 10 + "M";
-  } else {
-    return Math.round(num / 100) / 10 + "K";
-  }
-};
-
 const MapChart = ({ setTooltipContent }) => {
+  const routeChange = (name) =>{ 
+    let path = `/city/${name}`; 
+  }
+  const [position, setPosition] = useState({ coordinates: [0, 0], zoom: 1 });
+  function handleZoomIn() {
+    if (position.zoom >= 4) return;
+    setPosition(pos => ({ ...pos, zoom: pos.zoom * 2 }));
+  }
+
+  function handleZoomOut() {
+    if (position.zoom <= 1) return;
+    setPosition(pos => ({ ...pos, zoom: pos.zoom / 2 }));
+  }
+
+  function handleMoveEnd(position) {
+    setPosition(position);
+  }
   return (
     <>
       <ComposableMap className="map-chart" data-tip="" projectionConfig={{}}>
-          
           <Geographies geography={geoUrl}>
             {({ geographies }) =>
               geographies.map(geo => (
@@ -37,12 +47,18 @@ const MapChart = ({ setTooltipContent }) => {
                   onMouseLeave={() => {
                     setTooltipContent("");
                   }}
+                  onClick={()=>{
+                    const { NAME} = geo.properties;
+                    window.location.href=`/country/${NAME} `;
+                  }
+                  }
                   style={{
                     default: {
                       fill: "#4d2121",
                       outline: "none"
                     },
                     hover: {
+                      cursor:"pointer",
                       fill: "#faccb6",
                       outline: "none"
                     },
@@ -56,8 +72,11 @@ const MapChart = ({ setTooltipContent }) => {
             }
           </Geographies>
       </ComposableMap>
+      
+      
     </>
   );
 };
 
 export default memo(MapChart);
+

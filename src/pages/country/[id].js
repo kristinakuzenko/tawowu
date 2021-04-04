@@ -1,6 +1,8 @@
 import Layout from "../../components/Layout/Layout";
 import Link from "next/link";
 import {useState} from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; 
+import { faHeart } from "@fortawesome/free-solid-svg-icons"; 
 import SearchInput from "../../components/SearchInput/SearchInput";
 
 const Country = ({country, countries, cities}) => {
@@ -25,38 +27,57 @@ const Country = ({country, countries, cities}) => {
     e.preventDefault();
     setKeyword(e.target.value);
   };
-
+if(countryCities.length==0){
   return <Layout countries={countries} title={country}>
     <div className="country-page">
       <div className="country-page2">
-      <div className="country-h" key="{country.name}">
-              <div>
-                Discover {country}
-              </div>
+      <div className="country-h2" key="{country.name}">
+      <br/> Ooops... <br/> <br/>No cities for {country} yet
             </div>
-        <div>
-          <SearchInput
-              placeholder="Search for city"
-              onChange={onInputChange}
-          />
-        </div>
-        <div className="container-fluid cities">
-          <div className="row">
-          {filteredCities().map((city) => (
-                 <Link href={`/city/${city.city}`} key={city.city}>
-            <div className="city-descr col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4" key={city.city}>
-                <img className="city-icon" src={city.icon} />
-              
-              <h1 className="country-city">{city.city}</h1>
-              <p className="country-desc">{city.description}</p>
+            <p className="country-desc"> Contact us and we will add <br/> some cities as soon as possible! <br/><br/>  <FontAwesomeIcon icon={faHeart}></FontAwesomeIcon></p>
+            <div className="contact-div">
+            <p className="contact-btn">Click to contact us</p>
             </div>
-            </Link>
-          ))}
-          </div>
-        </div>
+           
       </div>
     </div>
   </Layout>;
+}else{
+  return <Layout countries={countries} title={country}>
+  <div className="country-page">
+    <div className="country-page2">
+    <div className="country-h">
+            <div>
+              Discover {country}
+            </div>
+          </div>
+      <div>
+        <SearchInput
+            placeholder="Search for city"
+            onChange={onInputChange}
+        />
+      </div>
+      <div className="container-fluid cities">
+
+        <div className="row">
+        {filteredCities().map((city) => (
+          
+               <Link href={`/city/${city.city}`} key={city.city}>
+          <div className="city-descr col-6 col-sm-6 col-md-6 col-lg-6 col-xl-4" key={city.city}>
+              <img className="city-icon" src={city.icon} />
+            
+            <h1 className="country-city">{city.city}</h1>
+            <p className="country-desc">{city.description}</p>
+          </div>
+          </Link>
+        ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>;
+}
+
 }
 export default Country;
 
