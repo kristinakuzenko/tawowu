@@ -1,10 +1,12 @@
 import Head from "next/head";
+import React from 'react';
 import { useState } from "react";
 import CountriesTable from "../components/CountriesTable/CountriesTable";
 import SearchInput from "../components/SearchInput/SearchInput";
 import Layout from "../components/Layout/Layout";
 import MainPage from "../components/MainPage/MainPage";
 import MapChart from "../components/MapChart/MapChart";
+//import Map from "../components/Map/Map";
 import ReactTooltip from "react-tooltip";
 
 
@@ -29,8 +31,6 @@ export default  function Home({ countries }) {
       <ReactTooltip  place='right' className="tooltip">{content}</ReactTooltip>
       </div>
       <CountriesTable countries={countries} />
-
-
     </Layout>
   );
 }
