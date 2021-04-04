@@ -1,0 +1,60 @@
+{
+"cities":[
+    {
+        "city":"Kyiv",
+        "country":"Ukraine",
+        "image":"https://kristinakuzenko.github.io/images/ukraine.png",
+        "icon":"https://kristinakuzenko.github.io/images/kiev.png",
+        "description": "I come to Kyiv for cheap food."
+    },
+    {
+        "city":"Barcelona",
+        "country":"Spain",
+        "icon":"https://kristinakuzenko.github.io/images/barcelona.png",
+        "image":"https://kristinakuzenko.github.io/images/spain1.jpg",
+        "description": "I need some jamón ibérico right now, please and thank you."
+    },
+    {
+        "city":"Madrid",
+        "country":"Spain",
+        "icon":"https://kristinakuzenko.github.io/images/madrid.png",
+        "image":"https://kristinakuzenko.github.io/images/spain1.jpg",
+        "description": "Nobody goes to bed in Madrid until they have killed the night."
+    },
+    {
+        "city":"Tokyo",
+        "country":"Japan",
+        "image":"https://kristinakuzenko.github.io/images/ukraine.png",
+        "icon":"https://kristinakuzenko.github.io/images/tokyo.png",
+        "description": "In Tokyo, we have more three-star Michelin restaurants than Paris."
+    },
+    {
+        "city":"Sydney",
+        "icon":"https://kristinakuzenko.github.io/images/sydney.png",
+        "country":"Australia",
+        "image":"https://kristinakuzenko.github.io/images/ukraine.png",
+        "description": "If Paris is a city of lights, Sydney is the city of fireworks."
+    },
+    {
+        "city":"New York",
+        "country":"United States",
+        "icon":"https://kristinakuzenko.github.io/images/ny.png",
+        "image":"https://kristinakuzenko.github.io/images/ukraine.png",
+        "description": "The true New Yorker secretly believes that people living anywhere else have to be, in some sense, kidding."
+    },
+    {
+        "city":"Rio de Janeiro",
+        "country":"Brazil",
+        "image":"https://kristinakuzenko.github.io/images/ukraine.png",
+        "icon":"https://kristinakuzenko.github.io/images/rio.png",
+        "description": "I want to see blue bird from that movie or take me to the Carnival!"
+    },
+    {
+        "city":"Hurghada",
+        "country":"Egypt",
+        "icon":"https://kristinakuzenko.github.io/images/hurghada.png",
+        "image":"https://kristinakuzenko.github.io/images/spain1.jpg",
+        "description": "What if I don't want to lay on the beach anymore..."
+    }
+]
+}

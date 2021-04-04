@@ -1,9 +1,34 @@
 import Layout from "../../components/Layout/Layout";
 import Link from "next/link";
+//database import
+import fire from '../../config/fire-config';
+import {useState} from "react";
+
 const orderBy = (countries) => {
   return countries.sort((a, b) => (a.name> b.name ? 1 : -1));
 };
-const Continent=({continent, continents, countries})=>{
+const Continent=({continent})=>{
+  const [countries, setCountries] = useState([]);
+  fire.firestore()
+      .collection('countries')
+      .onSnapshot(snap => {
+        const countries = snap.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setCountries(countries);
+});
+
+const [continents, setContinents] = useState([]);
+fire.firestore()
+    .collection('continents')
+    .onSnapshot(snap => {
+      const continents = snap.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setContinents(continents);
+});
   const myCountry = countries.filter(
     (country1) =>
       country1.continent.includes(continent) 
@@ -58,15 +83,9 @@ const Continent=({continent, continents, countries})=>{
 export default Continent;
 export const getServerSideProps = async({params})=>{
     const continent = params.id;
-    const res = await fetch("https://kristinakuzenko.github.io/continents.json");
-    const continents = await res.json();
-    const res2 = await fetch("https://kristinakuzenko.github.io/countries.json");
-    const countries = await res2.json();
     return{
         props:{
-          continent,
-          continents,
-          countries
+          continent
         },
     };
   };

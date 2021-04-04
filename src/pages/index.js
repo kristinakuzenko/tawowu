@@ -1,6 +1,5 @@
 import Head from "next/head";
 import React from 'react';
-import { useState } from "react";
 import CountriesTable from "../components/CountriesTable/CountriesTable";
 import SearchInput from "../components/SearchInput/SearchInput";
 import Layout from "../components/Layout/Layout";
@@ -8,21 +7,26 @@ import MainPage from "../components/MainPage/MainPage";
 import MapChart from "../components/MapChart/MapChart";
 //import Map from "../components/Map/Map";
 import ReactTooltip from "react-tooltip";
-
-
 import styles from "../styles/Home.module.css";
 
-export default  function Home({ countries }) {
-  const [keyword, setKeyword] = useState("");
+//database import
+import fire from '../config/fire-config';
+import { useState } from "react";
 
-  const filteredCountries = countries.filter(
-    (country) =>
-      country.name.toLowerCase().includes(keyword) ||
-      country.region.toLowerCase().includes(keyword) ||
-      country.subregion.toLowerCase().includes(keyword)
-  );
 
-  const [content, setContent] = useState("");
+export default  function Home() {
+  const [countries, setCountries] = useState([]);
+  fire.firestore()
+      .collection('countries')
+      .onSnapshot(snap => {
+        const countries = snap.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setCountries(countries);
+});
+
+const [content, setContent] = useState("");
   return (
     <Layout countries={countries}>
 <MainPage></MainPage>
@@ -35,13 +39,4 @@ export default  function Home({ countries }) {
   );
 }
 
-export const getStaticProps = async () => {
-  const res = await fetch("https://kristinakuzenko.github.io/countries.json");
-  const countries = await res.json();
 
-  return {
-    props: {
-      countries,
-    },
-  };
-};

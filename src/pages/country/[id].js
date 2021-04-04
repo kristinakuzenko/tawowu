@@ -1,11 +1,36 @@
 import Layout from "../../components/Layout/Layout";
 import Link from "next/link";
-import {useState} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; 
 import { faHeart } from "@fortawesome/free-solid-svg-icons"; 
 import SearchInput from "../../components/SearchInput/SearchInput";
+//database import
+import fire from '../../config/fire-config';
+import {useState} from "react";
 
-const Country = ({country, countries, cities}) => {
+const Country = ({country}) => {
+    const [countries, setCountries] = useState([]);
+    fire.firestore()
+        .collection('countries')
+        .onSnapshot(snap => {
+          const countries = snap.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          }));
+          setCountries(countries);
+  });
+
+  const [cities, setCities] = useState([]);
+  fire.firestore()
+      .collection('cities')
+      .onSnapshot(snap => {
+        const cities = snap.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setCities(cities);
+});
+
+
   const [keyword, setKeyword] = useState("");
 
   // Pick the country from the list by its name
@@ -83,15 +108,9 @@ export default Country;
 
 export const getServerSideProps = async ({params}) => {
   const country = params.id;
-  const res = await fetch("https://kristinakuzenko.github.io/cities.json");
-  const cities = await res.json();
-  const res2 = await fetch("https://kristinakuzenko.github.io/countries.json");
-  const countries = await res2.json();
   return {
     props: {
-      country,
-      cities,
-      countries
+      country
     },
   };
 };

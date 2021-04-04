@@ -1,0 +1,35 @@
+{
+"continents":[
+    {
+        "name":"Africa",
+        "image":"https://kristinakuzenko.github.io/images/africa2.jpg_large",
+        "contour":"https://kristinakuzenko.github.io/images/africacontour.png"
+    },
+    {
+        "name":"Asia",
+        "image":"https://kristinakuzenko.github.io/images/africa.jpg",
+        "contour":"https://kristinakuzenko.github.io/images/asia.png"
+    },
+    {
+        "name":"Australia",
+        "image":"https://kristinakuzenko.github.io/images/africa.jpg",
+        "contour":"https://kristinakuzenko.github.io/images/australiamap.png"
+    },
+    {
+        "name":"Europe",
+        "image":"https://kristinakuzenko.github.io/images/africa.jpg",
+        "contour":"https://kristinakuzenko.github.io/images/europe.png"
+
+    },
+    {
+        "name":"North America",
+        "image":"https://kristinakuzenko.github.io/images/africa.jpg",
+        "contour":"https://kristinakuzenko.github.io/images/northamerica.png"
+    },
+    {
+        "name":"South America",
+        "image":"https://kristinakuzenko.github.io/images/africa.jpg",
+        "contour":"https://kristinakuzenko.github.io/images/southamerica.png"
+    }
+]
+}

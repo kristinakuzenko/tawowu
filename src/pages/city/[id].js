@@ -1,11 +1,45 @@
 import Layout from "../../components/Layout/Layout";
-import {useState} from "react";
 import Link from "next/link";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMapMarkedAlt} from "@fortawesome/free-solid-svg-icons";
+//database import
+import fire from '../../config/fire-config';
+import {useState} from "react";
 
+const City = ({city}) => {
 
-const City = ({city, cities, countries, places}) => {
+  const [countries, setCountries] = useState([]);
+  fire.firestore()
+      .collection('countries')
+      .onSnapshot(snap => {
+        const countries = snap.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setCountries(countries);
+});
+
+const [cities, setCities] = useState([]);
+fire.firestore()
+    .collection('cities')
+    .onSnapshot(snap => {
+      const cities = snap.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setCities(cities);
+});
+
+const [places, setPlaces] = useState([]);
+fire.firestore()
+    .collection('places')
+    .onSnapshot(snap => {
+      const places = snap.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setPlaces(places);
+});
 
   const [placeType, setPlaceType] = useState(-1);
   const [placeFilter, setPlaceFilter] = useState(-1);
@@ -306,18 +340,9 @@ const City = ({city, cities, countries, places}) => {
 export default City;
 export const getServerSideProps = async ({params}) => {
   const city = params.id;
-  const res = await fetch("https://kristinakuzenko.github.io/cities.json");
-  const cities = await res.json();
-  const res2 = await fetch("https://kristinakuzenko.github.io/countries.json");
-  const countries = await res2.json();
-  const res3 = await fetch("https://kristinakuzenko.github.io/places.json");
-  const places = await res3.json();
   return {
     props: {
-      city,
-      countries,
-      cities,
-      places
+      city
     },
   };
 };
