@@ -1,36 +1,11 @@
 import Link from "next/link";
 import styles from "./CountriesTable.module.css";
 
-
 const orderBy = (countries) => {
   return countries.sort((a, b) => (a.name > b.name ? 1 : -1));
 };
 const CountriesTable = ({ countries }) => {
-  const europe = countries.filter(
-    (country) =>
-      country.continent.toLowerCase().includes("europe")
-  );
-  const australia = countries.filter(
-    (country) =>
-      country.continent.toLowerCase().includes("australia")
-  );
-  const africa = countries.filter(
-    (country) =>
-      country.continent.toLowerCase().includes("africa")
-  );
-  const northamerica = countries.filter(
-    (country) =>
-      country.continent.toLowerCase().includes("north america")
-  );
-  const southamerica = countries.filter(
-    (country) =>
-      country.continent.toLowerCase().includes("south america")
-  );
-  const asia = countries.filter(
-    (country) =>
-      country.continent.toLowerCase().includes("asia")
-  );
-  const orderedCountries = orderBy(countries);
+const orderedCountries = orderBy(countries);
   return (
 
     <div className="block-two container-fluid">
