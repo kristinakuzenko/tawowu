@@ -3,44 +3,68 @@
     {
         "name":"Ukraine",
         "continent":"Europe",
-        "icon":"https://kristinakuzenko.github.io/images/ukraine.png",
-        "images":["https://kristinakuzenko.github.io/images/spain1.jpg","https://kristinakuzenko.github.io/images/spain2.jpg","https://kristinakuzenko.github.io/images/spain3.jpg"]
-    },
+        "region":"Europe",
+        "icon":"https://kristinakuzenko.github.io/images/ukraine.png"
+     },
     {
         "name":"Japan",
+        "region":"Asia",
         "icon":"https://kristinakuzenko.github.io/images/japan.jpg",
-        "images":["https://kristinakuzenko.github.io/images/spain1.jpg","https://kristinakuzenko.github.io/images/spain2.jpg","https://kristinakuzenko.github.io/images/spain3.jpg"],
         "continent":"Asia"
     },
      {
         "name":"Egypt",
         "continent":"Africa",
-        "icon":"https://kristinakuzenko.github.io/images/egypt.png",
-        "images":["https://kristinakuzenko.github.io/images/spain1.jpg","https://kristinakuzenko.github.io/images/spain2.jpg","https://kristinakuzenko.github.io/images/spain3.jpg"]
-    },
+        "region":"Middle East",
+        "icon":"https://kristinakuzenko.github.io/images/egypt.png"
+     },
      {
         "name":"United States",
         "continent":"North America",
-        "icon":"https://kristinakuzenko.github.io/images/us.png",
-        "images":["https://kristinakuzenko.github.io/images/spain1.jpg","https://kristinakuzenko.github.io/images/spain2.jpg","https://kristinakuzenko.github.io/images/spain3.jpg"]
-    },
+        "region":"North America",
+        "icon":"https://kristinakuzenko.github.io/images/australia.png"
+     },
       {
         "name":"Australia",
         "continent":"Australia",
-        "icon":"https://kristinakuzenko.github.io/images/australia.png",
-        "images":["https://kristinakuzenko.github.io/images/spain1.jpg","https://kristinakuzenko.github.io/images/spain2.jpg","https://kristinakuzenko.github.io/images/spain3.jpg"]
+        "region":"Oceania",
+        "icon":"https://kristinakuzenko.github.io/images/australia.png"
     },
     {
         "name":"Spain",
+        "region":"Europe",
         "icon":"https://kristinakuzenko.github.io/images/spain.png",
-        "continent":"Europe",
-        "images":["https://kristinakuzenko.github.io/images/spain1.jpg","https://kristinakuzenko.github.io/images/spain2.jpg","https://kristinakuzenko.github.io/images/spain3.jpg"]
+        "continent":"Europe"
     },
-       {
+    {
         "name":"Brazil",
+        "region":"South America",
         "continent":"South America",
-        "icon":"https://kristinakuzenko.github.io/images/brazil.png",
-        "images":["https://kristinakuzenko.github.io/images/spain1.jpg","https://kristinakuzenko.github.io/images/spain2.jpg","https://kristinakuzenko.github.io/images/spain3.jpg"]
-    } 
+        "icon":"https://kristinakuzenko.github.io/images/brazil.png"
+    },
+    {
+     "name":"Cuba",
+     "region":"Caribbean",
+     "continent":"North America",
+     "icon":"https://kristinakuzenko.github.io/images/cuba.png"
+    },
+    {
+     "name":"Panama",
+     "region":"Central America",
+     "continent":"North America",
+     "icon":"https://kristinakuzenko.github.io/images/panama.png"
+    },
+    {
+     "name":"South Africa",
+     "region":"Africa",
+     "continent":"Africa",
+     "icon":"https://kristinakuzenko.github.io/images/southafrica.png"
+    },
+    {
+     "name":"Singapore",
+     "region":"Southeastern Asia",
+     "continent":"Asia",
+     "icon":"https://kristinakuzenko.github.io/images/singapore.png"
+    }  
 ]
 }

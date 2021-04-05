@@ -127,6 +127,12 @@ textarea:focus, input:focus{
 /********** second block main page
 ****
 */
+.continent-row{
+ padding: 0px 20px 50px 60px;
+}
+.continent{
+  margin-bottom: 40px;
+}
 .continent-filter-row{
   margin: 20px 50px 50px 50px;
   padding: 10px;
@@ -146,7 +152,6 @@ border: 2px solid black;
 }
 .block-two{
   background-image: linear-gradient(315deg, #fc935f  0%, #5e2c2c 120%);
-  height: 89vh;
 }
 .image{
   width: 15vh;
@@ -197,7 +202,8 @@ border: 2px solid black;
 margin-top: 100px;
 }
 .country-table{
-  font-size: 16px;
+  font-family: 'Courier New', monospace;
+  font-size: 28px;
 }
 .continent-table{
   font-size: 50px;
