@@ -4,7 +4,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMapMarkedAlt} from "@fortawesome/free-solid-svg-icons";
 //database import
 import fire from '../../config/fire-config';
-import {useState} from "react";
+import {useState,useEffect} from "react";
 
 const City = ({city}) => {
 
@@ -43,7 +43,6 @@ fire.firestore()
 
   const [placeType, setPlaceType] = useState(-1);
   const [placeFilter, setPlaceFilter] = useState(-1);
-
   const currentCity = cities.filter(cityItem => cityItem.city.toLowerCase() === city.toLowerCase());
 
   // console.log('currentCity', currentCity);
@@ -79,7 +78,20 @@ fire.firestore()
   // [[1,2], [3,4]].flat() => [1,2,3,4]
 
   // console.log('placesByType', cityPlacesByType);
+  const values=[];
+  function allStorage() {
+    useEffect(() => {
+        var keys = Object.keys(localStorage),
+        i = keys.length;
 
+    while ( i-- ) {
+        values.push( localStorage.getItem(keys[i]) );
+    }
+    return values;
+  }, [])
+    
+}
+allStorage();
   const cityPlacesFilteredByActiveType = () => {
     if (placeType === -1) {
       return [].concat(...cityPlacesByType);
@@ -113,9 +125,13 @@ fire.firestore()
     }
     setPlaceFilter(filterValue);
   }
-
+  const addToFavorites = (e, value,place) => {
+    e.preventDefault();
+    if(localStorage.getItem(value)!==null){
+      localStorage.setItem(value,place)
+    }
+  }
   const mySortingFunction = (a, b) => a.popularity.localeCompare(b.popularity);
-
   return <Layout countries={countries} title={city}>
     {currentCity.map((cityItem) => (
       <div className="city-block" key={cityItem.city}>
@@ -199,6 +215,9 @@ fire.firestore()
                     </div>
                       <div className="btn filter-p filter-btn ">
                         Show more
+                      </div>
+                      <div className="btn filter-p filter-btn " onClick={(e) => addToFavorites(e, place.name,place)}>
+                        Add to favorites
                       </div>
 
                     <div className=" col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
@@ -328,7 +347,25 @@ fire.firestore()
                 </div>
             ))}
           </div>
+          <div className="sightseeing-h"> in {city}
+          </div>
+          <div className="places-div">
+            {values.map((places) => (
+                <div className="one-place">
+                  <h1> {places.name} </h1>
+                  <p>{places.description} </p>
+                  <div className="container-fluid ">
+                    <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                      <img className="image-city " src={places.image} />
+                    </div>
 
+                    <div className=" col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+                      <h1 className="place-p">{places.price}</h1>
+                    </div>
+                  </div>
+                </div>
+            ))}
+          </div>
         </div>
 
       </div>
