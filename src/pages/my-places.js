@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import fire from '../config/fire-config';
 import Layout from "../components/Layout/Layout";
+import favorites from 'city'
 
 export default function Home() {
   const [countries, setCountries] = useState([]);
