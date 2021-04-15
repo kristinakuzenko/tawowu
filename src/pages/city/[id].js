@@ -203,6 +203,13 @@ const City = ({ city }) => {
 
               </div>
             </div>
+            <div className="input-city">
+            <SearchInput
+              placeholder="Search for city"
+              onChange={onInputChange}
+            />
+            </div>
+
             {cityPlacesFilteredByActiveFilter().filter(place => place.type.indexOf(1) !== -1).sort(mySortingFunction).map((place) => (
               <div className="one-place">
                 <h1 className="place-name"> {place.name} </h1>
