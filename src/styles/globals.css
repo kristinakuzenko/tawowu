@@ -365,6 +365,7 @@ font-size: 30px;
   padding-top: 10px;
 }
 .filter-name{
+  cursor: pointer;
   color: #4d2121;
   font-family: Helvetica;
   font-size: 20px;
