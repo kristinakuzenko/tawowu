@@ -1,40 +1,29 @@
 import Layout from "../../components/Layout/Layout";
 import Link from "next/link";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; 
-import { faHeart } from "@fortawesome/free-solid-svg-icons"; 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import SearchInput from "../../components/SearchInput/SearchInput";
 //database import
 import fire from '../../config/fire-config';
-import {useState} from "react";
+import { useState } from "react";
 
-const Country = ({country}) => {
-    const [countries, setCountries] = useState([]);
-    fire.firestore()
-        .collection('countries')
-        .onSnapshot(snap => {
-          const countries = snap.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-          }));
-          setCountries(countries);
-  });
+const Country = ({ country }) => {
 
   const [cities, setCities] = useState([]);
   fire.firestore()
-      .collection('cities')
-      .onSnapshot(snap => {
-        const cities = snap.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
-        setCities(cities);
-});
+    .collection('cities')
+    .onSnapshot(snap => {
+      const cities = snap.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setCities(cities);
+    });
 
 
   const [keyword, setKeyword] = useState("");
 
   // Pick the country from the list by its name
-  const filteredCountries = () => countries.filter((country) => country.name === country);
 
   // Here we filter out the cities that don't belong to current country
   const countryCities = cities.filter((city) => city.country.toLowerCase() === country.toLowerCase());
@@ -52,61 +41,61 @@ const Country = ({country}) => {
     e.preventDefault();
     setKeyword(e.target.value);
   };
-if(countryCities.length==0){
-  return <Layout countries={countries} title={country}>
-    <div className="country-page">
-      <div className="country-page2">
-      <div className="country-h2" key="{country.name}">
-      <br/> Ooops... <br/> <br/>No cities for {country} yet
+  if (countryCities.length == 0) {
+    return <Layout title={country}>
+      <div className="country-page">
+        <div className="country-page2">
+          <div className="country-h2" key="{country.name}">
+            <br /> Ooops... <br /> <br />No cities for {country} yet
             </div>
-            <p className="country-desc"> Contact us and we will add <br/> some cities as soon as possible! <br/><br/>  <FontAwesomeIcon icon={faHeart}></FontAwesomeIcon></p>
-            <div className="contact-div">
+          <p className="country-desc"> Contact us and we will add <br /> some cities as soon as possible! <br /><br />  <FontAwesomeIcon icon={faHeart}></FontAwesomeIcon></p>
+          <div className="contact-div">
             <p className="contact-btn">Click to contact us</p>
-            </div>
-           
+          </div>
+
+        </div>
       </div>
-    </div>
-  </Layout>;
-}else{
-  return <Layout countries={countries} title={country}>
-  <div className="country-page">
-    <div className="country-page2">
-    <div className="country-h">
+    </Layout>;
+  } else {
+    return <Layout title={country}>
+      <div className="country-page">
+        <div className="country-page2">
+          <div className="country-h">
             <div>
               Discover {country}
             </div>
           </div>
-      <div>
-        <SearchInput
-            placeholder="Search for city"
-            onChange={onInputChange}
-        />
-      </div>
-      <div className="container-fluid cities">
-
-        <div className="row">
-        {filteredCities().map((city) => (
-          
-               <Link href={`/city/${city.city}`} key={city.city}>
-          <div className="city-descr col-6 col-sm-6 col-md-6 col-lg-6 col-xl-4" key={city.city}>
-              <img className="city-icon" src={city.icon} />
-            
-            <h1 className="country-city">{city.city}</h1>
-            <p className="country-desc">{city.description}</p>
+          <div>
+            <SearchInput
+              placeholder="Search for city"
+              onChange={onInputChange}
+            />
           </div>
-          </Link>
-        ))}
+          <div className="container-fluid cities">
+
+            <div className="row">
+              {filteredCities().map((city) => (
+
+                <Link href={`/city/${city.city}`} key={city.city}>
+                  <div className="city-descr col-6 col-sm-6 col-md-6 col-lg-6 col-xl-4" key={city.city}>
+                    <img className="city-icon" src={city.icon} />
+
+                    <h1 className="country-city">{city.city}</h1>
+                    <p className="country-desc">{city.description}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</Layout>;
-}
+    </Layout>;
+  }
 
 }
 export default Country;
 
-export const getServerSideProps = async ({params}) => {
+export const getServerSideProps = async ({ params }) => {
   const country = params.id;
   return {
     props: {

@@ -288,7 +288,7 @@ margin-top: 100px;
 }
 
 .input {
-  border: 1px solid #4d2121;
+  border: 1px solid black;
   background-color: transparent;
   padding: 16px;
   width: 100%;
@@ -298,7 +298,7 @@ margin-top: 100px;
 }
 
 .input::placeholder {
-  color: #5e2c2c;
+  color: #4d2121;
   margin-left: 100px;
 }
 .wrapper{
@@ -326,7 +326,9 @@ font-size: 30px;
 
 /*city page
 */
-
+.input-city{
+  padding-top: 20px;
+}
 .image-city{
   width: 40vh;
   height: 26vh;
@@ -407,7 +409,7 @@ font-size: 30px;
   padding-top: 50px;
   padding-left: 50px;
   padding-right: 50px;
-  border-top: 1px solid black;
+ 
   
 }
 .filter-btn{

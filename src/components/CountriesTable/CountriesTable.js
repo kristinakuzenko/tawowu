@@ -1,10 +1,22 @@
 import Link from "next/link";
 import styles from "./CountriesTable.module.css";
+import { useState, useEffect } from 'react';
+import fire from '../../config/fire-config';
 
 const orderBy = (countries) => {
   return countries.sort((a, b) => (a.name > b.name ? 1 : -1));
 };
-const CountriesTable = ({ countries }) => {
+const CountriesTable = () => {
+  const [countries, setCountries] = useState([]);
+  fire.firestore()
+      .collection('countries')
+      .onSnapshot(snap => {
+        const countries = snap.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setCountries(countries);
+});
 const orderedCountries = orderBy(countries);
   return (
 

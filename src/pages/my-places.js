@@ -16,7 +16,7 @@ export default function Home() {
         setCountries(countries);
 });
   return (
-    <Layout countries={countries}>
+    <Layout>
     </Layout>
   );
 }

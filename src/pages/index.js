@@ -15,26 +15,17 @@ import { useState } from "react";
 
 
 export default  function Home() {
-  const [countries, setCountries] = useState([]);
-  fire.firestore()
-      .collection('countries')
-      .onSnapshot(snap => {
-        const countries = snap.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
-        setCountries(countries);
-});
+
 
 const [content, setContent] = useState("");
   return (
-    <Layout countries={countries}>
+    <Layout>
 <MainPage></MainPage>
 <div className="map">
       <MapChart setTooltipContent={setContent} />
       <ReactTooltip  place='right' className="tooltip">{content}</ReactTooltip>
       </div>
-      <CountriesTable countries={countries} />
+      <CountriesTable />
     </Layout>
   );
 }

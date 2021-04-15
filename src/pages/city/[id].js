@@ -1,26 +1,25 @@
 import Layout from "../../components/Layout/Layout";
 import Link from "next/link";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faMapMarkedAlt} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMapMarkedAlt } from "@fortawesome/free-solid-svg-icons";
+import SearchInput from "../../components/SearchInput/SearchInput";
 //database import
 import fire from '../../config/fire-config';
-import {useState,useEffect} from "react";
+import { useState, useEffect } from "react";
 
-const City = ({city}) => {
+const City = ({ city }) => {
+  const [keyword, setKeyword] = useState("");
+  const onInputChange = (e) => {
+    e.preventDefault();
+    setKeyword(e.target.value);
+  };
 
-  const [countries, setCountries] = useState([]);
+  const filteredPlaces = () => {
+    const needle = keyword ? keyword.toLowerCase() : '';
+    return cityPlaces().filter((place) => place.name.toLowerCase().indexOf(needle) !== -1);
+  };
+  const [cities, setCities] = useState([]);
   fire.firestore()
-      .collection('countries')
-      .onSnapshot(snap => {
-        const countries = snap.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
-        setCountries(countries);
-});
-
-const [cities, setCities] = useState([]);
-fire.firestore()
     .collection('cities')
     .onSnapshot(snap => {
       const cities = snap.docs.map(doc => ({
@@ -28,10 +27,10 @@ fire.firestore()
         ...doc.data()
       }));
       setCities(cities);
-});
+    });
 
-const [places, setPlaces] = useState([]);
-fire.firestore()
+  const [places, setPlaces] = useState([]);
+  fire.firestore()
     .collection('places')
     .onSnapshot(snap => {
       const places = snap.docs.map(doc => ({
@@ -39,7 +38,7 @@ fire.firestore()
         ...doc.data()
       }));
       setPlaces(places);
-});
+    });
 
   const [placeType, setPlaceType] = useState(-1);
   const [placeFilter, setPlaceFilter] = useState(-1);
@@ -53,45 +52,45 @@ fire.firestore()
 
   const cityPlacesByType = [
     // sightseeing
-    [...cityPlaces().filter(place => place.type.indexOf(1) !== -1)],
+    [...filteredPlaces().filter(place => place.type.indexOf(1) !== -1)],
     // food
-    [...cityPlaces().filter(place => place.type.indexOf(2) !== -1)],
+    [...filteredPlaces().filter(place => place.type.indexOf(2) !== -1)],
     // shopping
-    [...cityPlaces().filter(place => place.type.indexOf(3) !== -1)],
+    [...filteredPlaces().filter(place => place.type.indexOf(3) !== -1)],
     // transport
-    [...cityPlaces().filter(place => place.type.indexOf(4) !== -1)]
+    [...filteredPlaces().filter(place => place.type.indexOf(4) !== -1)]
   ]
   const cityPlacesByFilter = [
     // art
-    [...cityPlaces().filter(place => place.filter.indexOf(1) !== -1)],
+    [...filteredPlaces().filter(place => place.filter.indexOf(1) !== -1)],
     // camera
-    [...cityPlaces().filter(place => place.filter.indexOf(2) !== -1)],
+    [...filteredPlaces().filter(place => place.filter.indexOf(2) !== -1)],
     // park
-    [...cityPlaces().filter(place => place.filter.indexOf(3) !== -1)],
+    [...filteredPlaces().filter(place => place.filter.indexOf(3) !== -1)],
     // museum
-    [...cityPlaces().filter(place => place.filter.indexOf(4) !== -1)],
+    [...filteredPlaces().filter(place => place.filter.indexOf(4) !== -1)],
     //viewpoint
-    [...cityPlaces().filter(place => place.filter.indexOf(5) !== -1)],
+    [...filteredPlaces().filter(place => place.filter.indexOf(5) !== -1)],
     //
   ]
 
   // [[1,2], [3,4]].flat() => [1,2,3,4]
 
   // console.log('placesByType', cityPlacesByType);
-  const values=[];
+  const values = [];
   function allStorage() {
     useEffect(() => {
-        var keys = Object.keys(localStorage),
+      var keys = Object.keys(localStorage),
         i = keys.length;
 
-    while ( i-- ) {
-        values.push( localStorage.getItem(keys[i]) );
-    }
-    return values;
-  }, [])
-    
-}
-allStorage();
+      while (i--) {
+        values.push(localStorage.getItem(keys[i]));
+      }
+      return values;
+    }, [])
+
+  }
+  allStorage();
   const cityPlacesFilteredByActiveType = () => {
     if (placeType === -1) {
       return [].concat(...cityPlacesByType);
@@ -125,19 +124,19 @@ allStorage();
     }
     setPlaceFilter(filterValue);
   }
-  const addToFavorites = (e, value,place) => {
+  const addToFavorites = (e, value, place) => {
     e.preventDefault();
-    if(localStorage.getItem(value)!==null){
-      localStorage.setItem(value,place)
+    if (localStorage.getItem(value) !== null) {
+      localStorage.setItem(value, place)
     }
   }
   const mySortingFunction = (a, b) => a.popularity.localeCompare(b.popularity);
-  return <Layout countries={countries} title={city}>
+  return <Layout title={city}>
     {currentCity.map((cityItem) => (
       <div className="city-block" key={cityItem.city}>
-        <img className="city-main-img" src={cityItem.image}/>
-          <div className="city-main-caption">
-            {cityItem.city}
+        <img className="city-main-img" src={cityItem.image} />
+        <div className="city-main-caption">
+          {cityItem.city}
         </div>
         <div className="city-filter container-fluid ">
 
@@ -145,10 +144,10 @@ allStorage();
             <p className="filter-name" >Sightseeing</p>
           </div>
           <a href="#food">
-          <div  className="col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2 filter-item ">
-            <p className="filter-name">Food</p>
-         
-          </div>
+            <div className="col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2 filter-item ">
+              <p className="filter-name">Food</p>
+
+            </div>
           </a>
           <div className="col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2 filter-item ">
             <p className="filter-name" >Shopping</p>
@@ -169,25 +168,24 @@ allStorage();
           <div className="sightseeing-h">Things to do in {cityItem.city}</div>
 
           <div className="places-div">
-
             <div className="container-fluid ">
               <div className="icon-container">
-                
+
                 <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  ">
-                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Art" src="../art.png" onClick={(e) => toggleFilterFilter(e, 1)}/>
+                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Art" src="../art.png" onClick={(e) => toggleFilterFilter(e, 1)} />
                 </div>
 
                 <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  ">
-                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Insta places" src="../camera.png" onClick={(e) => toggleFilterFilter(e, 2)}/>
+                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Insta places" src="../camera.png" onClick={(e) => toggleFilterFilter(e, 2)} />
                 </div>
                 <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  ">
-                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Parks / outdoors" src="../park.png" onClick={(e) => toggleFilterFilter(e, 3)}/>
+                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Parks / outdoors" src="../park.png" onClick={(e) => toggleFilterFilter(e, 3)} />
                 </div>
                 <div className="btn icon-div col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2  ">
-                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Museums" src="../museum.png" onClick={(e) => toggleFilterFilter(e, 4)}/>
+                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Museums" src="../museum.png" onClick={(e) => toggleFilterFilter(e, 4)} />
                 </div>
                 <div className="btn icon-div col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2  ">
-                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Viewpoints" src="../view.png" onClick={(e) => toggleFilterFilter(e, 5)}/>
+                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Viewpoints" src="../view.png" onClick={(e) => toggleFilterFilter(e, 5)} />
                 </div>
                 <div data-toggle="modal" data-target="#filterModal" className="btn filter-btn icon-div col-6 col-sm-6 col-md-12 col-lg-2 col-xl-2  ">
                   <p className="filter-p">Filter</p>
@@ -196,42 +194,42 @@ allStorage();
                   <div className="modal-dialog">
                     <div className="modal-content">
                       <h1 className="modal-f">Filter by categories</h1>
-                      <p className="btn modal-item"  onClick={(e) => toggleFilterFilter(e, 1)}>Art</p>
-                      <p className="btn modal-item"  onClick={(e) => toggleFilterFilter(e, 2)}>Insta places</p>
+                      <p className="btn modal-item" onClick={(e) => toggleFilterFilter(e, 1)}>Art</p>
+                      <p className="btn modal-item" onClick={(e) => toggleFilterFilter(e, 2)}>Insta places</p>
                       <span className="btn close-btn modal-item" data-dismiss="modal">Close</span>
                     </div>
                   </div>
                 </div>
-                
+
               </div>
             </div>
             {cityPlacesFilteredByActiveFilter().filter(place => place.type.indexOf(1) !== -1).sort(mySortingFunction).map((place) => (
-                <div className="one-place">
-                  <h1 className="place-name"> {place.name} </h1>
-                  <p className="place-desc">{place.description} </p>
-                  <div className="container-fluid ">
-                    <div className="image-city-div col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                      <img className="image-city " src={place.image} />
-                    </div>
-                      <div className="btn filter-p filter-btn ">
-                        Show more
+              <div className="one-place">
+                <h1 className="place-name"> {place.name} </h1>
+                <p className="place-desc">{place.description} </p>
+                <div className="container-fluid ">
+                  <div className="image-city-div col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                    <img className="image-city " src={place.image} />
+                  </div>
+                  <div className="btn filter-p filter-btn ">
+                    Show more
                       </div>
-                      <div className="btn filter-p filter-btn " onClick={(e) => addToFavorites(e, place.name,place)}>
-                        Add to favorites
+                  <div className="btn filter-p filter-btn " onClick={(e) => addToFavorites(e, place.name, place)}>
+                    Add to favorites
                       </div>
 
-                    <div className=" col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-                      <h1 className="place-h">Price </h1>
-                      <h1 className="place-p">{place.price}</h1>
-                      <h1 className="place-h">Location</h1>
-                      <h1 className="place-p">{place.location}</h1>
-                      <h1 className="place-h">Transport</h1>
-                      <h1 className="place-p">{place.transport}</h1>
-                      <h1 className="place-h">Tips</h1>
-                      <h1 className="place-p">{place.tips}</h1>
-                    </div>
+                  <div className=" col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+                    <h1 className="place-h">Price </h1>
+                    <h1 className="place-p">{place.price}</h1>
+                    <h1 className="place-h">Location</h1>
+                    <h1 className="place-p">{place.location}</h1>
+                    <h1 className="place-h">Transport</h1>
+                    <h1 className="place-p">{place.transport}</h1>
+                    <h1 className="place-h">Tips</h1>
+                    <h1 className="place-p">{place.tips}</h1>
                   </div>
                 </div>
+              </div>
             ))}
           </div>
           <div id="food" className="sightseeing-h">Food in {city}
@@ -240,19 +238,19 @@ allStorage();
             <div className="container-fluid ">
               <div className="icon-container">
                 <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  ">
-                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Take-away" src="../take-away.png" onClick={(e) => toggleFilterFilter(e, 1)}/>
+                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Take-away" src="../take-away.png" onClick={(e) => toggleFilterFilter(e, 1)} />
                 </div>
                 <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  ">
-                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Coffee shops" src="../tea.png" onClick={(e) => toggleFilterFilter(e, 2)}/>
+                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Coffee shops" src="../tea.png" onClick={(e) => toggleFilterFilter(e, 2)} />
                 </div>
                 <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  ">
-                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Bars" src="../cocktail.png" onClick={(e) => toggleFilterFilter(e, 3)}/>
+                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Bars" src="../cocktail.png" onClick={(e) => toggleFilterFilter(e, 3)} />
                 </div>
                 <div className="btn icon-div col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2  ">
-                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Restaurants / cafes" src="../restaurant.png" onClick={(e) => toggleFilterFilter(e, 4)}/>
+                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Restaurants / cafes" src="../restaurant.png" onClick={(e) => toggleFilterFilter(e, 4)} />
                 </div>
                 <div className="btn icon-div col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2  ">
-                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Confectionery" src="../cupcake.png" onClick={(e) => toggleFilterFilter(e, 5)}/>
+                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Confectionery" src="../cupcake.png" onClick={(e) => toggleFilterFilter(e, 5)} />
                 </div>
                 <div className="btn filter-btn icon-div col-6 col-sm-6 col-md-12 col-lg-2 col-xl-2  ">
                   <p className="filter-p">Filter</p>
@@ -260,47 +258,47 @@ allStorage();
               </div>
             </div>
             {cityPlacesFilteredByActiveFilter().filter(place => place.type.indexOf(2) !== -1).sort(mySortingFunction).map((place) => (
-                <div className="one-place">
-                  <h1 className="place-name"> {place.name} </h1>
-                  <p className="place-desc">{place.description} </p>
-                  <div className="container-fluid ">
-                    <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                      <img className="image-city " src={place.image} />
-                    </div>
+              <div className="one-place">
+                <h1 className="place-name"> {place.name} </h1>
+                <p className="place-desc">{place.description} </p>
+                <div className="container-fluid ">
+                  <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                    <img className="image-city " src={place.image} />
+                  </div>
 
-                    <div className=" col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-                      <h1 className="place-h">Average bill price</h1>
-                      <h1 className="place-p">{place.price}</h1>
-                      <h1 className="place-h">Location</h1>
-                      <h1 className="place-p">{place.location}</h1>
-                      <h1 className="place-h">Transport</h1>
-                      <h1 className="place-p">{place.transport}</h1>
-                      <h1 className="place-h">Our favorites / recommendations</h1>
-                      <h1 className="place-p">{place.tips}</h1>
-                    </div>
+                  <div className=" col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+                    <h1 className="place-h">Average bill price</h1>
+                    <h1 className="place-p">{place.price}</h1>
+                    <h1 className="place-h">Location</h1>
+                    <h1 className="place-p">{place.location}</h1>
+                    <h1 className="place-h">Transport</h1>
+                    <h1 className="place-p">{place.transport}</h1>
+                    <h1 className="place-h">Our favorites / recommendations</h1>
+                    <h1 className="place-p">{place.tips}</h1>
                   </div>
                 </div>
+              </div>
             ))}
           </div>
           <div className="sightseeing-h">Shopping in {city}
           </div>
           <div className="places-div">
-          <div className="container-fluid ">
+            <div className="container-fluid ">
               <div className="icon-container">
                 <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  ">
-                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Markets" src="../market.png" onClick={(e) => toggleFilterFilter(e, 1)}/>
+                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Markets" src="../market.png" onClick={(e) => toggleFilterFilter(e, 1)} />
                 </div>
                 <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  ">
-                  <img className="small-icon "data-toggle="tooltip" data-placement="bottom" title="Shopping malls / streets" src="../clothes.png" onClick={(e) => toggleFilterFilter(e, 2)}/>
+                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Shopping malls / streets" src="../clothes.png" onClick={(e) => toggleFilterFilter(e, 2)} />
                 </div>
                 <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  ">
-                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Supermarkets" src="../supermarket.png" onClick={(e) => toggleFilterFilter(e, 3)}/>
+                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Supermarkets" src="../supermarket.png" onClick={(e) => toggleFilterFilter(e, 3)} />
                 </div>
                 <div className="btn icon-div col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2  ">
-                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Souvenir shops" src="../souvenir.png" onClick={(e) => toggleFilterFilter(e, 4)}/>
+                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Souvenir shops" src="../souvenir.png" onClick={(e) => toggleFilterFilter(e, 4)} />
                 </div>
                 <div className="btn icon-div col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2  ">
-                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Outlet" src="../outlet.png" onClick={(e) => toggleFilterFilter(e, 5)}/>
+                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Outlet" src="../outlet.png" onClick={(e) => toggleFilterFilter(e, 5)} />
                 </div>
                 <div className="btn filter-btn icon-div col-6 col-sm-6 col-md-12 col-lg-2 col-xl-2  ">
                   <p className="filter-p">Filter</p>
@@ -308,62 +306,62 @@ allStorage();
               </div>
             </div>
             {cityPlacesByType[2].map((places) => (
-                <div className="one-place">
-                  <h1> {places.name} </h1>
-                  <p>{places.description} </p>
-                  <div className="container-fluid ">
-                    <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                      <img className="image-city " src={places.image} />
-                    </div>
+              <div className="one-place">
+                <h1> {places.name} </h1>
+                <p>{places.description} </p>
+                <div className="container-fluid ">
+                  <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                    <img className="image-city " src={places.image} />
+                  </div>
 
-                    <div className=" col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-                      <h1 className="place-h">Location</h1>
-                      <h1 className="place-p">{places.location}</h1>
-                      <h1 className="place-h">Transport</h1>
-                      <h1 className="place-p">{places.transport}</h1>
-                      <h1 className="place-h">Tips</h1>
-                      <h1 className="place-p">{places.tips}</h1>
-                    </div>
+                  <div className=" col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+                    <h1 className="place-h">Location</h1>
+                    <h1 className="place-p">{places.location}</h1>
+                    <h1 className="place-h">Transport</h1>
+                    <h1 className="place-p">{places.transport}</h1>
+                    <h1 className="place-h">Tips</h1>
+                    <h1 className="place-p">{places.tips}</h1>
                   </div>
                 </div>
+              </div>
             ))}
           </div>
           <div className="sightseeing-h">Transport in {city}
           </div>
           <div className="places-div">
             {cityPlacesByType[3].map((places) => (
-                <div className="one-place">
-                  <h1> {places.name} </h1>
-                  <p>{places.description} </p>
-                  <div className="container-fluid ">
-                    <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                      <img className="image-city " src={places.image} />
-                    </div>
+              <div className="one-place">
+                <h1> {places.name} </h1>
+                <p>{places.description} </p>
+                <div className="container-fluid ">
+                  <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                    <img className="image-city " src={places.image} />
+                  </div>
 
-                    <div className=" col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-                      <h1 className="place-p">{places.price}</h1>
-                    </div>
+                  <div className=" col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+                    <h1 className="place-p">{places.price}</h1>
                   </div>
                 </div>
+              </div>
             ))}
           </div>
           <div className="sightseeing-h"> in {city}
           </div>
           <div className="places-div">
             {values.map((places) => (
-                <div className="one-place">
-                  <h1> {places.name} </h1>
-                  <p>{places.description} </p>
-                  <div className="container-fluid ">
-                    <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                      <img className="image-city " src={places.image} />
-                    </div>
+              <div className="one-place">
+                <h1> {places.name} </h1>
+                <p>{places.description} </p>
+                <div className="container-fluid ">
+                  <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                    <img className="image-city " src={places.image} />
+                  </div>
 
-                    <div className=" col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-                      <h1 className="place-p">{places.price}</h1>
-                    </div>
+                  <div className=" col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+                    <h1 className="place-p">{places.price}</h1>
                   </div>
                 </div>
+              </div>
             ))}
           </div>
         </div>
@@ -375,7 +373,7 @@ allStorage();
 
 }
 export default City;
-export const getServerSideProps = async ({params}) => {
+export const getServerSideProps = async ({ params }) => {
   const city = params.id;
   return {
     props: {
