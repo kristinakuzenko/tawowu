@@ -37,16 +37,6 @@ const Layout = ({ children, title = "Tawowu" }) => {
   const orderedCountries = orderBy(countries);
   return (
     <div className="layout-main">
-      <Head>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-        <link
-          rel="stylesheet"
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        />
-        <title>{title}</title>
-
-      </Head>
       <header className="header">
         <nav className="navbar navbar-expand-lg navbar-dark fixed-top">
           <div className="">
@@ -103,7 +93,7 @@ const Layout = ({ children, title = "Tawowu" }) => {
         </nav>
       </header>
 
-      <main className={styles.main}>{children}</main>
+      <main className={"main"}>{children}</main>
 
       <footer className="footer">
         Thank you for using Tawowu!

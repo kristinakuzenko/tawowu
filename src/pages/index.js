@@ -16,14 +16,19 @@ import { useState } from "react";
 
 export default  function Home() {
 
+  const [isTooltipVisible, setTooltipVisibility] = React.useState(false);
+  const [content, setContent] = useState("");
 
-const [content, setContent] = useState("");
+  React.useEffect(() => {
+    setTooltipVisibility(true);
+  }, []);
+
   return (
     <Layout>
-<MainPage></MainPage>
-<div className="map">
-      <MapChart setTooltipContent={setContent} />
-      <ReactTooltip  place='right' className="tooltip">{content}</ReactTooltip>
+      <MainPage />
+      <div className="map">
+        <MapChart setTooltipContent={setContent} />
+        {isTooltipVisible && <ReactTooltip  place='right' className="tooltip">{content}</ReactTooltip>}
       </div>
       <CountriesTable />
     </Layout>
