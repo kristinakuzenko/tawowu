@@ -5,9 +5,43 @@ import { faMapMarkedAlt } from "@fortawesome/free-solid-svg-icons";
 import SearchInput from "../../components/SearchInput/SearchInput";
 //database import
 import fire from '../../config/fire-config';
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 const City = ({ city }) => {
+  let _isMounted = false;
+  const values = [];
+
+  React.useEffect(() => {
+    _isMounted = true;
+
+    fire.firestore()
+        .collection('cities')
+        .onSnapshot(snap => {
+          const cities = snap.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          }));
+          _isMounted && setCities(cities);
+        });
+
+    fire.firestore()
+        .collection('places')
+        .onSnapshot(snap => {
+          const places = snap.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          }));
+          _isMounted && setPlaces(places);
+        });
+
+    // get values by keys from local storage
+    Object.keys(localStorage).forEach((key) => values.push(localStorage.getItem(key)));
+
+    return function cleanup() {
+      _isMounted = false;
+    }
+  }, [])
+
   const [keyword, setKeyword] = useState("");
   const onInputChange = (e) => {
     e.preventDefault();
@@ -19,29 +53,10 @@ const City = ({ city }) => {
     return cityPlaces().filter((place) => place.name.toLowerCase().indexOf(needle) !== -1);
   };
   const [cities, setCities] = useState([]);
-  fire.firestore()
-    .collection('cities')
-    .onSnapshot(snap => {
-      const cities = snap.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setCities(cities);
-    });
-
   const [places, setPlaces] = useState([]);
-  fire.firestore()
-    .collection('places')
-    .onSnapshot(snap => {
-      const places = snap.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setPlaces(places);
-    });
-
   const [placeType, setPlaceType] = useState(-1);
   const [placeFilter, setPlaceFilter] = useState(-1);
+
   const currentCity = cities.filter(cityItem => cityItem.city.toLowerCase() === city.toLowerCase());
 
   // console.log('currentCity', currentCity);
@@ -77,20 +92,6 @@ const City = ({ city }) => {
   // [[1,2], [3,4]].flat() => [1,2,3,4]
 
   // console.log('placesByType', cityPlacesByType);
-  const values = [];
-  function allStorage() {
-    useEffect(() => {
-      var keys = Object.keys(localStorage),
-        i = keys.length;
-
-      while (i--) {
-        values.push(localStorage.getItem(keys[i]));
-      }
-      return values;
-    }, [])
-
-  }
-  allStorage();
   const cityPlacesFilteredByActiveType = () => {
     if (placeType === -1) {
       return [].concat(...cityPlacesByType);
