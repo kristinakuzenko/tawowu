@@ -13,26 +13,42 @@ const orderBy = (countries) => {
   return countries.sort((a, b) => (a.name > b.name ? 1 : -1));
 };
 const Layout = ({ children, title = "Tawowu" }) => {
+
+  let _isMounted = false;
   const [countries, setCountries] = useState([]);
-  fire.firestore()
-    .collection('countries')
-    .onSnapshot(snap => {
-      const countries = snap.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setCountries(countries);
-    });
   const [continents, setContinents] = useState([]);
-  fire.firestore()
-    .collection('continents')
-    .onSnapshot(snap => {
-      const continents = snap.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setContinents(continents);
-    });
+
+  React.useEffect(() => {
+    _isMounted = true;
+
+    fire.firestore()
+        .collection('countries')
+        .onSnapshot(snap => {
+          const countries = snap.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          }));
+          if (_isMounted) {
+            setCountries(countries);
+          }
+        });
+
+    fire.firestore()
+        .collection('continents')
+        .onSnapshot(snap => {
+          const continents = snap.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          }));
+          if (_isMounted) {
+            setContinents(continents);
+          }
+        });
+
+    return function cleanup() {
+      _isMounted = false;
+    }
+  }, [])
 
   const orderedCountries = orderBy(countries);
   return (
