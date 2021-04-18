@@ -66,8 +66,8 @@ const orderedCountries = orderBy(countries);
           </Link>
           <div>
             {countries.filter((country) => country.region.toLowerCase()=="africa").map((countries) => (
-              <div>
-                <Link href={`/country/${countries.name}`} key={countries.name}>
+              <div key={countries.name}>
+                <Link href={`/country/${countries.name}`}>
                   <div className="btn country-table">{countries.name}</div>
                 </Link>
               </div>
@@ -83,8 +83,8 @@ const orderedCountries = orderBy(countries);
           </Link>
           <div>
             {countries.filter((country) => country.region.toLowerCase()=="europe").map((countries) => (
-              <div>
-                <Link href={`/country/${countries.name}`} key={countries.name}>
+              <div key={countries.name}>
+                <Link href={`/country/${countries.name}`} >
                   <div className="btn country-table">{countries.name}</div>
                 </Link>
               </div>

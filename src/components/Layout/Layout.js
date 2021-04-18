@@ -68,7 +68,7 @@ const Layout = ({ children, title = "Tawowu" }) => {
             <div className="collapse navbar-collapse " id="navbarResponsive">
               <ul className="navbar-nav ">
                 {continents.map((continent) => (
-                  <li className="nav-item dropdown">
+                  <li className="nav-item dropdown" key={continent.name}>
                     <Link href={`/continent/${continent.name} `} key={continent.name}>
                       <a className="nav-link " data-toggle="dropdown"> {continent.name} </a>
                     </Link>
