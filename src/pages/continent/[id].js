@@ -54,7 +54,7 @@ const Continent = ({ continent }) => {
     <div className="continent2">
 
       {myContinent.map((continents) => (
-        <div >
+        <div key={continents.id}>
           <div className="main-header2">
             <div>
               <span>Welcome </span>
@@ -66,7 +66,7 @@ const Continent = ({ continent }) => {
 
           </div>
           <div className="contour">
-            <img className="" src={continents.contour} ></img>
+            <img className="" src={continents.contour} />
           </div>
 
         </div>
