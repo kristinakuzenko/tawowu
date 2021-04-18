@@ -212,7 +212,7 @@ const City = ({ city }) => {
             </div>
 
             {cityPlacesFilteredByActiveFilter().filter(place => place.type.indexOf(1) !== -1).sort(mySortingFunction).map((place) => (
-              <div className="one-place">
+              <div className="one-place" key={place.name}>
                 <h1 className="place-name"> {place.name} </h1>
                 <p className="place-desc">{place.description} </p>
                 <div className="container-fluid ">
@@ -266,7 +266,7 @@ const City = ({ city }) => {
               </div>
             </div>
             {cityPlacesFilteredByActiveFilter().filter(place => place.type.indexOf(2) !== -1).sort(mySortingFunction).map((place) => (
-              <div className="one-place">
+              <div className="one-place" key={place.name}>
                 <h1 className="place-name"> {place.name} </h1>
                 <p className="place-desc">{place.description} </p>
                 <div className="container-fluid ">
@@ -314,7 +314,7 @@ const City = ({ city }) => {
               </div>
             </div>
             {cityPlacesByType[2].map((places) => (
-              <div className="one-place">
+              <div className="one-place" key={places.name}>
                 <h1> {places.name} </h1>
                 <p>{places.description} </p>
                 <div className="container-fluid ">
@@ -338,7 +338,7 @@ const City = ({ city }) => {
           </div>
           <div className="places-div">
             {cityPlacesByType[3].map((places) => (
-              <div className="one-place">
+              <div className="one-place" key={places.name}>
                 <h1> {places.name} </h1>
                 <p>{places.description} </p>
                 <div className="container-fluid ">
@@ -357,7 +357,7 @@ const City = ({ city }) => {
           </div>
           <div className="places-div">
             {values.map((places) => (
-              <div className="one-place">
+              <div className="one-place" key={places.name}>
                 <h1> {places.name} </h1>
                 <p>{places.description} </p>
                 <div className="container-fluid ">
