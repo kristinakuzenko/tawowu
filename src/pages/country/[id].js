@@ -5,22 +5,29 @@ import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import SearchInput from "../../components/SearchInput/SearchInput";
 //database import
 import fire from '../../config/fire-config';
-import { useState } from "react";
+import React, { useState } from "react";
 
 const Country = ({ country }) => {
+  let _isMounted = false;
+  React.useEffect(() => {
+    _isMounted = true;
+
+    fire.firestore()
+        .collection('cities')
+        .onSnapshot(snap => {
+          const cities = snap.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          }));
+          _isMounted && setCities(cities);
+        });
+
+    return function cleanup() {
+      _isMounted = false;
+    }
+  }, [])
 
   const [cities, setCities] = useState([]);
-  fire.firestore()
-    .collection('cities')
-    .onSnapshot(snap => {
-      const cities = snap.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setCities(cities);
-    });
-
-
   const [keyword, setKeyword] = useState("");
 
   // Pick the country from the list by its name
