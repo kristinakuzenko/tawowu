@@ -2,33 +2,43 @@ import Layout from "../../components/Layout/Layout";
 import Link from "next/link";
 //database import
 import fire from '../../config/fire-config';
-import { useState } from "react";
+import React, { useState } from "react";
 
 const orderBy = (countries) => {
   return countries.sort((a, b) => (a.name > b.name ? 1 : -1));
 };
 const Continent = ({ continent }) => {
-  const [countries, setCountries] = useState([]);
-  fire.firestore()
-    .collection('countries')
-    .onSnapshot(snap => {
-      const countries = snap.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setCountries(countries);
-    });
+  let _isMounted = false;
+  React.useEffect(() => {
+    _isMounted = true;
 
+    fire.firestore()
+        .collection('countries')
+        .onSnapshot(snap => {
+          const countries = snap.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          }));
+          _isMounted && setCountries(countries);
+        });
+
+    fire.firestore()
+        .collection('continents')
+        .onSnapshot(snap => {
+          const continents = snap.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          }));
+          _isMounted && setContinents(continents);
+        });
+
+    return function cleanup() {
+      _isMounted = false;
+    }
+  }, [])
+
+  const [countries, setCountries] = useState([]);
   const [continents, setContinents] = useState([]);
-  fire.firestore()
-    .collection('continents')
-    .onSnapshot(snap => {
-      const continents = snap.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setContinents(continents);
-    });
   const myCountry = countries.filter(
     (country1) =>
       country1.continent.includes(continent)
@@ -38,6 +48,7 @@ const Continent = ({ continent }) => {
       country1.name.includes(continent)
   );
   const orderedCountries = orderBy(myCountry);
+
   return <Layout title={continent}>
 
     <div className="continent2">
