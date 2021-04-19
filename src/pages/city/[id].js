@@ -127,10 +127,27 @@ const City = ({ city }) => {
   }
   const addToFavorites = (e, value, place) => {
     e.preventDefault();
-    if (localStorage.getItem(value) !== null) {
-      localStorage.setItem(value, place)
-    }
+    localStorage.setItem(`tawowu-fav-${value}`, JSON.stringify(place)); // put
   }
+
+  // const activeFilters = [['type', [1, 2, 3]], ['location', [1]]];
+  // const places = [{type: [1, 3, 2], location: 1}, {type:1, location: 3}, {type:2, location:3}];
+  //
+  // const getFilteredPlaces = () => {
+  //
+  //   // [1, 2, 3] === [1, 2, 3]
+  //   // 1-2-3 === 1-2-3
+  //   // 1-2-3 !== 1-3-2
+  //
+  //   let result = [...places];
+  //
+  //   activeFilters.forEach(filter => { // ['type', 1]
+  //     result = result.filter(place => place[filter[0]].join('-') === filter[1].join('-'))
+  //   })
+  //
+  //   return result;
+  // }
+
   const mySortingFunction = (a, b) => a.popularity.localeCompare(b.popularity);
   return <Layout title={city}>
     {currentCity.map((cityItem) => (
@@ -177,7 +194,7 @@ const City = ({ city }) => {
                 </div>
 
                 <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  ">
-                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Insta places" src="../camera.png" onClick={(e) => toggleFilterFilter(e, 2)} />
+                  <img className={placeFilter === 2 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Insta places" src="../camera.png" onClick={(e) => toggleFilterFilter(e, 2)} />
                 </div>
                 <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  ">
                   <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Parks / outdoors" src="../park.png" onClick={(e) => toggleFilterFilter(e, 3)} />

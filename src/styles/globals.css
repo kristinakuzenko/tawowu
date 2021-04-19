@@ -435,6 +435,10 @@ font-size: 30px;
   border-radius: 10px;
   border: 3px solid black;
   padding: 5px;
+  transition: all .4s ease-in-out;
+}
+.small-icon.active {
+  border: 3px solid green;
 }
 .icon-container{
 margin: 40px 50px 150px 50px;
@@ -474,6 +478,58 @@ margin: 40px 50px 150px 50px;
 .tooltip{
   background-color: #5e2c2c;
   color: #faccb6; 
+}
+
+/*
+.nav-link.search
+.nav-link.user
+.navbar-brand.logo
+.navbar-toggler
+*/
+
+@media (max-width: 768px) {
+  .navbar > div {
+    display:flex;
+    width:100%;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .nav-link.search,
+  .nav-link.user {
+    width:40px;
+    flex: 0 0 40px;
+  }
+  .navbar-brand.logo {
+    flex:1;
+    text-align:center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .navbar .navbar-toggler {
+    flex:0 0 24px;
+  }
+
+  .navbar-collapse {
+    width:100%;
+  }
+}
+
+@media (min-width: 769px) {
+  .navbar div {
+    display:flex;
+    width:100%;
+    align-items: center;
+  }
+  .navbar-brand.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .navbar-collapse {
+    justify-content: flex-end;
+  }
 }
 
 

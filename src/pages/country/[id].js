@@ -22,6 +22,10 @@ const Country = ({ country }) => {
           _isMounted && setCities(cities);
         });
 
+    Object.keys(localStorage).filter(key => key.indexOf('tawowu-fav') !== -1).forEach((key) => {
+      console.log(JSON.parse(localStorage.getItem(key)));
+    })
+
     return function cleanup() {
       _isMounted = false;
     }

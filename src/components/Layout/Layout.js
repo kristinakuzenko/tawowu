@@ -53,30 +53,23 @@ const Layout = ({ children, title = "Tawowu" }) => {
   const orderedCountries = orderBy(countries);
   return (
     <div className="layout-main">
+      <Head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        <link
+            rel="stylesheet"
+            href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        />
+        <title>{title}</title>
+
+      </Head>
       <header className="header">
-        <nav className="navbar navbar-expand-lg navbar-dark fixed-top">
+        <nav className="navbar navbar-expand-md navbar-dark fixed-top">
           <div className="">
             <span type="button" className="nav-link search" href="#" data-toggle="modal" data-target="#exampleModal"><FontAwesomeIcon icon={faSearch}></FontAwesomeIcon> </span>
-            <Link href={`/my-places`}>
+            <Link href={`/my-places`} class="nav-link user">
               <span type="button" className="nav-link search" ><FontAwesomeIcon icon={faUser}></FontAwesomeIcon> </span>
             </Link>
-            <div className="modal fade " id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-              <div className="modal-dialog">
-                <div className="modal-content">
-                  <input className="input-search" type="text" placeholder=" Search for cities, countries, ..." ></input>
-                  {continents.map((continent) => (
-                    <Link href={`/continent/${continent.name} `} key={continent.name}>
-                      <p className="btn modal-item">{continent.name}</p>
-                    </Link>
-                  ))}
-
-                  <br></br>
-                  <p className="btn modal-item">About</p>
-                  <br></br>
-                  <span className="btn close-btn modal-item" data-dismiss="modal">Close</span>
-                </div>
-              </div>
-            </div>
             <Link href="/"><a className="navbar-brand logo" >t a w o w u <span className="sr-only">(current)</span></a></Link>
             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
               <span className="navbar-toggler-icon"></span>
@@ -108,6 +101,24 @@ const Layout = ({ children, title = "Tawowu" }) => {
           </div>
         </nav>
       </header>
+
+      <div className="modal fade " id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <input className="input-search" type="text" placeholder=" Search for cities, countries, ..." ></input>
+            {continents.map((continent) => (
+                <Link href={`/continent/${continent.name} `} key={continent.name}>
+                  <p className="btn modal-item">{continent.name}</p>
+                </Link>
+            ))}
+
+            <br></br>
+            <p className="btn modal-item">About</p>
+            <br></br>
+            <span className="btn close-btn modal-item" data-dismiss="modal">Close</span>
+          </div>
+        </div>
+      </div>
 
       <main className={"main"}>{children}</main>
 
