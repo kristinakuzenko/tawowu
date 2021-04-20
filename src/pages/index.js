@@ -5,7 +5,7 @@ import SearchInput from "../components/SearchInput/SearchInput";
 import Layout from "../components/Layout/Layout";
 import MainPage from "../components/MainPage/MainPage";
 import MapChart from "../components/MapChart/MapChart";
-//import Map from "../components/Map/Map";
+import Map from "../components/Map/Map";
 import ReactTooltip from "react-tooltip";
 import styles from "../styles/Home.module.css";
 

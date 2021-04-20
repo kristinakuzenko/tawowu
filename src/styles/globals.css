@@ -74,7 +74,7 @@
 }
 @media all and (min-width: 992px) {
 .navbar .nav-item .dropdown-menu{ display: none; }
-.navbar .nav-item:hover .nav-link{ color: #fff;  }
+.navbar .nav-item:hover .nav-link{ color: #4d2121;  }
 .navbar .nav-item:hover .dropdown-menu{ display: block; }
 .navbar .nav-item .dropdown-menu{ margin-top:0; }
 }
@@ -83,7 +83,7 @@
   background-image: linear-gradient(#a0481c   0%, #eb9f79 140%);
 }
 .dropdown-item:hover{
-  background-color: #df9672
+  background: #4d2121;
 }
 .modal-backdrop {
   z-index: -1;
@@ -118,6 +118,7 @@ textarea:focus, input:focus{
   color: #faccb6;
 }
 .dropdown-item{
+  
   font-size: 16px;
 }
 
@@ -429,16 +430,17 @@ font-size: 30px;
   padding: 5px;
   height: 60px;
 }
-.small-icon {
+.small-icon {    
   width: 60px;
   height: 60px;
   border-radius: 10px;
   border: 3px solid black;
   padding: 5px;
   transition: all .4s ease-in-out;
+  box-shadow:none;  
 }
 .small-icon.active {
-  border: 3px solid green;
+  box-shadow:0 0 50px #faddcf;  
 }
 .icon-container{
 margin: 40px 50px 150px 50px;
@@ -487,7 +489,7 @@ margin: 40px 50px 150px 50px;
 .navbar-toggler
 */
 
-@media (max-width: 768px) {
+@media (max-width: 992px) {
   .navbar > div {
     display:flex;
     width:100%;
@@ -516,7 +518,7 @@ margin: 40px 50px 150px 50px;
   }
 }
 
-@media (min-width: 769px) {
+@media (min-width: 993px) {
   .navbar div {
     display:flex;
     width:100%;
@@ -528,10 +530,27 @@ margin: 40px 50px 150px 50px;
     justify-content: center;
   }
   .navbar-collapse {
+    padding-right: 60px;
     justify-content: flex-end;
   }
 }
 
+.myPlaces-div{
+  text-align: center;
+  padding-top: 100px;
+}
+
+.fav-city{
+  text-shadow: -1px -1px 0px #9e6b6b, 1px 1px 0px #4d2121;
+	color: black;
+	opacity: 0.7;
+	font: 500 70px 'Bitter';
+  height: 100%;
+  width: 50%;
+  border: 3px solid black;
+  border-radius: 10px;
+  
+}
 
 
 

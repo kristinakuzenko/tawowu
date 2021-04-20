@@ -1,9 +1,27 @@
-//not working
 import React from 'react';
 import { MapAjax } from '@syncfusion/ej2-maps';
 import { MapsComponent, Inject, LayersDirective, LayerDirective, Selection, Highlight, MarkersDirective, MarkerDirective, Marker, MapsTooltip } from '@syncfusion/ej2-react-maps';
-import { SampleBase } from './SampleBase';
-import * as data from '../../map-data/default-datasource.json';
+import data from '../../map-data/default-datasource.json';
+import asia from '../../map-data/asia.json';
+import africa from '../../map-data/africa.json';
+import europe from '../../map-data/europe.json';
+import northamerica from '../../map-data/north-america.json';
+import southamerica from '../../map-data/south-america.json';
+import oceania from '../../map-data/oceania.json';
+import world from '../../map-data/world-map.json';
+import { enableRipple } from '@syncfusion/ej2-base';
+enableRipple(true);
+export class SampleBase extends React.PureComponent {
+    rendereComplete() {
+        /**custom render complete function */
+    }
+    componentDidMount() {
+        setTimeout(() => {
+        this.rendereComplete();
+    });
+      }
+    }
+
 let datasource = data;
 // Data ref
 const SAMPLE_CSS = `
@@ -22,7 +40,7 @@ let markers = [
     { name: 'South America', latitude: -6.64607562172573, longitude: -54.54687499999999 }
 ];
 let touchmove;
-export class Map extends SampleBase {
+export default class Map extends SampleBase {
     change() {
         this.mapInstance.baseLayerIndex = 0;
         this.mapInstance.refresh();
@@ -90,7 +108,7 @@ export class Map extends SampleBase {
         }}>
                         <Inject services={[Selection, Highlight, Marker, MapsTooltip]}/>
                         <LayersDirective>
-                            <LayerDirective shapeData={new MapAjax('https://ej2.syncfusion.com/react/demos/src/maps/map-data/world-map.json')} layerType='Geometry' shapePropertyPath='continent' shapeDataPath='continent' dataSource={datasource.default} shapeSettings={{
+                            <LayerDirective shapeData={new MapAjax(world)} layerType='Geometry' shapePropertyPath='continent' shapeDataPath='continent' dataSource={datasource.default} shapeSettings={{
             colorValuePath: 'drillColor'
         }} selectionSettings={{
             enable: false
@@ -103,7 +121,7 @@ export class Map extends SampleBase {
                                     </MarkerDirective>
                                 </MarkersDirective>
                             </LayerDirective>
-                            <LayerDirective shapeData={new MapAjax('https://ej2.syncfusion.com/react/demos/src/maps/map-data/africa.json')} layerType='Geometry' shapeSettings={{
+                            <LayerDirective shapeData={new MapAjax(africa)} layerType='Geometry' shapeSettings={{
             fill: '#80306A'
         }} highlightSettings={{
             enable: true,
@@ -113,7 +131,7 @@ export class Map extends SampleBase {
             valuePath: 'name'
         }}>
                             </LayerDirective>
-                            <LayerDirective shapeData={new MapAjax('https://ej2.syncfusion.com/react/demos/src/maps/map-data/europe.json')} layerType='Geometry' shapeSettings={{
+                            <LayerDirective shapeData={new MapAjax(europe)} layerType='Geometry' shapeSettings={{
             fill: '#622D6C'
         }} highlightSettings={{
             enable: true,
@@ -123,7 +141,7 @@ export class Map extends SampleBase {
             valuePath: 'name'
         }}>
                             </LayerDirective>
-                            <LayerDirective shapeData={new MapAjax('https://ej2.syncfusion.com/react/demos/src/maps/map-data/asia.json')} layerType='Geometry' shapeSettings={{
+                            <LayerDirective shapeData={new MapAjax(asia)} layerType='Geometry' shapeSettings={{
             fill: '#462A6D'
         }} highlightSettings={{
             enable: true,
@@ -133,7 +151,7 @@ export class Map extends SampleBase {
             valuePath: 'name'
         }}>
                             </LayerDirective>
-                            <LayerDirective shapeData={new MapAjax('https://ej2.syncfusion.com/react/demos/src/maps/map-data/north-america.json')} layerType='Geometry' shapeSettings={{
+                            <LayerDirective shapeData={new MapAjax(northamerica)} layerType='Geometry' shapeSettings={{
             fill: '#C13664'
         }} highlightSettings={{
             enable: true,
@@ -143,7 +161,7 @@ export class Map extends SampleBase {
             valuePath: 'name'
         }}>
                             </LayerDirective>
-                            <LayerDirective shapeData={new MapAjax('https://ej2.syncfusion.com/react/demos/src/maps/map-data/south-america.json')} layerType='Geometry' shapeSettings={{
+                            <LayerDirective shapeData={new MapAjax(southamerica)} layerType='Geometry' shapeSettings={{
             fill: '#9C3367'
         }} highlightSettings={{
             enable: true,
@@ -153,7 +171,7 @@ export class Map extends SampleBase {
             valuePath: 'name'
         }}>
                             </LayerDirective>
-                            <LayerDirective shapeData={new MapAjax('https://ej2.syncfusion.com/react/demos/src/maps/map-data/oceania.json')} layerType='Geometry' shapeSettings={{
+                            <LayerDirective shapeData={new MapAjax(oceania)} layerType='Geometry' shapeSettings={{
             fill: '#2A2870'
         }} highlightSettings={{
             enable: true,
@@ -171,4 +189,3 @@ export class Map extends SampleBase {
             </div>);
     }
 }
-export default Map;

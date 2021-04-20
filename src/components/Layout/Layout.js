@@ -64,7 +64,7 @@ const Layout = ({ children, title = "Tawowu" }) => {
 
       </Head>
       <header className="header">
-        <nav className="navbar navbar-expand-md navbar-dark fixed-top">
+        <nav className="navbar navbar-expand-lg navbar-dark fixed-top">
           <div className="">
             <span type="button" className="nav-link search" href="#" data-toggle="modal" data-target="#exampleModal"><FontAwesomeIcon icon={faSearch}></FontAwesomeIcon> </span>
             <Link href={`/my-places`} class="nav-link user">

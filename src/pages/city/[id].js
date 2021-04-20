@@ -190,20 +190,20 @@ const City = ({ city }) => {
               <div className="icon-container">
 
                 <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  ">
-                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Art" src="../art.png" onClick={(e) => toggleFilterFilter(e, 1)} />
+                  <img className={placeFilter === 1 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Art" src="../art.png" onClick={(e) => toggleFilterFilter(e, 1)} />
                 </div>
 
                 <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  ">
                   <img className={placeFilter === 2 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Insta places" src="../camera.png" onClick={(e) => toggleFilterFilter(e, 2)} />
                 </div>
                 <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  ">
-                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Parks / outdoors" src="../park.png" onClick={(e) => toggleFilterFilter(e, 3)} />
+                  <img className={placeFilter === 3 ? 'small-icon active' : 'small-icon'}data-toggle="tooltip" data-placement="bottom" title="Parks / outdoors" src="../park.png" onClick={(e) => toggleFilterFilter(e, 3)} />
                 </div>
                 <div className="btn icon-div col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2  ">
-                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Museums" src="../museum.png" onClick={(e) => toggleFilterFilter(e, 4)} />
+                  <img className={placeFilter === 4 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Museums" src="../museum.png" onClick={(e) => toggleFilterFilter(e, 4)} />
                 </div>
                 <div className="btn icon-div col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2  ">
-                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Viewpoints" src="../view.png" onClick={(e) => toggleFilterFilter(e, 5)} />
+                  <img className={placeFilter === 5 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Viewpoints" src="../view.png" onClick={(e) => toggleFilterFilter(e, 5)} />
                 </div>
                 <div data-toggle="modal" data-target="#filterModal" className="btn filter-btn icon-div col-6 col-sm-6 col-md-12 col-lg-2 col-xl-2  ">
                   <p className="filter-p">Filter</p>
@@ -236,9 +236,7 @@ const City = ({ city }) => {
                   <div className="image-city-div col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                     <img className="image-city " src={place.image} />
                   </div>
-                  <div className="btn filter-p filter-btn ">
-                    Show more
-                      </div>
+                  
                   <div className="btn filter-p filter-btn " onClick={(e) => addToFavorites(e, place.name, place)}>
                     Add to favorites
                       </div>
@@ -290,7 +288,7 @@ const City = ({ city }) => {
                   <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                     <img className="image-city " src={place.image} />
                   </div>
-
+                
                   <div className=" col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
                     <h1 className="place-h">Average bill price</h1>
                     <h1 className="place-p">{place.price}</h1>
