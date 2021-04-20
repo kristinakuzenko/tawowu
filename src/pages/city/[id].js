@@ -15,24 +15,24 @@ const City = ({ city }) => {
     _isMounted = true;
 
     fire.firestore()
-        .collection('cities')
-        .onSnapshot(snap => {
-          const cities = snap.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-          }));
-          _isMounted && setCities(cities);
-        });
+      .collection('cities')
+      .onSnapshot(snap => {
+        const cities = snap.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        _isMounted && setCities(cities);
+      });
 
     fire.firestore()
-        .collection('places')
-        .onSnapshot(snap => {
-          const places = snap.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-          }));
-          _isMounted && setPlaces(places);
-        });
+      .collection('places')
+      .onSnapshot(snap => {
+        const places = snap.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        _isMounted && setPlaces(places);
+      });
 
     // get values by keys from local storage
     Object.keys(localStorage).forEach((key) => values.push(localStorage.getItem(key)));
@@ -130,6 +130,30 @@ const City = ({ city }) => {
     localStorage.setItem(`tawowu-fav-${value}`, JSON.stringify(place)); // put
   }
 
+
+  const activeFilters = [];
+
+  const toggleFilter = (e, filterValue) => {
+    activeFilters.forEach(element => console.log(element));
+    e.preventDefault();
+    const index = activeFilters.indexOf(filterValue);
+    if (index > -1) {
+      activeFilters.splice(index, 1);
+    } else {
+      activeFilters.push(filterValue);
+    }
+  }
+  const activePlaces=[];
+
+  const getActiveFilteredPlaces = () => {
+    let result = [...activePlaces];
+    if(activeFilters>0){
+      activePlaces.forEach(pl=>{
+        result = result.filter(pl.filter.sort(function(a, b) {return a - b;}).join('-').includes(activeFilters.sort(function(a, b) {return a - b;}).join('-')))
+    })
+  }
+  return result;
+  }
   // const activeFilters = [['type', [1, 2, 3]], ['location', [1]]];
   // const places = [{type: [1, 3, 2], location: 1}, {type:1, location: 3}, {type:2, location:3}];
   //
@@ -197,7 +221,7 @@ const City = ({ city }) => {
                   <img className={placeFilter === 2 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Insta places" src="../camera.png" onClick={(e) => toggleFilterFilter(e, 2)} />
                 </div>
                 <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  ">
-                  <img className={placeFilter === 3 ? 'small-icon active' : 'small-icon'}data-toggle="tooltip" data-placement="bottom" title="Parks / outdoors" src="../park.png" onClick={(e) => toggleFilterFilter(e, 3)} />
+                  <img className={placeFilter === 3 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Parks / outdoors" src="../park.png" onClick={(e) => toggleFilterFilter(e, 3)} />
                 </div>
                 <div className="btn icon-div col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2  ">
                   <img className={placeFilter === 4 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Museums" src="../museum.png" onClick={(e) => toggleFilterFilter(e, 4)} />
@@ -222,13 +246,13 @@ const City = ({ city }) => {
               </div>
             </div>
             <div className="input-city">
-            <SearchInput
-              placeholder="Search for city"
-              onChange={onInputChange}
-            />
+              <SearchInput
+                placeholder="Search for city"
+                onChange={onInputChange}
+              />
             </div>
 
-            {cityPlacesFilteredByActiveFilter().filter(place => place.type.indexOf(1) !== -1).sort(mySortingFunction).map((place) => (
+            {getActiveFilteredPlaces().filter(place => place.type.indexOf(1) !== -1).sort(mySortingFunction).map((place) => (
               <div className="one-place" key={place.name}>
                 <h1 className="place-name"> {place.name} </h1>
                 <p className="place-desc">{place.description} </p>
@@ -236,7 +260,7 @@ const City = ({ city }) => {
                   <div className="image-city-div col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                     <img className="image-city " src={place.image} />
                   </div>
-                  
+
                   <div className="btn filter-p filter-btn " onClick={(e) => addToFavorites(e, place.name, place)}>
                     Add to favorites
                       </div>
@@ -261,7 +285,7 @@ const City = ({ city }) => {
             <div className="container-fluid ">
               <div className="icon-container">
                 <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  ">
-                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Take-away" src="../take-away.png" onClick={(e) => toggleFilterFilter(e, 1)} />
+                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Take-away" src="../take-away.png" onClick={(e) => toggleFilter(e, 1)} />
                 </div>
                 <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  ">
                   <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Coffee shops" src="../tea.png" onClick={(e) => toggleFilterFilter(e, 2)} />
@@ -288,7 +312,7 @@ const City = ({ city }) => {
                   <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                     <img className="image-city " src={place.image} />
                   </div>
-                
+
                   <div className=" col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
                     <h1 className="place-h">Average bill price</h1>
                     <h1 className="place-p">{place.price}</h1>
