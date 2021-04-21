@@ -11,6 +11,9 @@ function MyApp({Component,pageProps}) {
   return (
       <>
           <Head>
+          <head>
+<link href='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css' rel='stylesheet' />
+</head>
               <link 
                   rel="stylesheet" 
                   href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
