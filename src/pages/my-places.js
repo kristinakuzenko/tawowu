@@ -3,7 +3,7 @@ import Head from 'next/head';
 import fire from '../config/fire-config';
 import Layout from "../components/Layout/Layout";
 
-export default function Home() {
+const MyPlaces = () => {
   const favCities = [];
   const favPlaces = [];
   React.useEffect(() => {
@@ -28,7 +28,8 @@ export default function Home() {
     favoritePlaces().map((place) => (
       console.log("c" + place)
     ));
-
+    console.log(favPlaces);
+    console.log(favCities);
   }, [])
   const mySortingFunction = (a, b) => a.popularity.localeCompare(b.popularity);
   const favoriteCities = () => favCities.sort();
@@ -38,7 +39,7 @@ export default function Home() {
   return <Layout title="Favorite places">
     <div className="country-page">
       <div className="country-page2">
-        {favoriteCities().map((city) => (
+        {favCities.map((city) => (
           <div className="myPlaces-div" key={city}>
             <p>
               <button className="btn fav-city" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
@@ -80,5 +81,5 @@ export default function Home() {
     </div>
   </Layout>;
 }
-
+export default MyPlaces;
 

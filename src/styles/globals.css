@@ -516,6 +516,9 @@ margin: 40px 50px 150px 50px;
   .navbar-collapse {
     width:100%;
   }
+  .navbar-collapse.collapse:not(.show) {
+    display: none!important;
+  }
 }
 
 @media (min-width: 993px) {
@@ -532,6 +535,9 @@ margin: 40px 50px 150px 50px;
   .navbar-collapse {
     padding-right: 60px;
     justify-content: flex-end;
+  }
+  .navbar-collapse.collapse{
+    display: flex!important;
   }
 }
 

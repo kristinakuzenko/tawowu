@@ -5,13 +5,26 @@ import { faMapMarkedAlt } from "@fortawesome/free-solid-svg-icons";
 import SearchInput from "../../components/SearchInput/SearchInput";
 //database import
 import fire from '../../config/fire-config';
+import dynamic from 'next/dynamic';
+import styled from "styled-components";
 import React, { useState, useEffect } from "react";
 
 const City = ({ city }) => {
   let _isMounted = false;
   const values = [];
-
+  const [cities, setCities] = useState([]);
+  const [places, setPlaces] = useState([]);
   React.useEffect(() => {
+    const fetchLocations = async () => {
+      await fetch(url).then((response) =>
+        response.text()).then((res) => JSON.parse(res))
+      .then((json) => {
+        setLocations(json.features);
+      }).catch((err) => console.log({ err }));
+    };
+    fetchLocations();
+
+
     _isMounted = true;
 
     fire.firestore()
@@ -41,6 +54,10 @@ const City = ({ city }) => {
       _isMounted = false;
     }
   }, [])
+ const Map = dynamic(() => import("../../components/Map/Map"), {
+    loading: () => "Loading...",
+    ssr: false
+  });
 
   const [keyword, setKeyword] = useState("");
   const onInputChange = (e) => {
@@ -52,8 +69,7 @@ const City = ({ city }) => {
     const needle = keyword ? keyword.toLowerCase() : '';
     return cityPlaces().filter((place) => place.name.toLowerCase().indexOf(needle) !== -1);
   };
-  const [cities, setCities] = useState([]);
-  const [places, setPlaces] = useState([]);
+
   const [placeType, setPlaceType] = useState(-1);
   const [placeFilter, setPlaceFilter] = useState(-1);
 
@@ -131,7 +147,7 @@ const City = ({ city }) => {
   }
 
 
-  const activeFilters = [];
+  const [activeFilters, setActiveFilters] = useState([]);
 
   const toggleFilter = (e, filterValue) => {
     activeFilters.forEach(element => console.log(element));
@@ -139,20 +155,45 @@ const City = ({ city }) => {
     const index = activeFilters.indexOf(filterValue);
     if (index > -1) {
       activeFilters.splice(index, 1);
+      setActiveFilters([...activeFilters])
     } else {
       activeFilters.push(filterValue);
+      setActiveFilters([...activeFilters])
+      /*const filter={
+        name:"filter",
+        value:3
+      }*/
+
     }
+    console.log(activeFilters);
   }
-  const activePlaces=[];
+
+  const toggleFilterNew = (e,name, value) => {
+    e.preventDefault();
+    const index = activeFilters.findIndex(f=>f.value===value);
+    if (index > -1) {
+      activeFilters.splice(index, 1);
+      
+    } else {
+      activeFilters.push({name,value});
+    }
+    setActiveFilters([...activeFilters])
+    console.log(activeFilters);
+  }
+
 
   const getActiveFilteredPlaces = () => {
-    let result = [...activePlaces];
-    if(activeFilters>0){
-      activePlaces.forEach(pl=>{
-        result = result.filter(activeFilters.every(pl.filter)===true)
-    })
-  }
-  return result;
+    console.log([...cityPlaces()]);
+    let result = [...cityPlaces()];
+    if (activeFilters.length > 0) {
+      activeFilters.forEach(filter => {
+        console.log(filter);
+        result = result.filter(pl=>pl.filter.indexOf(filter)!==-1)
+        //result = result.filter(pl=>pl[filter.name].indexOf(filter.value)!==-1)
+      })
+    }
+    console.log(result);
+    return result;
   }
   // const activeFilters = [['type', [1, 2, 3]], ['location', [1]]];
   // const places = [{type: [1, 3, 2], location: 1}, {type:1, location: 3}, {type:2, location:3}];
@@ -171,7 +212,8 @@ const City = ({ city }) => {
   //
   //   return result;
   // }
-
+  const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/greggs.json?access_token=pk.eyJ1Ijoia3Jpc3RpbmFrdXplbmtvIiwiYSI6ImNrbnJpZDFtYjBwMG8ybnBmeG82a3Z0ejYifQ.GYQGZmk2Y0sSruGEpupdgw&bbox=-0.227654%2C51.464102%2C0.060737%2C51.553421&limit=10`;
+  const [locations, setLocations] = React.useState([]);
   const mySortingFunction = (a, b) => a.popularity.localeCompare(b.popularity);
   return <Layout title={city}>
     {currentCity.map((cityItem) => (
@@ -180,6 +222,7 @@ const City = ({ city }) => {
         <div className="city-main-caption">
           {cityItem.city}
         </div>
+        <Container><Map locations={locations} /></Container>
         <div className="city-filter container-fluid ">
 
           <div className="col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2 filter-item ">
@@ -214,20 +257,20 @@ const City = ({ city }) => {
               <div className="icon-container">
 
                 <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  ">
-                  <img className={placeFilter === 1 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Art" src="../art.png" onClick={(e) => toggleFilterFilter(e, 1)} />
+                  <img className={placeFilter === 1 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Art" src="../art.png" onClick={(e) => toggleFilter(e, 1)} />
                 </div>
 
                 <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  ">
-                  <img className={placeFilter === 2 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Insta places" src="../camera.png" onClick={(e) => toggleFilterFilter(e, 2)} />
+                  <img className={placeFilter === 2 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Insta places" src="../camera.png" onClick={(e) => toggleFilter(e, 2)} />
                 </div>
                 <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  ">
-                  <img className={placeFilter === 3 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Parks / outdoors" src="../park.png" onClick={(e) => toggleFilterFilter(e, 3)} />
+                  <img className={placeFilter === 3 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Parks / outdoors" src="../park.png" onClick={(e) => toggleFilter(e, 3)} />
                 </div>
                 <div className="btn icon-div col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2  ">
-                  <img className={placeFilter === 4 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Museums" src="../museum.png" onClick={(e) => toggleFilterFilter(e, 4)} />
+                  <img className={placeFilter === 4 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Museums" src="../museum.png" onClick={(e) => toggleFilter(e, 4)} />
                 </div>
                 <div className="btn icon-div col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2  ">
-                  <img className={placeFilter === 5 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Viewpoints" src="../view.png" onClick={(e) => toggleFilterFilter(e, 5)} />
+                  <img className={placeFilter === 5 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Viewpoints" src="../view.png" onClick={(e) => toggleFilter(e, 5)} />
                 </div>
                 <div data-toggle="modal" data-target="#filterModal" className="btn filter-btn icon-div col-6 col-sm-6 col-md-12 col-lg-2 col-xl-2  ">
                   <p className="filter-p">Filter</p>
@@ -419,6 +462,10 @@ const City = ({ city }) => {
   </Layout>;
 
 }
+const Container = styled.div`
+  width: 50vw;
+  height: 50vh;
+`;
 export default City;
 export const getServerSideProps = async ({ params }) => {
   const city = params.id;

@@ -40,7 +40,7 @@ let markers = [
     { name: 'South America', latitude: -6.64607562172573, longitude: -54.54687499999999 }
 ];
 let touchmove;
-export default class Map extends SampleBase {
+export default class MapWorld extends SampleBase {
     change() {
         this.mapInstance.baseLayerIndex = 0;
         this.mapInstance.refresh();
@@ -108,7 +108,7 @@ export default class Map extends SampleBase {
         }}>
                         <Inject services={[Selection, Highlight, Marker, MapsTooltip]}/>
                         <LayersDirective>
-                            <LayerDirective shapeData={new MapAjax(world)} layerType='Geometry' shapePropertyPath='continent' shapeDataPath='continent' dataSource={datasource.default} shapeSettings={{
+                            <LayerDirective shapeData={world} layerType='Geometry' shapePropertyPath='continent' shapeDataPath='continent' dataSource={datasource.default} shapeSettings={{
             colorValuePath: 'drillColor'
         }} selectionSettings={{
             enable: false
@@ -121,7 +121,7 @@ export default class Map extends SampleBase {
                                     </MarkerDirective>
                                 </MarkersDirective>
                             </LayerDirective>
-                            <LayerDirective shapeData={new MapAjax(africa)} layerType='Geometry' shapeSettings={{
+                            <LayerDirective shapeData={africa} layerType='Geometry' shapeSettings={{
             fill: '#80306A'
         }} highlightSettings={{
             enable: true,
@@ -131,7 +131,7 @@ export default class Map extends SampleBase {
             valuePath: 'name'
         }}>
                             </LayerDirective>
-                            <LayerDirective shapeData={new MapAjax(europe)} layerType='Geometry' shapeSettings={{
+                            <LayerDirective shapeData={europe} layerType='Geometry' shapeSettings={{
             fill: '#622D6C'
         }} highlightSettings={{
             enable: true,
@@ -141,7 +141,7 @@ export default class Map extends SampleBase {
             valuePath: 'name'
         }}>
                             </LayerDirective>
-                            <LayerDirective shapeData={new MapAjax(asia)} layerType='Geometry' shapeSettings={{
+                            <LayerDirective shapeData={asia} layerType='Geometry' shapeSettings={{
             fill: '#462A6D'
         }} highlightSettings={{
             enable: true,
@@ -151,7 +151,7 @@ export default class Map extends SampleBase {
             valuePath: 'name'
         }}>
                             </LayerDirective>
-                            <LayerDirective shapeData={new MapAjax(northamerica)} layerType='Geometry' shapeSettings={{
+                            <LayerDirective shapeData={northamerica} layerType='Geometry' shapeSettings={{
             fill: '#C13664'
         }} highlightSettings={{
             enable: true,
@@ -161,7 +161,7 @@ export default class Map extends SampleBase {
             valuePath: 'name'
         }}>
                             </LayerDirective>
-                            <LayerDirective shapeData={new MapAjax(southamerica)} layerType='Geometry' shapeSettings={{
+                            <LayerDirective shapeData={southamerica} layerType='Geometry' shapeSettings={{
             fill: '#9C3367'
         }} highlightSettings={{
             enable: true,
@@ -171,7 +171,7 @@ export default class Map extends SampleBase {
             valuePath: 'name'
         }}>
                             </LayerDirective>
-                            <LayerDirective shapeData={new MapAjax(oceania)} layerType='Geometry' shapeSettings={{
+                            <LayerDirective shapeData={oceania} layerType='Geometry' shapeSettings={{
             fill: '#2A2870'
         }} highlightSettings={{
             enable: true,
