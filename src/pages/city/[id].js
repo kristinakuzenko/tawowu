@@ -149,7 +149,7 @@ const City = ({ city }) => {
     let result = [...activePlaces];
     if(activeFilters>0){
       activePlaces.forEach(pl=>{
-        result = result.filter(pl.filter.sort(function(a, b) {return a - b;}).join('-').includes(activeFilters.sort(function(a, b) {return a - b;}).join('-')))
+        result = result.filter(activeFilters.every(pl.filter)===true)
     })
   }
   return result;
