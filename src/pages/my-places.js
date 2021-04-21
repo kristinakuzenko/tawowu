@@ -4,8 +4,9 @@ import fire from '../config/fire-config';
 import Layout from "../components/Layout/Layout";
 
 const MyPlaces = () => {
-  const favCities = [];
-  const favPlaces = [];
+  const [favCities, setFavCities] = useState([]);
+  const [favPlaces, setFavPlaces] = useState([]);
+
   React.useEffect(() => {
 
     Object.keys(localStorage).filter(key => key.indexOf('tawowu-fav') !== -1).forEach((key) => {
@@ -13,33 +14,24 @@ const MyPlaces = () => {
         favCities.push(JSON.parse(localStorage.getItem(key)).city);
       }
     });
-    favCities.forEach(element => console.log(element));
-
 
     Object.keys(localStorage).filter(key => key.indexOf('tawowu-fav') !== -1).forEach((key) => {
       favPlaces.push(JSON.parse(localStorage.getItem(key)));
     });
-    favPlaces.forEach(element => console.log(element));
 
-    favoriteCities().map((city) => (
-      console.log("c" + city)
-    ));
+    setFavCities([...favCities]);
+    setFavPlaces([...favPlaces]);
 
-    favoritePlaces().map((place) => (
-      console.log("c" + place)
-    ));
-    console.log(favPlaces);
-    console.log(favCities);
-  }, [])
+  }, []);
+
   const mySortingFunction = (a, b) => a.popularity.localeCompare(b.popularity);
   const favoriteCities = () => favCities.sort();
   const favoritePlaces = () => favPlaces.sort(mySortingFunction);
 
-
   return <Layout title="Favorite places">
     <div className="country-page">
       <div className="country-page2">
-        {favCities.map((city) => (
+        {favoriteCities().map((city) => (
           <div className="myPlaces-div" key={city}>
             <p>
               <button className="btn fav-city" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
