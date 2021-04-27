@@ -28,6 +28,13 @@ const MyPlaces = () => {
   const favoriteCities = () => favCities.sort();
   const favoritePlaces = () => favPlaces.sort(mySortingFunction);
 
+  const removeFromFavorites = (e, value,place) => {
+    e.preventDefault();
+    localStorage.removeItem(`tawowu-fav-${value}`);
+    
+  }
+
+
   return <Layout title="Favorite places">
     <div className="country-page">
       <div className="country-page2">
@@ -48,7 +55,7 @@ const MyPlaces = () => {
                       <img className="image-city " src={place.image} />
                     </div>
 
-                    <div className="btn filter-p filter-btn " >
+                    <div className="btn filter-p filter-btn " onClick={(e) => removeFromFavorites(e, place.name,place)}>
                       Remove
                   </div>
 

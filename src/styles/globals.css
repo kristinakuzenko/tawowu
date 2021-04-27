@@ -68,6 +68,7 @@
   margin-top: 10em;
   text-align: center;
   color: gray;
+  color: #eb9f79;
 }
 #vmap{
   width: 600px; height: 400px;
@@ -436,7 +437,7 @@ font-size: 30px;
   border-radius: 10px;
   border: 3px solid black;
   padding: 5px;
-  transition: all .4s ease-in-out;
+  transition: all .2s ease-in-out;
   box-shadow:none;  
 }
 .small-icon.active {
@@ -466,9 +467,13 @@ margin: 40px 50px 150px 50px;
 .modal-f{
   padding-top: 20px;
 }
-.map{
+.map2{
   background-image: linear-gradient(315deg, #fc935f  0%, #5e2c2c 120%);
   height: 90vh;
+}
+.map{
+  height: 1000px;
+  width:2000px;
 }
 .map-chart{
   margin-top: -100px;
@@ -557,6 +562,11 @@ margin: 40px 50px 150px 50px;
   border-radius: 10px;
   
 }
+.location{
+  font-size: 30px;
+  color: red;
+}
+
 
 
 

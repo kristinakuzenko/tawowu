@@ -30,17 +30,14 @@ export default  function Home() {
   return (
     <Layout>
       <MainPage />
-      <div className="map">
+      <div className="map2">
         <MapChart setTooltipContent={setContent} />
         {isTooltipVisible && <ReactTooltip  place='right' className="tooltip">{content}</ReactTooltip>}
       </div>
+      <div className="map">
       <MapWorld/>
-     
-        
-  
+      </div>
       <CountriesTable />
-      
-
     </Layout>
   );
 }

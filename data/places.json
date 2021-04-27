@@ -11,7 +11,9 @@
         "tips": "Tips",
         "transport":"transport",
         "filter":[2],
-        "popularity":"1"
+        "category":[1,2],
+        "popularity":"1",
+        "coordinates":[41.4036,2.1744]
     },
     {
         "city":"Barcelona",
@@ -24,7 +26,9 @@
         "tips": "Tips",
         "transport":"transport",
         "filter":[1],
-        "popularity":"1"
+        "category":[1,2],
+        "popularity":"1",
+        "coordinates":[41.4036,2.1744]
     },
     {
         "city":"Barcelona",
@@ -37,7 +41,9 @@
         "tips": "Tips",
         "transport":"transport",
         "filter":[1],
-        "popularity":"1"
+        "category":[1,2],
+        "popularity":"1",
+        "coordinates":[41.4036,2.1744]
     },
     {
         "city":"Barcelona",
@@ -46,6 +52,7 @@
         "type":[4],
         "filter":[6],
         "price":"One way ticket: 10$",
+        "category":[1,2],
         "popularity":"1"
     },
     {
@@ -59,7 +66,8 @@
         "tips": "Queues can be punishingly long; visit at lunch or shortly before the last entry, or buy your tickets in advance online.",
         "transport":"transport",
         "filter":[1,2],
-        "popularity":"4"
+        "popularity":"4",
+        "coordinates":[41.4036,2.1744]
     },
     {
         "city":"Barcelona",
@@ -72,7 +80,8 @@
         "tips": "The visit allows you to enjoy a 360-degree view of the city and see the main buildings and monuments that make up the skyline of Barcelona.",
         "transport":"transport",
         "filter":[4,5],
-        "popularity":"3"
+        "popularity":"3",
+        "coordinates":[41.4036,2.1744]
     },
     {
         "city":"Barcelona",
@@ -85,293 +94,8 @@
         "tips": "Park",
         "transport":"transport",
         "filter":[3],
-        "popularity":"2"
-    },
-    {
-        "city":"Hurghada",
-        "name":" Hurghada Grand Aquarium",
-        "image":"https://kristinakuzenko.github.io/images/barcelona.jpg",
-        "type":[1],
-        "description": "Aquarium",
-        "location": "Location",
-        "price": "10$",
-        "tips": "Tips",
-        "transport":"transport",
-        "filter":[2],
-        "popularity":"1"
-    },{
-        "city":"Hurghada",
-        "name":"Sofra",
-        "image":"https://kristinakuzenko.github.io/images/barcelona.jpg",
-        "type":[2],
-        "description": "Restaurant",
-        "location": "Location",
-        "price": "10$",
-        "tips": "Tips",
-        "transport":"transport",
-        "filter":[2],
-        "popularity":"1"
-    },{
-        "city":"Hurghada",
-        "name":"Senzo Mall",
-        "image":"https://kristinakuzenko.github.io/images/barcelona.jpg",
-        "type":[3],
-        "description": "Mall",
-        "location": "Location",
-        "price": "10$",
-        "tips": "Tips",
-        "transport":"transport",
-        "filter":[2],
-        "popularity":"1"
-    },
-    {
-        "city":"Hurghada",
-        "name":"Boat",
-        "image":"https://kristinakuzenko.github.io/images/barcelona.jpg",
-        "type":[4],
-        "filter":[6],
-        "price":"One way ticket: 10$",
-        "popularity":"1"
-    },
-    {
-        "city":"Tokyo",
-        "name":" Tokyo Tower",
-        "image":"https://kristinakuzenko.github.io/images/barcelona.jpg",
-        "type":[1],
-        "description": "Tower",
-        "location": "Location",
-        "price": "10$",
-        "tips": "Tips",
-        "transport":"transport",
-        "filter":[2],
-        "popularity":"1"
-    },
-    {
-        "city":"Tokyo",
-        "name":"Tsukiji Fish Market",
-        "image":"https://kristinakuzenko.github.io/images/barcelona.jpg",
-        "type":[2],
-        "description": "Market",
-        "location": "Location",
-        "price": "10$",
-        "tips": "Tips",
-        "transport":"transport",
-        "filter":[2],
-        "popularity":"1"
-    },
-    {
-        "city":"Tokyo",
-        "name":"Ginza Street",
-        "image":"https://kristinakuzenko.github.io/images/barcelona.jpg",
-        "type":[3],
-        "description": "Shopping street",
-        "location": "Location",
-        "price": "10$",
-        "tips": "Tips",
-        "transport":"transport",
-        "filter":[2],
-        "popularity":"1"
-    },
-    {
-        "city":"Tokyo",
-        "name":"Metro",
-        "image":"https://kristinakuzenko.github.io/images/barcelona.jpg",
-        "type":[4],
-        "filter":[6],
-        "price":"One way ticket: 10$",
-        "popularity":"1"
-    },
-    {
-        "city":"Kyiv",
-        "name":" Saint Sophia`s Cathedral",
-        "image":"https://kristinakuzenko.github.io/images/barcelona.jpg",
-        "type":[1],
-        "description": "Cathedral",
-        "location": "Location",
-        "price": "10$",
-        "tips": "Tips",
-        "transport":"transport",
-        "filter":[2],
-        "popularity":"1"
-    },
-    {
-        "city":"Kyiv",
-        "name":"Puzata Hata",
-        "image":"https://kristinakuzenko.github.io/images/barcelona.jpg",
-        "type":[2],
-        "description": "Cafe",
-        "location": "Location",
-        "price": "10$",
-        "tips": "Tips",
-        "transport":"transport",
-        "filter":[2],
-        "popularity":"1"
-    },
-    {
-        "city":"Kyiv",
-        "name":"Ocean Plaza",
-        "image":"https://kristinakuzenko.github.io/images/barcelona.jpg",
-        "type":[3],
-        "description": "Shopping mall",
-        "location": "Location",
-        "price": "10$",
-        "tips": "Tips",
-        "transport":"transport",
-        "filter":[2],
-        "popularity":"1"
-    },
-    {
-        "city":"Kyiv",
-        "name":"Metro",
-        "image":"https://kristinakuzenko.github.io/images/barcelona.jpg",
-        "type":[4],
-        "filter":[6],
-        "price":"One way ticket: 10$",
-        "popularity":"1"
-    },
-    {
-        "city":"Sydney",
-        "name":"Sydney Opera House",
-        "image":"https://kristinakuzenko.github.io/images/barcelona.jpg",
-        "type":[1],
-        "description": "Opera House",
-        "location": "Location",
-        "price": "10$",
-        "tips": "Tips",
-        "transport":"transport",
-        "filter":[2],
-        "popularity":"1"
-    },
-    {
-        "city":"Sydney",
-        "name":"Sydney cafe",
-        "image":"https://kristinakuzenko.github.io/images/barcelona.jpg",
-        "type":[2],
-        "description": "Cafe",
-        "location": "Location",
-        "price": "10$",
-        "tips": "Tips",
-        "transport":"transport",
-        "filter":[2],
-        "popularity":"1"
-    },
-    {
-        "city":"Sydney",
-        "name":"Sydney Plaza",
-        "image":"https://kristinakuzenko.github.io/images/barcelona.jpg",
-        "type":[3],
-        "description": "Shopping mall",
-        "location": "Location",
-        "price": "10$",
-        "tips": "Tips",
-        "transport":"transport",
-        "filter":[2],
-        "popularity":"1"
-    },
-    {
-        "city":"Sydney",
-        "name":"Metro",
-        "image":"https://kristinakuzenko.github.io/images/barcelona.jpg",
-        "type":[4],
-        "filter":[6],
-        "price":"One way ticket: 10$"
-    },
-    {
-        "city":"New York",
-        "name":"Statue of Liberty",
-        "image":"https://kristinakuzenko.github.io/images/barcelona.jpg",
-        "type":[1],
-        "description": "Statue",
-        "location": "Location",
-        "price": "10$",
-        "tips": "Tips",
-        "transport":"transport",
-        "filter":[2],
-        "popularity":"1"
-    },
-    {
-        "city":"New York",
-        "name":"Hard Rock Cafe",
-        "image":"https://kristinakuzenko.github.io/images/barcelona.jpg",
-        "type":[2],
-        "description": "Cafe",
-        "location": "Location",
-        "price": "10$",
-        "tips": "Tips",
-        "transport":"transport",
-        "filter":[2],
-        "popularity":"1"
-    },
-    {
-        "city":"New York",
-        "name":"New York Plaza",
-        "image":"https://kristinakuzenko.github.io/images/barcelona.jpg",
-        "type":[3],
-        "description": "Shopping mall",
-        "location": "Location",
-        "price": "10$",
-        "tips": "Tips",
-        "transport":"transport",
-        "filter":[2],
-        "popularity":"1"
-    },
-    {
-        "city":"New York",
-        "name":"Metro",
-        "image":"https://kristinakuzenko.github.io/images/barcelona.jpg",
-        "type":[4],
-        "filter":[6],
-        "price":"One way ticket: 10$",
-        "popularity":"1"
-    },
-    {
-        "city":"Rio de Janeiro",
-        "name":"Rio Statue",
-        "image":"https://kristinakuzenko.github.io/images/barcelona.jpg",
-        "type":[1],
-        "description": "Statue",
-        "location": "Location",
-        "price": "10$",
-        "tips": "Tips",
-        "transport":"transport",
-        "filter":[2],
-        "popularity":"1"
-    },
-    {
-        "city":"Rio de Janeiro",
-        "name":"Rio de Janeiro Cafe",
-        "image":"https://kristinakuzenko.github.io/images/barcelona.jpg",
-        "type":[2],
-        "description": "Cafe",
-        "location": "Location",
-        "price": "10$",
-        "tips": "Tips",
-        "transport":"transport",
-        "filter":[2],
-        "popularity":"1"
-    },
-    {
-        "city":"Rio de Janeiro",
-        "name":"Rio de Janeiro Plaza",
-        "image":"https://kristinakuzenko.github.io/images/barcelona.jpg",
-        "type":[3],
-        "description": "Shopping mall",
-        "location": "Location",
-        "price": "10$",
-        "tips": "Tips",
-        "transport":"transport",
-        "filter":[2],
-        "popularity":"1"
-    },
-    {
-        "city":"Rio de Janeiro",
-        "name":"Metro",
-        "image":"https://kristinakuzenko.github.io/images/barcelona.jpg",
-        "type":[4],
-        "filter":[6],
-        "price":"One way ticket: 10$",
-        "popularity":"1"
+        "popularity":"2",
+        "coordinates":[41.4036,2.1744]
     }
-    
 ]
 }
