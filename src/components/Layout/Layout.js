@@ -81,7 +81,7 @@ const Layout = ({ children, title = "Tawowu" }) => {
                     <Link href={`/continent/${continent.name} `} key={continent.name}>
                       <a className="nav-link " data-toggle="dropdown"> {continent.name} </a>
                     </Link>
-                    <ul className="dropdown-menu">
+                    <ul className="dropdown-menu  " id="navbarResponsive">
                       {countries.filter((country) => country.continent.toLowerCase() == continent.name.toLowerCase()).map((countries) => (
                         <Link href={`/country/${countries.name}`} key={countries.name}>
                           <li><a className="dropdown-item btn"> {countries.name}</a></li>
@@ -113,7 +113,7 @@ const Layout = ({ children, title = "Tawowu" }) => {
             ))}
 
             <br></br>
-            <p className="btn modal-item">About</p>
+            <p className="btn  modal-item">About</p>
             <br></br>
             <span className="btn close-btn modal-item" data-dismiss="modal">Close</span>
           </div>

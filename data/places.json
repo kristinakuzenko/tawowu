@@ -28,7 +28,7 @@
         "filter":[1],
         "category":[1,2],
         "popularity":"1",
-        "coordinates":[41.4036,2.1744]
+        "coordinates":[41.3817,2.1716]
     },
     {
         "city":"Barcelona",
@@ -43,7 +43,7 @@
         "filter":[1],
         "category":[1,2],
         "popularity":"1",
-        "coordinates":[41.4036,2.1744]
+        "coordinates":[41.4105,2.2168]
     },
     {
         "city":"Barcelona",
@@ -67,7 +67,7 @@
         "transport":"transport",
         "filter":[1,2],
         "popularity":"4",
-        "coordinates":[41.4036,2.1744]
+        "coordinates":[41.3853,2.1809]
     },
     {
         "city":"Barcelona",
@@ -81,7 +81,7 @@
         "transport":"transport",
         "filter":[4,5],
         "popularity":"3",
-        "coordinates":[41.4036,2.1744]
+        "coordinates":[41.3684,2.1536]
     },
     {
         "city":"Barcelona",
@@ -95,7 +95,7 @@
         "transport":"transport",
         "filter":[3],
         "popularity":"2",
-        "coordinates":[41.4036,2.1744]
+        "coordinates":[41.4145,2.1527]
     }
 ]
 }

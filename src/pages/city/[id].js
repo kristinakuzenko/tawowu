@@ -6,7 +6,6 @@ import SearchInput from "../../components/SearchInput/SearchInput";
 //database import
 import fire from '../../config/fire-config';
 import dynamic from 'next/dynamic';
-import styled from "styled-components";
 import React, { useState, useEffect } from "react";
 
 const City = ({ city }) => {
@@ -57,92 +56,13 @@ const City = ({ city }) => {
   });
 
 
-  const [placeType, setPlaceType] = useState(-1);
-  const [placeFilter, setPlaceFilter] = useState(-1);
 
   const currentCity = cities.filter(cityItem => cityItem.city.toLowerCase() === city.toLowerCase());
-
-
   const cityPlaces = () => places.filter(place => place.city.toLowerCase() === city.toLowerCase());
-  const sightseeingPlaces = () => cityPlaces().filter(place => place.type.indexOf(1) !== -1);
-  const foodPlaces = () => cityPlaces().filter(place => place.type.indexOf(2) !== -1);
 
-/*
-  const cityPlacesByType = [
-    // sightseeing
-    [...filteredPlaces().filter(place => place.type.indexOf(1) !== -1)],
-    // food
-    [...filteredPlaces().filter(place => place.type.indexOf(2) !== -1)],
-    // shopping
-    [...filteredPlaces().filter(place => place.type.indexOf(3) !== -1)],
-    // transport
-    [...filteredPlaces().filter(place => place.type.indexOf(4) !== -1)]
-  ]
-
-  const cityPlacesByFilter = [
-    // art
-    [...filteredPlaces().filter(place => place.filter.indexOf(1) !== -1)],
-    // camera
-    [...filteredPlaces().filter(place => place.filter.indexOf(2) !== -1)],
-    // park
-    [...filteredPlaces().filter(place => place.filter.indexOf(3) !== -1)],
-    // museum
-    [...filteredPlaces().filter(place => place.filter.indexOf(4) !== -1)],
-    //viewpoint
-    [...filteredPlaces().filter(place => place.filter.indexOf(5) !== -1)],
-    //
-  ]
-
-
-  const cityPlacesFilteredByActiveType = () => {
-    if (placeType === -1) {
-      return [].concat(...cityPlacesByType);
-    }
-    return cityPlacesByType[placeType - 1];
-  }
-
-  const cityPlacesFilteredByActiveFilter = () => {
-    if (placeFilter === -1) {
-      return [].concat(...cityPlacesByFilter);
-    }
-    return cityPlacesByFilter[placeFilter - 1];
-  }
-
-
-  const toggleTypeFilter = (e, filterValue) => {
-    e.preventDefault();
-    if (placeType === filterValue) {
-      setPlaceType(-1);
-      return;
-    }
-    setPlaceType(filterValue);
-  }
-
-  const toggleFilterFilter = (e, filterValue) => {
-    e.preventDefault();
-    if (placeFilter === filterValue) {
-      setPlaceFilter(-1);
-      return;
-    }
-    setPlaceFilter(filterValue);
-  }
-  */
 
   const [activeFilters, setActiveFilters] = useState([]);
   const [activeFilter, setActiveFilterOne] = useState([]);
-
-  /*const toggleFilterNew = (e, name, value) => {
-    e.preventDefault();
-    const index = activeFilters.findIndex(f => f.value === value);
-    if (index > -1) {
-      activeFilters.splice(index, 1);
-
-    } else {
-      activeFilters.push({ name, value });
-    }
-    setActiveFilters([...activeFilters])
-  }
-*/
 
   //filter for camera, art...
   const toggleFilterOne = (e, filterValue) => {
@@ -150,44 +70,42 @@ const City = ({ city }) => {
     const index = activeFilter.indexOf(filterValue);
     if (index > -1) {
       activeFilter.splice(index, 1);
-    } else{
-      activeFilter.splice(0,activeFilter.length);
+    } else {
+      activeFilter.splice(0, activeFilter.length);
       activeFilter.push(filterValue);
     }
-
-
     setActiveFilterOne([...activeFilter])
   }
 
   const sixFiltersPlaces = (type) => {
-      let result = [...cityPlaces().filter(place => place.type.indexOf(type) !== -1)];
-      if (activeFilter.length > 0) {
-        activeFilter.forEach(filter => {
-          result = result.filter(pl => pl.filter.indexOf(filter) !== -1)
-          //result = result.filter(pl=>pl[filter.name].indexOf(filter.value)!==-1)
-        })
-      }
-      return result;
-    
-  }
-
-//filters for everything
-const toggleFilter = (e, filterValue) => {
-  e.preventDefault();
-  const index = activeFilters.indexOf(filterValue);
-  if (index !== -1) {
-    activeFilters.splice(index, 1);
-    setActiveFilters([...activeFilters])
-  } else {
-    activeFilters.push(filterValue);
-    setActiveFilters([...activeFilters])
-    /*const filter={
-      name:"filter",
-      value:3
-    }*/
+    let result = [...cityPlaces().filter(place => place.type.indexOf(type) !== -1)];
+    if (activeFilter.length > 0) {
+      activeFilter.forEach(filter => {
+        result = result.filter(pl => pl.filter.indexOf(filter) !== -1)
+        //result = result.filter(pl=>pl[filter.name].indexOf(filter.value)!==-1)
+      })
+    }
+    return result;
 
   }
-}
+
+  //filters for everything
+  const toggleFilter = (e, filterValue) => {
+    e.preventDefault();
+    const index = activeFilters.indexOf(filterValue);
+    if (index !== -1) {
+      activeFilters.splice(index, 1);
+      setActiveFilters([...activeFilters])
+    } else {
+      activeFilters.push(filterValue);
+      setActiveFilters([...activeFilters])
+      /*const filter={
+        name:"filter",
+        value:3
+      }*/
+
+    }
+  }
 
   const allFilteredPlaces = (type) => {
     let result = [...sixFiltersPlaces(type)];
@@ -209,12 +127,29 @@ const toggleFilter = (e, filterValue) => {
     const needle = keyword ? keyword.toLowerCase() : '';
     return allFilteredPlaces(type).filter((place) => place.name.toLowerCase().indexOf(needle) !== -1);
   };
+  const filteredPlacesValue = () => {
+    const needle = keyword ? keyword.toLowerCase() : '';
+    return filteredPlaces(placeType).filter((place) => place.type.indexOf(4) === -1);
+  };
 
   const addToFavorites = (e, value, place) => {
     e.preventDefault();
     localStorage.setItem(`tawowu-fav-${value}`, JSON.stringify(place));
   }
 
+  const [placeType, setPlaceType] = useState(1);
+
+  const toggleType = (e, typeValue) => {
+    e.preventDefault();
+    if (placeType !== typeValue) {
+      activeFilter.splice(0,activeFilter.length);
+      activeFilters.splice(0,activeFilters.length);
+      setActiveFilterOne([...activeFilter]);
+      setActiveFilters([...activeFilters]);
+      setKeyword("");
+    }
+    setPlaceType(typeValue);
+  }
 
   const url = `https://github.com/kristinakuzenko/kristinakuzenko.github.io/blob/main/locations.json`;
   const [locations, setLocations] = React.useState([]);
@@ -226,219 +161,174 @@ const toggleFilter = (e, filterValue) => {
         <div className="city-main-caption">
           {cityItem.city}
         </div>
-        <Container><Map locations={filteredPlaces(1)} latitude={41.3851} longitude={2.1734} zoom={12}/></Container>
+
         <div className="city-filter container-fluid ">
 
-          <div className="col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2 filter-item ">
-            <p className="filter-name" >Sightseeing</p>
+          <div className="col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2 filter-item " >
+            <p  onClick={(e) => toggleType(e, 1)} className={placeType === 1 ? 'filter-name active' : 'filter-name '} >&nbsp;Sightseeing&nbsp;</p>
           </div>
-          <a href="#food">
             <div className="col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2 filter-item ">
-              <p className="filter-name">Food</p>
-
+              <p onClick={(e) => toggleType(e, 2)} className={placeType === 2 ? 'filter-name active' : 'filter-name '}>&nbsp;Food&nbsp;</p>
             </div>
-          </a>
           <div className="col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2 filter-item ">
-            <p className="filter-name" >Shopping</p>
+            <p onClick={(e) => toggleType(e, 3)} className={placeType === 3 ? 'filter-name active' : 'filter-name '} >&nbsp;Shopping&nbsp;</p>
           </div>
           <div className="col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2 filter-item ">
-            <p className="filter-name" >Transportation</p>
+            <p onClick={(e) => toggleType(e, 4)} className={placeType === 4 ? 'filter-name active' : 'filter-name '} >&nbsp;Transport&nbsp;</p>
           </div>
           <div className="col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2 filter-item ">
-            <p className="filter-name">Activities</p>
+            <p className="filter-name">&nbsp;Activities&nbsp;</p>
           </div>
           <div className="col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2 filter-item ">
-            <p className="filter-name">Trip plans</p>
+            <p className="filter-name">&nbsp;Trip plans&nbsp;</p>
           </div>
 
         </div>
 
         <div>
-          <div className="sightseeing-h">Things to do in {cityItem.city}</div>
+
 
           <div className="places-div">
+
+
             <div className="container-fluid ">
-              <div className="icon-container">
-
-                <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  ">
-                  <img className={activeFilter[0] === 1 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Art" src="../art.png" onClick={(e) => toggleFilterOne(e, 1)} />
-                </div>
-
-                <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  ">
-                  <img className={placeFilter === 2 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Insta places" src="../camera.png" onClick={(e) => toggleFilterOne(e, 2)} />
-                </div>
-                <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  ">
-                  <img className={placeFilter === 3 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Parks / outdoors" src="../park.png" onClick={(e) => toggleFilterOne(e, 3)} />
-                </div>
-                <div className="btn icon-div col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2  ">
-                  <img className={placeFilter === 4 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Museums" src="../museum.png" onClick={(e) => toggleFilterOne(e, 4)} />
-                </div>
-                <div className="btn icon-div col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2  ">
-                  <img className={placeFilter === 5 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Viewpoints" src="../view.png" onClick={(e) => toggleFilterOne(e, 5)} />
-                </div>
-                <div data-toggle="modal" data-target="#filterModal" className="btn filter-btn icon-div col-6 col-sm-6 col-md-12 col-lg-2 col-xl-2  ">
-                  <p className="filter-p">Filter</p>
-                </div>
-                <div className="modal fade " id="filterModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                  <div className="modal-dialog">
-                    <div className="modal-content">
-                      <h1 className="modal-f">Filter by categories</h1>
-                      <p className="btn modal-item" onClick={(e) => toggleFilter(e, 1)}>Art</p>
-                      <p className="btn modal-item" onClick={(e) => toggleFilter(e, 2)}>Insta places</p>
-                      <span className="btn close-btn modal-item" data-dismiss="modal">Close</span>
-                    </div>
-                  </div>
-                </div>
+              <div className=" col-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 map-container">
+                <Map className="fixed" locations={filteredPlacesValue()} latitude={41.3851} longitude={2.1734} zoom={12} />
 
               </div>
-            </div>
-            <div className="input-city">
-              <SearchInput
-                placeholder="Search for city"
-                onChange={onInputChange}
-              />
-            </div>
-
-            {filteredPlaces(1).sort(mySortingFunction).map((place) => (
-              <div className="one-place" key={place.name}>
-                <h1 className="place-name"> {place.name} </h1>
-                <p className="place-desc">{place.description} </p>
-                <div className="container-fluid ">
-                  <div className="image-city-div col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                    <img className="image-city " src={place.image} />
+              <div className="city-places-div col-12 col-sm-12 col-md-12 col-lg-7 col-xl-7">
+                <div className="">
+                  <div className={placeType === 4 ?' none':'input-city'}>
+                    <SearchInput
+                      placeholder="Search for a place"
+                      onChange={onInputChange}
+                    />
                   </div>
+                  <div className="container-fluid ">
+                    <div className={placeType === 1 ? 'icon-container ' : 'icon-container active'} >
 
-                  <div className="btn filter-p filter-btn " onClick={(e) => addToFavorites(e, place.name, place)}>
-                    Add to favorites
+                      <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  ">
+                        <img className={activeFilter[0] === 1 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Art" src="../art.png" onClick={(e) => toggleFilterOne(e, 1)} />
                       </div>
 
-                  <div className=" col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-                    <h1 className="place-h">Price </h1>
-                    <h1 className="place-p">{place.price}</h1>
-                    <h1 className="place-h">Location</h1>
-                    <h1 className="place-p">{place.location}</h1>
-                    <h1 className="place-h">Transport</h1>
-                    <h1 className="place-p">{place.transport}</h1>
-                    <h1 className="place-h">Tips</h1>
-                    <h1 className="place-p">{place.tips}</h1>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div id="food" className="sightseeing-h">Food in {city}
-          </div>
-          <div className="places-div">
-            <div className="container-fluid ">
-              <div className="icon-container">
+                      <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  ">
+                        <img className={activeFilter[0] === 2 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Insta places" src="../camera.png" onClick={(e) => toggleFilterOne(e, 2)} />
+                      </div>
+                      <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  ">
+                        <img className={activeFilter[0] === 3 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Parks / outdoors" src="../park.png" onClick={(e) => toggleFilterOne(e, 3)} />
+                      </div>
+                      <div className="btn icon-div col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2  ">
+                        <img className={activeFilter[0] === 4 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Museums" src="../museum.png" onClick={(e) => toggleFilterOne(e, 4)} />
+                      </div>
+                      <div className="btn icon-div col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2  ">
+                        <img className={activeFilter[0] === 5 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Viewpoints" src="../view.png" onClick={(e) => toggleFilterOne(e, 5)} />
+                      </div>
+                      <div data-toggle="modal" data-target="#filterModal" className="btn filter-btn icon-div col-6 col-sm-6 col-md-12 col-lg-2 col-xl-2  ">
+                        <p className="filter-p">Filter</p>
+                      </div>
+                      <div className="modal fade " id="filterModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div className="modal-dialog">
+                          <div className="modal-content">
+                            <h1 className="modal-f">Filter by categories</h1>
+                            <p className="btn modal-item" onClick={(e) => toggleFilter(e, 1)}>Art</p>
+                            <p className="btn modal-item" onClick={(e) => toggleFilter(e, 2)}>Insta places</p>
+                            <span className="btn close-btn modal-item" data-dismiss="modal">Close</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+              <div className={placeType === 2 ? 'icon-container ' : 'icon-container active'}>
                 <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  ">
-                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Take-away" src="../take-away.png" onClick={(e) => toggleFilter(e, 1)} />
+                  <img className={activeFilter[0] === 1 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Take-away" src="../take-away.png" onClick={(e) => toggleFilterOne(e, 1)} />
                 </div>
                 <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  ">
-                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Coffee shops" src="../tea.png" onClick={(e) => toggleFilterFilter(e, 2)} />
+                  <img className={activeFilter[0] === 2 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Coffee shops" src="../tea.png" onClick={(e) => toggleFilterOne(e, 2)} />
                 </div>
                 <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  ">
-                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Bars" src="../cocktail.png" onClick={(e) => toggleFilterFilter(e, 3)} />
+                  <img className={activeFilter[0] === 3 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Bars" src="../cocktail.png" onClick={(e) => toggleFilterOne(e, 3)} />
                 </div>
                 <div className="btn icon-div col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2  ">
-                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Restaurants / cafes" src="../restaurant.png" onClick={(e) => toggleFilterFilter(e, 4)} />
+                  <img className={activeFilter[0] === 4 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Restaurants / cafes" src="../restaurant.png" onClick={(e) => toggleFilterOne(e, 4)} />
                 </div>
                 <div className="btn icon-div col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2  ">
-                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Confectionery" src="../cupcake.png" onClick={(e) => toggleFilterFilter(e, 5)} />
+                  <img className={activeFilter[0] === 5 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Confectionery" src="../cupcake.png" onClick={(e) => toggleFilterOne(e, 5)} />
+                </div>
+                <div className="btn filter-btn icon-div col-6 col-sm-6 col-md-12 col-lg-2 col-xl-2  ">
+                  <p className="filter-p">Filter</p>
+                </div>
+            </div>
+              <div className={placeType === 3 ? 'icon-container ' : 'icon-container active'}>
+                <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  ">
+                  <img className={activeFilter[0] === 1 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Markets" src="../market.png" onClick={(e) => toggleFilterOne(e, 1)} />
+                </div>
+                <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  ">
+                  <img className={activeFilter[0] === 2 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Shopping malls / streets" src="../clothes.png" onClick={(e) => toggleFilterOne(e, 2)} />
+                </div>
+                <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  ">
+                  <img className={activeFilter[0] === 3 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Supermarkets" src="../supermarket.png" onClick={(e) => toggleFilterOne(e, 3)} />
+                </div>
+                <div className="btn icon-div col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2  ">
+                  <img className={activeFilter[0] === 4 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Souvenir shops" src="../souvenir.png" onClick={(e) => toggleFilterOne(e, 4)} />
+                </div>
+                <div className="btn icon-div col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2  ">
+                  <img className={activeFilter[0] === 5 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Outlet" src="../outlet.png" onClick={(e) => toggleFilterOne(e, 5)} />
                 </div>
                 <div className="btn filter-btn icon-div col-6 col-sm-6 col-md-12 col-lg-2 col-xl-2  ">
                   <p className="filter-p">Filter</p>
                 </div>
               </div>
-            </div>
-            {filteredPlaces(2).sort(mySortingFunction).map((place) => (
-              <div className="one-place" key={place.name}>
-                <h1 className="place-name"> {place.name} </h1>
-                <p className="place-desc">{place.description} </p>
-                <div className="container-fluid ">
-                  <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                    <img className="image-city " src={place.image} />
                   </div>
+                </div>
+                {filteredPlaces(placeType).filter(place => place.type.indexOf(placeType) !== -1).sort(mySortingFunction).map((place) => (
+                  <div className="one-place" key={place.name}>
+                    <h1 className="place-name"> {place.name} </h1>
+                    <p className="place-desc">{place.description} </p>
+                    <div className="container-fluid ">
+                      <div className="image-city-div col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                        <img className="image-city " src={place.image} />
+                      </div>
 
-                  <div className=" col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-                    <h1 className="place-h">Average bill price</h1>
+                      <div className={placeType !== 4 ?'btn filter-p filter-btn ':'none'} onClick={(e) => addToFavorites(e, place.name, place)}>
+                        Add to favorites
+                      </div>
+
+                      <div className={placeType === 1 ? 'col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8':'none' } >
+                        <h1 className="place-h">Price </h1>
+                        <h1 className="place-p">{place.price}</h1>
+                        <h1 className="place-h">Location</h1>
+                        <h1 className="place-p">{place.location}</h1>
+                        <h1 className="place-h">Transport</h1>
+                        <h1 className="place-p">{place.transport}</h1>
+
+                      </div>
+
+                    <div className={placeType === 2 ? 'col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8':'none' }>
+                    <h1 className="place-h">&nbsp; Average bill price</h1>
                     <h1 className="place-p">{place.price}</h1>
                     <h1 className="place-h">Location</h1>
                     <h1 className="place-p">{place.location}</h1>
                     <h1 className="place-h">Transport</h1>
                     <h1 className="place-p">{place.transport}</h1>
-                    <h1 className="place-h">Our favorites / recommendations</h1>
-                    <h1 className="place-p">{place.tips}</h1>
                   </div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="sightseeing-h">Shopping in {city}
-          </div>
-          <div className="places-div">
-            <div className="container-fluid ">
-              <div className="icon-container">
-                <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  ">
-                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Markets" src="../market.png" onClick={(e) => toggleFilterFilter(e, 1)} />
-                </div>
-                <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  ">
-                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Shopping malls / streets" src="../clothes.png" onClick={(e) => toggleFilterFilter(e, 2)} />
-                </div>
-                <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  ">
-                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Supermarkets" src="../supermarket.png" onClick={(e) => toggleFilterFilter(e, 3)} />
-                </div>
-                <div className="btn icon-div col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2  ">
-                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Souvenir shops" src="../souvenir.png" onClick={(e) => toggleFilterFilter(e, 4)} />
-                </div>
-                <div className="btn icon-div col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2  ">
-                  <img className="small-icon " data-toggle="tooltip" data-placement="bottom" title="Outlet" src="../outlet.png" onClick={(e) => toggleFilterFilter(e, 5)} />
-                </div>
-                <div className="btn filter-btn icon-div col-6 col-sm-6 col-md-12 col-lg-2 col-xl-2  ">
-                  <p className="filter-p">Filter</p>
-                </div>
+                  <div className={placeType === 3 ? 'col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8':'none' }>
+                    <h1 className="place-h">Location</h1>
+                    <h1 className="place-p">{place.location}</h1>
+                    <h1 className="place-h">Transport</h1>
+                    <h1 className="place-p">{place.transport}</h1>
+                  </div>
+                  <h1 className={placeType !== 4 ?'place-h':'none'}>Tips</h1>
+                  <h1 className={placeType !== 4 ?'place-p':'none'}>{place.tips}</h1>
+                  <div className={placeType === 4 ? 'col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8':'none' }>
+                    <h1 className="place-p">{place.price}</h1>
+                  </div>
+
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
-            {filteredPlaces(3).sort(mySortingFunction).map((places) => (
-              <div className="one-place" key={places.name}>
-                <h1> {places.name} </h1>
-                <p>{places.description} </p>
-                <div className="container-fluid ">
-                  <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                    <img className="image-city " src={places.image} />
-                  </div>
-
-                  <div className=" col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-                    <h1 className="place-h">Location</h1>
-                    <h1 className="place-p">{places.location}</h1>
-                    <h1 className="place-h">Transport</h1>
-                    <h1 className="place-p">{places.transport}</h1>
-                    <h1 className="place-h">Tips</h1>
-                    <h1 className="place-p">{places.tips}</h1>
-                  </div>
-                </div>
-              </div>
-            ))}
           </div>
-          <div className="sightseeing-h">Transport in {city}
-          </div>
-          <div className="places-div">
-            {filteredPlaces(4).sort(mySortingFunction).map((places) => (
-              <div className="one-place" key={places.name}>
-                <h1> {places.name} </h1>
-                <p>{places.description} </p>
-                <div className="container-fluid ">
-                  <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                    <img className="image-city " src={places.image} />
-                  </div>
-
-                  <div className=" col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-                    <h1 className="place-p">{places.price}</h1>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          
 
         </div>
 
@@ -448,10 +338,6 @@ const toggleFilter = (e, filterValue) => {
   </Layout>;
 
 }
-const Container = styled.div`
-  width: 50vw;
-  height: 50vh;
-`;
 export default City;
 export const getServerSideProps = async ({ params }) => {
   const city = params.id;

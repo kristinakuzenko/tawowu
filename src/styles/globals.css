@@ -90,8 +90,13 @@
   z-index: -1;
 }
 .modal-item{
+  color: #4d2121;
   font-size: 20px;
 }
+.modal-item:hover{
+  color: #faccb6;
+}
+
 .modal-content{
   border-radius: 50px !important; 
   color: #4d2121;
@@ -118,6 +123,9 @@ textarea:focus, input:focus{
 .close-btn{
   color: #faccb6;
 }
+.close-btn:hover{
+  color: #ec8856;
+}
 .dropdown-item{
   
   font-size: 16px;
@@ -132,17 +140,30 @@ textarea:focus, input:focus{
 .continent-row{
  padding: 0px 20px 50px 60px;
 }
+.continent-row.active{
+  display:none;
+ }
 .continent{
+  display: table;
+  margin: 0 auto;
   margin-bottom: 40px;
+}
+.continent.active{
+  display: none;
 }
 .continent-filter-row{
   margin: 20px 50px 50px 50px;
   padding: 10px;
 }
-.continent-filter-p{
+.continent-filter-p{ 
   cursor: pointer;
   width:max-content;
 border: 2px solid black;
+}
+.continent-filter-p.active{
+  border: 1px solid #faddcf;
+  color: #faddcf;
+  box-shadow:0 0 50px #faddcf;  
 }
 .continent-filter{
   margin-top: 30px;
@@ -151,6 +172,7 @@ border: 2px solid black;
   font-family: 'Courier New', monospace;
   font-size: 28px;
   height: 50px;
+ 
 }
 .block-two{
   background-image: linear-gradient(315deg, #fc935f  0%, #5e2c2c 120%);
@@ -335,6 +357,7 @@ font-size: 30px;
   width: 40vh;
   height: 26vh;
   margin-bottom: 50px;
+  margin-top: 60px;
 }
 .city-main-img{
   filter: blur(3px);
@@ -359,7 +382,7 @@ font-size: 30px;
 .city-filter{
   padding-left: 10vh;
   height: 70px;
- background-color: #faccb6;
+  background-color: #faccb6;
   position: relative;
   z-index: 99;
 }
@@ -368,27 +391,31 @@ font-size: 30px;
 }
 .filter-name{
   cursor: pointer;
-  color: #4d2121;
   font-family: Helvetica;
   font-size: 20px;
   height: 50px;
   display: table-cell;
   vertical-align: middle;
+ 
 }
+.filter-name.active{
+  border-bottom: 3px solid #4d2121;
+}
+
 @media screen and (max-width: 992px){
   .city-filter{
     height: 140px;
     text-align: center;
-   background-color: #faccb6;
   }
 }
 @media screen and (max-width: 768px){
   .city-filter{
-    height: 210px;
+    height: 350px;
     text-align: center;
-   background-color: #faccb6;
+   
   }
 }
+
 .sightseeing-h{
   font-family: SangbleuSans,serif;
   color: #faccb6;
@@ -401,6 +428,9 @@ font-size: 30px;
   padding-top: 3px;
   padding-bottom: 3px;
   padding-left: 5vw;
+}
+.none{
+  display: none;
 }
 
 .places-div{
@@ -446,6 +476,9 @@ font-size: 30px;
 .icon-container{
 margin: 40px 50px 150px 50px;
 }
+.icon-container.active{
+  display: none;
+  }
 .place-name{
   font-size: 40px;
   font-family: 'Courier New', Courier, monospace;
@@ -564,7 +597,34 @@ margin: 40px 50px 150px 50px;
 }
 .location{
   font-size: 30px;
-  color: red;
+  color: #ec8856;
+
+}
+.location.active {
+  color: #e066ff;
+}
+.location.active2 {
+  color:  #ff66a3;
+}
+.popup-map{
+  position: absolute;
+  z-index: 2;
+  text-align: center;
+  font-size: 15px;
+  width: 50vh;
+  font-family: SangbleuSans,serif;
+}
+.map-container{
+  margin-top: 30px;
+  height: 85vh;
+}
+.fixed{
+  position: fixed;
+}
+.city-places-div{
+  height:86vh; 
+  margin-top: 10px;
+  overflow: scroll;
 }
 
 

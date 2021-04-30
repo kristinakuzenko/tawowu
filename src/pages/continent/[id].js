@@ -3,6 +3,7 @@ import Link from "next/link";
 //database import
 import fire from '../../config/fire-config';
 import React, { useState } from "react";
+import Map from "../../components/MapWorld/MapContinent"
 
 const orderBy = (countries) => {
   return countries.sort((a, b) => (a.name > b.name ? 1 : -1));
@@ -55,19 +56,11 @@ const Continent = ({ continent }) => {
 
       {myContinent.map((continents) => (
         <div key={continents.id}>
-          <div className="main-header2">
-            <div>
-              <span>Welcome </span>
-              <span>to </span>
-              <span> {continents.name}</span>
-            </div>
+                    <div className="map">
+      <Map/>
+      </div>
 
-            <h2><button type="button" className="btn discover2">Choose the country</button></h2>
 
-          </div>
-          <div className="contour">
-            <img className="" src={continents.contour} />
-          </div>
 
         </div>
       ))}

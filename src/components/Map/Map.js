@@ -7,14 +7,12 @@ export default function Map({ locations,latitude,longitude,zoom }) {
   const [viewport, setViewport] = useState({
     width: "100%",
     height: "100%",
-    // The latitude and longitude of the center of London
     latitude: latitude,
     longitude: longitude,
     zoom: zoom
   });
 
   const [selectLocation, setSelectedLocation] = useState({});
-
   return (
     <ReactMapGL
       mapStyle="mapbox://styles/mapbox/streets-v11"
@@ -26,23 +24,36 @@ export default function Map({ locations,latitude,longitude,zoom }) {
         <div key={location.id}>
           <Marker latitude={location.coordinates[0]} longitude={location.coordinates[1]}>
             <a
-              onClick={() => {
+              onMouseEnter={() => {
                 setSelectedLocation(location);
               }}
             >
-              <span role="img" aria-label="push-pin" className="location">
+              <span role="img" aria-label="push-pin" className={location.type[0] === 2 ? 'location active' : location.type[0] === 3 ? 'location active2':'location'}>
               <FontAwesomeIcon icon={faMapMarker}></FontAwesomeIcon>
               </span>
             </a>
           </Marker>
           {selectLocation.id === location.id ? (
-            <Popup
+            <Popup 
               onClose={() => setSelectedLocation({})}
               closeOnClick={true}
               latitude={location.coordinates[0]}
               longitude={location.coordinates[1]}
+              className="popup-map"
             >
-              {location.place_name}
+              <p >
+              {location.name}
+              <br></br>
+              {location.description}
+              </p>
+              <br></br>
+              <p>
+              {location.location}
+              <br></br>
+              {location.price}
+              <br></br>
+              {location.tips}
+              </p>
             </Popup>
           ) : (
             false
