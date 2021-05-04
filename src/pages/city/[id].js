@@ -2,6 +2,7 @@ import Layout from "../../components/Layout/Layout";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMapMarkedAlt } from "@fortawesome/free-solid-svg-icons";
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import SearchInput from "../../components/SearchInput/SearchInput";
 //database import
 import fire from '../../config/fire-config';
@@ -61,6 +62,7 @@ const City = ({ city }) => {
   const toggleFilterOne = (e, filterValue) => {
     e.preventDefault();
     const index = activeFilter.indexOf(filterValue);
+    const index2 = activeFilters.indexOf(filterValue);
     if (index > -1) {
       activeFilter.splice(index, 1);
     } else {
@@ -98,6 +100,11 @@ const City = ({ city }) => {
       }*/
 
     }
+  }
+  const clearAll = (e) => {
+    e.preventDefault();
+    activeFilters.splice(0, activeFilters.length);
+    setActiveFilters([...activeFilters]);
   }
 
   const allFilteredPlaces = (type) => {
@@ -180,7 +187,7 @@ const City = ({ city }) => {
             <div className="container-fluid ">
               <div className=" col-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 map-container">
               <div className="city-main-caption">
-          {cityItem.city}
+         {cityItem.city}
         </div>
                 <Map className="fixed" locations={filteredPlacesValue()} latitude={41.3851} longitude={2.1734} zoom={12} />
 
@@ -219,10 +226,14 @@ const City = ({ city }) => {
                         <div className="modal-dialog">
                           <div className="modal-content">
                             <h1 className="modal-f">Filter by categories</h1>
-                            <p className={activeFilter[0]!==1 ? 'btn modal-item':'none'} onClick={(e) => toggleFilterOne(e, 1)}>Art</p>
-                            <p className={activeFilter[0] ===1 ?'btn modal-item filter-active':'none'} onClick={(e) => toggleFilterOne(e, 1)}>Art</p>
-                            <p className="btn modal-item" onClick={(e) => toggleFilterOne(e, 2)}>Insta places</p>
-                            <span className="btn close-btn modal-item" data-dismiss="modal">Done</span>
+                            <p className={!activeFilters.includes(1)?'btn modal-item2':'none'} onClick={(e) => toggleFilter(e, 1)}>Art</p>
+                            <p className={activeFilters.includes(1)?'btn modal-item2 filter-active':'none'} onClick={(e) => toggleFilter(e, 1)}><FontAwesomeIcon icon={faCheck}></FontAwesomeIcon> Art</p>
+                            <p className={!activeFilters.includes(2)? 'btn modal-item2':'none'} onClick={(e) => toggleFilter(e, 2)}>Insta places</p>
+                            <p className={activeFilters.includes(2) ?'btn modal-item2 filter-active':'none'} onClick={(e) => toggleFilter(e, 2)}><FontAwesomeIcon icon={faCheck}></FontAwesomeIcon> Insta places</p>
+<div>
+                            <span className="btn close-btn modal-item col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6" data-dismiss="modal">Done</span>
+                            <span className="btn close-btn modal-item col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6" data-dismiss="modal" onClick={(e) => clearAll(e)}>Clear all</span>
+                            </div>
                           </div>
                         </div>
                       </div>
