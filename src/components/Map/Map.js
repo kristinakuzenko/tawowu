@@ -1,5 +1,5 @@
 import { useState } from "react";
-import ReactMapGL, { Marker, Popup } from "react-map-gl";
+import ReactMapGL, { Marker, Popup, NavigationControl, FullscreenControl} from "react-map-gl";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMapMarker } from "@fortawesome/free-solid-svg-icons";
 
@@ -11,7 +11,10 @@ export default function Map({ locations,latitude,longitude,zoom }) {
     longitude: longitude,
     zoom: zoom
   });
-
+  const navControlStyle= {
+    right: 10,
+    top: 10
+  };
   const [selectLocation, setSelectedLocation] = useState({});
   return (
     <ReactMapGL
@@ -19,7 +22,9 @@ export default function Map({ locations,latitude,longitude,zoom }) {
       mapboxApiAccessToken="pk.eyJ1Ijoia3Jpc3RpbmFrdXplbmtvIiwiYSI6ImNrbnJpZDFtYjBwMG8ybnBmeG82a3Z0ejYifQ.GYQGZmk2Y0sSruGEpupdgw"
       {...viewport}
       onViewportChange={(nextViewport) => setViewport(nextViewport)}
+      
     >
+      <NavigationControl style={navControlStyle} />
       {locations.map((location) => (
         <div key={location.id}>
           <Marker latitude={location.coordinates[0]} longitude={location.coordinates[1]}>
