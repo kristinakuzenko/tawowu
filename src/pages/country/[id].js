@@ -56,7 +56,7 @@ const Country = ({ country }) => {
     return <Layout title={country}>
       <div className="country-page">
         <div className="country-page2">
-          <div className="country-h2" key="{country.name}">
+          <div className="country-h2" key={country}>
             <br /> Ooops... <br /> <br />No cities for {country} yet
             </div>
           <p className="country-desc"> Contact us and we will add <br /> some cities as soon as possible! <br /><br />  <FontAwesomeIcon icon={faHeart}></FontAwesomeIcon></p>

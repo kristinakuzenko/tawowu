@@ -13,14 +13,7 @@ const City = ({ city }) => {
   const [cities, setCities] = useState([]);
   const [places, setPlaces] = useState([]);
   React.useEffect(() => {
-    const fetchLocations = async () => {
-      await fetch(url).then((response) =>
-        response.text()).then((res) => JSON.parse(res))
-        .then((json) => {
-          setLocations(json.features);
-        }).catch((err) => console.log({ err }));
-    };
-    fetchLocations();
+
 
 
     _isMounted = true;
@@ -151,17 +144,10 @@ const City = ({ city }) => {
     setPlaceType(typeValue);
   }
 
-  const url = `https://github.com/kristinakuzenko/kristinakuzenko.github.io/blob/main/locations.json`;
-  const [locations, setLocations] = React.useState([]);
   const mySortingFunction = (a, b) => a.popularity.localeCompare(b.popularity);
   return <Layout title={city}>
     {currentCity.map((cityItem) => (
       <div className="city-block" key={cityItem.city}>
-        <img className="city-main-img" src={cityItem.image} />
-        <div className="city-main-caption">
-          {cityItem.city}
-        </div>
-
         <div className="city-filter container-fluid ">
 
           <div className="col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2 filter-item " >
@@ -193,6 +179,9 @@ const City = ({ city }) => {
 
             <div className="container-fluid ">
               <div className=" col-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 map-container">
+              <div className="city-main-caption">
+          {cityItem.city}
+        </div>
                 <Map className="fixed" locations={filteredPlacesValue()} latitude={41.3851} longitude={2.1734} zoom={12} />
 
               </div>
@@ -230,9 +219,10 @@ const City = ({ city }) => {
                         <div className="modal-dialog">
                           <div className="modal-content">
                             <h1 className="modal-f">Filter by categories</h1>
-                            <p className="btn modal-item" onClick={(e) => toggleFilter(e, 1)}>Art</p>
-                            <p className="btn modal-item" onClick={(e) => toggleFilter(e, 2)}>Insta places</p>
-                            <span className="btn close-btn modal-item" data-dismiss="modal">Close</span>
+                            <p className={activeFilter[0]!==1 ? 'btn modal-item':'none'} onClick={(e) => toggleFilterOne(e, 1)}>Art</p>
+                            <p className={activeFilter[0] ===1 ?'btn modal-item filter-active':'none'} onClick={(e) => toggleFilterOne(e, 1)}>Art</p>
+                            <p className="btn modal-item" onClick={(e) => toggleFilterOne(e, 2)}>Insta places</p>
+                            <span className="btn close-btn modal-item" data-dismiss="modal">Done</span>
                           </div>
                         </div>
                       </div>
