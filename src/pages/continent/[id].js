@@ -57,7 +57,7 @@ const Continent = ({ continent }) => {
       {myContinent.map((continents) => (
         <div key={continents.id}>
                     <div className="map">
-      <Map/>
+      <Map continent={continents.name.toLowerCase().replace(' ', '')} />
       </div>
 
 

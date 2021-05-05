@@ -34,6 +34,17 @@ const SAMPLE_CSS = `
 let touchmove;
 export default class MapContinent extends SampleBase {
 
+    constructor(props) {
+        super(props);
+
+        const {continent} = props;
+
+        this.state = {continent};
+        this.maps = {asia, europe, northamerica, southamerica, oceania, africa}
+
+        console.log(this.state);
+    }
+
     shapeSelected(args) {
         let shape2 = args.shapeData.name;
         if (this.mapInstance.baseLayerIndex === 0 && !touchmove) {
@@ -46,9 +57,8 @@ export default class MapContinent extends SampleBase {
             <style>
                 {SAMPLE_CSS}
             </style>
-            <div className='control-section row'>
-               
 
+            <div className='control-section row'>
 
                 <div className=' '>
 
@@ -61,7 +71,7 @@ export default class MapContinent extends SampleBase {
                         <Inject services={[Selection, Highlight, MapsTooltip]} />
                         <LayersDirective>
 
-                            <LayerDirective shapeData={africa} layerType='Geometry' shapeSettings={{
+                            <LayerDirective shapeData={this.maps[this.state.continent]} layerType='Geometry' shapeSettings={{
                                 fill: '#4d2121',
                                 border: {
                                     color: '#faccb6',

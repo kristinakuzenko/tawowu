@@ -88,24 +88,9 @@ export default class MapWorld extends SampleBase {
         touchmove = false;
     }
     render() {
-        return (<div className='control-pane'>
-            <style>
-                {SAMPLE_CSS}
-            </style>
-            <div className='control-section row'>
-                <div id="button" className="backLabel">
-                    <a id="category" onClick={this.change.bind(this)} style={{ visibility: 'hidden', display: 'inline-block', fontsize: 16 }}>
-                        <h5>WorldMap</h5>
-                    </a>
-                    <p style={{ visibility: 'hidden', display: 'inline-block' }} id="symbol">&nbsp;&gt;&gt;&nbsp;</p>
-                    <p id="text" style={{ display: 'inline-block', fontSize: 16 }}></p>
-                </div>
-
-
-                <div className=' '>
-
-                    <MapsComponent id="maps" ref={m => this.mapInstance = m} loaded={this.loaded} load={this.load} shapeSelected={this.shapeSelected.bind(this)} zoomSettings={{
-                        enable: false
+        return (<MapsComponent id="maps" ref={m => this.mapInstance = m} loaded={this.loaded} load={this.load} shapeSelected={this.shapeSelected.bind(this)} zoomSettings={{
+                        enable: false,
+                        height: 1000
                     }}
                         mapsArea={{
                             background: '#eb9f79 '
@@ -212,10 +197,6 @@ export default class MapWorld extends SampleBase {
                             }}>
                             </LayerDirective>
                         </LayersDirective>
-                    </MapsComponent>
-                </div>
-
-            </div>
-        </div>);
+                    </MapsComponent>);
     }
 }

@@ -198,6 +198,7 @@ const City = ({ city }) => {
                     <SearchInput
                       placeholder="Search for a place"
                       onChange={onInputChange}
+                      value={keyword}
                     />
                   </div>
                   <div className="container-fluid ">
@@ -329,7 +330,7 @@ const City = ({ city }) => {
               </div>
             </div>
           </div>
-          
+
 
         </div>
 

@@ -518,8 +518,8 @@ margin: 40px 50px 150px 50px;
   height: 90vh;
 }
 .map{
-  height: 1000px;
-  width:2000px;
+  height: 100vh;
+  width: 100vw;
 }
 .map-chart{
   margin-top: -100px;
@@ -636,8 +636,14 @@ margin: 40px 50px 150px 50px;
 .city-places-div{
   height:86vh; 
   margin-top: 10px;
-  overflow: scroll;
+  overflow-y: scroll;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
+.city-places-div::-webkit-scrollbar {
+  display: none;
+}
+
 .filter-active{
   color:#faddcf; 
 }
