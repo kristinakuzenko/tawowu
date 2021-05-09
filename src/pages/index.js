@@ -28,6 +28,7 @@ export default  function Home() {
 
 
   return (
+
     <Layout>
       <MainPage />
       <div className="map2">

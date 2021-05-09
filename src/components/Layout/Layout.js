@@ -3,10 +3,12 @@ import Link from "next/link";
 import React from 'react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import styles from './layout.module.css';
 import { useState, useEffect } from 'react';
 import fire from '../../config/fire-config';
+import { signin, signout, useSession } from 'next-auth/client';
 
 
 const orderBy = (countries) => {
@@ -49,7 +51,7 @@ const Layout = ({ children, title = "Tawowu" }) => {
       _isMounted = false;
     }
   }, [])
-
+  const [session, loading] = useSession();
   const orderedCountries = orderBy(countries);
   return (
     <div className="layout-main">
@@ -68,6 +70,9 @@ const Layout = ({ children, title = "Tawowu" }) => {
           <div className="">
             <span type="button" className="nav-link search" href="#" data-toggle="modal" data-target="#exampleModal"><FontAwesomeIcon icon={faSearch}></FontAwesomeIcon> </span>
             <Link href={`/my-places`} class="nav-link user">
+              <span type="button" className="nav-link search" ><FontAwesomeIcon icon={faHeart}></FontAwesomeIcon> </span>
+            </Link>
+            <Link href={`/plans`} class="nav-link user">
               <span type="button" className="nav-link search" ><FontAwesomeIcon icon={faUser}></FontAwesomeIcon> </span>
             </Link>
             <Link href="/"><a className="navbar-brand logo" >t a w o w u <span className="sr-only">(current)</span></a></Link>
@@ -91,7 +96,41 @@ const Layout = ({ children, title = "Tawowu" }) => {
                     </ul>
                   </li>
                 ))}
-
+<p>
+          {!session && (
+            <a
+              href="/api/auth/signin"
+              onClick={(e) => {
+                e.preventDefault();
+                signin();
+              }}
+            >
+              <button className="signInButton">Sign in</button>
+            </a>
+          )}
+          {session && (
+            <>
+              <Link href="/profile">
+                <a>
+                  <span
+                    style={{ backgroundImage: `url(${session.user.image})` }}
+                    className="avatar"
+                  />
+                </a>
+              </Link>
+              <span className="email">{session.user.email}</span>
+              <a
+                href="/api/auth/signout"
+                onClick={(e) => {
+                  e.preventDefault();
+                  signout();
+                }}
+              >
+                <button className="signOutButton">Sign out</button>
+              </a>
+            </>
+          )}
+        </p>
                 <li className="nav-item">
                   <a className="nav-link" href="#">About </a>
                 </li>

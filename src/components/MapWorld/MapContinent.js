@@ -62,7 +62,7 @@ export default class MapContinent extends SampleBase {
 
                 <div className=' '>
 
-                    <MapsComponent id="maps" ref={m => this.mapInstance = m} loaded={this.loaded} load={this.load} shapeSelected={this.shapeSelected.bind(this)} zoomSettings={{
+                    <MapsComponent id="maps" height="950" width="1000" ref={m => this.mapInstance = m} loaded={this.loaded} load={this.load} shapeSelected={this.shapeSelected.bind(this)} zoomSettings={{
                         enable: false
                     }}
                         mapsArea={{

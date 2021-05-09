@@ -2,8 +2,9 @@
 "places":[
     {
         "city":"Barcelona",
+        "id":1,
         "name":"La Sagrada Familia",
-        "image":"https://kristinakuzenko.github.io/images/barcelona.jpg",
+        "image":"https://kristinakuzenko.github.io/images/sagrada.jpg",
         "type":[1],
         "description": "Church",
         "location": "Location",
@@ -11,14 +12,14 @@
         "tips": "Tips",
         "transport":"transport",
         "filter":[2],
-        "category":[1,2],
         "popularity":"1",
         "coordinates":[41.4036,2.1744]
     },
     {
         "city":"Barcelona",
+        "id":2,
         "name":"Mercado de La Boqueria",
-        "image":"https://kristinakuzenko.github.io/images/barcelona.jpg",
+        "image":"https://kristinakuzenko.github.io/images/mercado.jpg",
         "type":[2],
         "description": "Market",
         "location": "Location",
@@ -26,14 +27,14 @@
         "tips": "Tips",
         "transport":"transport",
         "filter":[1],
-        "category":[1,2],
         "popularity":"1",
         "coordinates":[41.3817,2.1716]
     },
     {
         "city":"Barcelona",
-        "name":"Diagonal Mar",
-        "image":"https://kristinakuzenko.github.io/images/barcelona.jpg",
+        "id":3,
+        "name":"Diagonal Mall",
+        "image":"https://kristinakuzenko.github.io/images/diagonal.jpg",
         "type":[3],
         "description": "Mall",
         "location": "Location",
@@ -41,24 +42,22 @@
         "tips": "Tips",
         "transport":"transport",
         "filter":[1],
-        "category":[1,2],
         "popularity":"1",
         "coordinates":[41.4105,2.2168]
     },
     {
         "city":"Barcelona",
         "name":"Metro",
-        "image":"https://kristinakuzenko.github.io/images/barcelona.jpg",
         "type":[4],
         "filter":[6],
         "price":"One way ticket: 10$",
-        "category":[1,2],
         "popularity":"1"
     },
     {
         "city":"Barcelona",
+        "id":4,
         "name":"Museu Picasso",
-        "image":"https://kristinakuzenko.github.io/images/barcelona.jpg",
+        "image":"https://kristinakuzenko.github.io/images/picasso.jpg",
         "type":[1],
         "description": "Church",
         "location": "Location",
@@ -71,8 +70,9 @@
     },
     {
         "city":"Barcelona",
+        "id":5,
         "name":"Museu Nacional d'Art de Catalunya",
-        "image":"https://kristinakuzenko.github.io/images/barcelona.jpg",
+        "image":"https://kristinakuzenko.github.io/images/nacional-museu.jpeg",
         "type":[1],
         "description": "Church",
         "location": "Location",
@@ -85,8 +85,9 @@
     },
     {
         "city":"Barcelona",
+        "id":6,
         "name":"Park Güell",
-        "image":"https://kristinakuzenko.github.io/images/barcelona.jpg",
+        "image":"https://kristinakuzenko.github.io/images/park-guell.jpg",
         "type":[1],
         "description": "Church",
         "location": "Location",
@@ -96,6 +97,21 @@
         "filter":[3],
         "popularity":"2",
         "coordinates":[41.4145,2.1527]
+    },
+    {
+        "city":"Kyiv",
+        "id":1,
+        "name":"Saint Sophia's Cathedral",
+        "image":"https://kristinakuzenko.github.io/images/park-guell.jpg",
+        "type":[1],
+        "description": "Church",
+        "location": "Location",
+        "price": "10$",
+        "tips": "tips",
+        "transport":"transport",
+        "filter":[3],
+        "popularity":"1",
+        "coordinates":[50.4529,30.5143]
     }
 ]
 }

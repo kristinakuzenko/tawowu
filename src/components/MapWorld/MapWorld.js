@@ -77,24 +77,19 @@ export default class MapWorld extends SampleBase {
                 this.mapInstance.baseLayerIndex = 6;
                 this.mapInstance.refresh();
             }
-            let button = document.getElementById('button');
-            button.style.display = 'block';
-            document.getElementById('category').style.visibility = 'visible';
-            document.getElementById('text').innerHTML = shape;
-            document.getElementById('symbol').style.visibility = 'visible';
         }else{
             window.location.href=`/country/${shape2} `;
         }
         touchmove = false;
     }
     render() {
-        return (<MapsComponent id="maps" ref={m => this.mapInstance = m} loaded={this.loaded} load={this.load} shapeSelected={this.shapeSelected.bind(this)} zoomSettings={{
-                        enable: false,
-                        height: 1000
+        return (<MapsComponent id="maps" height="950" ref={m => this.mapInstance = m} loaded={this.loaded} load={this.load} shapeSelected={this.shapeSelected.bind(this)} zoomSettings={{
+                        enable: false
                     }}
                         mapsArea={{
                             background: '#eb9f79 '
                         }}>
+                            
                         <Inject services={[Selection, Highlight, MapsTooltip]} />
                         <LayersDirective>
                             <LayerDirective shapeData={world} layerType='Geometry' shapePropertyPath='continent' shapeDataPath='continent' dataSource={datasource.default} shapeSettings={{

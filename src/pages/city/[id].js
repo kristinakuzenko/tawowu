@@ -1,4 +1,5 @@
 import Layout from "../../components/Layout/Layout";
+import Head from "next/head";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMapMarkedAlt } from "@fortawesome/free-solid-svg-icons";
@@ -9,13 +10,20 @@ import fire from '../../config/fire-config';
 import dynamic from 'next/dynamic';
 import React, { useState, useEffect } from "react";
 
+
 const City = ({ city }) => {
   let _isMounted = false;
   const [cities, setCities] = useState([]);
   const [places, setPlaces] = useState([]);
+  const [favPlaces, setFavPlaces] = useState([]);
   React.useEffect(() => {
 
 
+    Object.keys(localStorage).filter(key => key.indexOf('tawowu-fav') !== -1).forEach((key) => {
+      favPlaces.push(JSON.parse(localStorage.getItem(key)));
+    });
+
+    setFavPlaces([...favPlaces]);
 
     _isMounted = true;
 
@@ -48,7 +56,6 @@ const City = ({ city }) => {
     loading: () => "Loading...",
     ssr: false
   });
-
 
 
   const currentCity = cities.filter(cityItem => cityItem.city.toLowerCase() === city.toLowerCase());
@@ -135,6 +142,15 @@ const City = ({ city }) => {
   const addToFavorites = (e, value, place) => {
     e.preventDefault();
     localStorage.setItem(`tawowu-fav-${value}`, JSON.stringify(place));
+    favPlaces.push(place);
+    setFavPlaces([...favPlaces]);
+  }
+  const removeFromFavorites = (e, value, place) => {
+    e.preventDefault();
+    localStorage.removeItem(`tawowu-fav-${value}`);
+    const index = favPlaces.indexOf(place);
+favPlaces.splice(index,1);
+setFavPlaces([...favPlaces]);
   }
 
   const [placeType, setPlaceType] = useState(1);
@@ -147,16 +163,38 @@ const City = ({ city }) => {
       setActiveFilterOne([...activeFilter]);
       setActiveFilters([...activeFilters]);
       setKeyword("");
+      setAllTogether(-1);
     }
     setPlaceType(typeValue);
   }
+  const [allTogether, setAllTogether] = useState(-1);
+
+  const toggleAllTogether = (e, value) => {
+    e.preventDefault();
+    setAllTogether(value);
+  }
+  const [showRoutes, setShowRoutes] = useState(-1);
+
+  const toggleShowRoutes = (e, value) => {
+    e.preventDefault();
+    setShowRoutes(value);
+  }
+
+  const allPlaces = () => cityPlaces().filter(place => place.type.indexOf(4) === -1);
+
 
   const mySortingFunction = (a, b) => a.popularity.localeCompare(b.popularity);
   return <Layout title={city}>
+    <Head>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBIwzALxUPNbatRBj3Xi1Uhp0fFzwWNBkE"
+      async
+    ></script>
+    </Head>
     {currentCity.map((cityItem) => (
       <div className="city-block" key={cityItem.city}>
         <div className="city-filter container-fluid ">
-
+<map/>
           <div className="col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2 filter-item " >
             <p  onClick={(e) => toggleType(e, 1)} className={placeType === 1 ? 'filter-name active' : 'filter-name '} >&nbsp;Sightseeing&nbsp;</p>
           </div>
@@ -170,10 +208,10 @@ const City = ({ city }) => {
             <p onClick={(e) => toggleType(e, 4)} className={placeType === 4 ? 'filter-name active' : 'filter-name '} >&nbsp;Transport&nbsp;</p>
           </div>
           <div className="col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2 filter-item ">
-            <p className="filter-name">&nbsp;Activities&nbsp;</p>
+            <p onClick={(e) => toggleShowRoutes(e, 2)} className="filter-name">&nbsp;Activities&nbsp;</p>
           </div>
           <div className="col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2 filter-item ">
-            <p className="filter-name">&nbsp;Trip plans&nbsp;</p>
+            <p onClick={(e) => toggleShowRoutes(e, 1)} className="filter-name">&nbsp;Trip plans&nbsp;</p>
           </div>
 
         </div>
@@ -189,11 +227,19 @@ const City = ({ city }) => {
               <div className="city-main-caption">
          {cityItem.city}
         </div>
-                <Map className="fixed" locations={filteredPlacesValue()} latitude={41.3851} longitude={2.1734} zoom={12} />
-
+        <div onClick={(e) => toggleAllTogether(e, 1)} className= {allTogether===-1 ? ' show-all filter-type-container ' : 'none'}>
+          <p className={allTogether===-1 ? 'continent-filter-p ' : 'none'}  >&nbsp;Show all places together&nbsp; </p>
+        </div>
+        <div onClick={(e) => toggleAllTogether(e, -1)} className= {allTogether===1 ? ' show-all filter-type-container ' : 'none'}>
+          <p className={allTogether===1 && placeType===2? 'continent-filter-p ' : 'none'}  >&nbsp;Show only food&nbsp; </p>
+          <p className={allTogether===1 && placeType===1? 'continent-filter-p ' : 'none'}  >&nbsp;Show only sightseeing&nbsp; </p>
+          <p className={allTogether===1 && placeType===3? 'continent-filter-p ' : 'none'}  >&nbsp;Show only shopping&nbsp; </p>
+        </div>
+                <Map className="fixed" locations={ allTogether===-1?filteredPlacesValue():allPlaces()} latitude={currentCity[0].latitude} longitude={currentCity[0].longitude} zoom={12} />
+                       
               </div>
               <div className="city-places-div col-12 col-sm-12 col-md-12 col-lg-7 col-xl-7">
-                <div className="">
+                <div className="fixed-div">
                   <div className={placeType === 4 ?' none':'input-city'}>
                     <SearchInput
                       placeholder="Search for a place"
@@ -290,8 +336,11 @@ const City = ({ city }) => {
                         <img className="image-city " src={place.image} />
                       </div>
 
-                      <div className={placeType !== 4 ?'btn filter-p filter-btn ':'none'} onClick={(e) => addToFavorites(e, place.name, place)}>
+                      <div className={placeType !== 4 && favPlaces.indexOf(place)===-1 ?'btn filter-p filter-btn ':'none'} onClick={(e) => addToFavorites(e, place.name, place)}>
                         Add to favorites
+                      </div>
+                      <div className={placeType !== 4 && favPlaces.indexOf(place)!==-1 ?'btn filter-p filter-btn ':'none'} onClick={(e) => removeFromFavorites(e, place.name, place)}>
+                        Remove from favorites
                       </div>
 
                       <div className={placeType === 1 ? 'col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8':'none' } >
@@ -318,16 +367,19 @@ const City = ({ city }) => {
                     <h1 className="place-h">Transport</h1>
                     <h1 className="place-p">{place.transport}</h1>
                   </div>
-                  <h1 className={placeType !== 4 ?'place-h':'none'}>Tips</h1>
-                  <h1 className={placeType !== 4 ?'place-p':'none'}>{place.tips}</h1>
                   <div className={placeType === 4 ? 'col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8':'none' }>
                     <h1 className="place-p">{place.price}</h1>
                   </div>
 
                     </div>
+                    <h1 className={placeType !== 4 ?'place-h':'none'}>Tips</h1>
+                  <h1 className={placeType !== 4 ?'place-p':'none'}>{place.tips}</h1>
                   </div>
                 ))}
               </div>
+            </div>
+            <div>
+              
             </div>
           </div>
 

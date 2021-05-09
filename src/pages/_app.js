@@ -2,14 +2,18 @@ import 'bootstrap/dist/css/bootstrap.css'
 import '../styles/globals.css'
 import "@fortawesome/fontawesome-svg-core/styles.css"; // import Font Awesome CSS
 import { config } from "@fortawesome/fontawesome-svg-core";
+import { Provider } from 'next-auth/client';
 import Head from 'next/head'
 config.autoAddCss = false; // Tell Font Awesome to skip adding the CSS automatically since it's being imported above
 
 
 
 function MyApp({Component,pageProps}) {
+    const { session } = pageProps;
   return (
       <>
+      <Provider options={{ site: process.env.SITE }} session={session}>
+   
           <Head>
           <head>
 <link href='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css' rel='stylesheet' />
@@ -29,6 +33,7 @@ function MyApp({Component,pageProps}) {
                   />
           </Head>
           <Component {...pageProps}/>
+          </Provider>
       </>
   );
 }

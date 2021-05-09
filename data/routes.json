@@ -2,7 +2,20 @@
     "routes":[
         {
             "city":"Barcelona",
-            "routes":[[1,2,3,4]]
+            "name":"1 Day in Barcelona",
+            "plan":[{
+                "place":1,
+                "description":"15 min walk"
+            },
+            {
+                "place":2,
+                "description":"take bus"
+            },
+            {
+                "place":3,
+                "description":"get by metro"
+            }]
+
         }
     ]
     }
