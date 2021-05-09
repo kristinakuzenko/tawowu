@@ -1,4 +1,5 @@
 import Layout from "../../components/Layout/Layout";
+import GoogleMap from "../../components/GoogleMap/GoogleMap";
 import Head from "next/head";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,9 +9,24 @@ import SearchInput from "../../components/SearchInput/SearchInput";
 //database import
 import fire from '../../config/fire-config';
 import dynamic from 'next/dynamic';
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
+import GoogleMapReact from 'google-map-react';
+import DirectionsService from 'google-map-react';
+import DirectionsRenderer from 'google-map-react';
+import MyGreatPlaceWithHover from "../../components/MyPlace/MyPlace";
+import { withScriptjs } from "react-google-maps";
 
-
+const markers = ( locations, handler ) => {
+return locations.map(location => (
+<MyGreatPlaceWithHover
+text={location.name}
+lat={location.coordinates[0]}
+lng={location.coordinates[1]}
+type={location.type}
+/>
+))
+}
+const MapLoader = withScriptjs(GoogleMap);
 const City = ({ city }) => {
   let _isMounted = false;
   const [cities, setCities] = useState([]);
@@ -56,7 +72,6 @@ const City = ({ city }) => {
     loading: () => "Loading...",
     ssr: false
   });
-
 
   const currentCity = cities.filter(cityItem => cityItem.city.toLowerCase() === city.toLowerCase());
   const cityPlaces = () => places.filter(place => place.city.toLowerCase() === city.toLowerCase());
@@ -185,16 +200,14 @@ setFavPlaces([...favPlaces]);
 
   const mySortingFunction = (a, b) => a.popularity.localeCompare(b.popularity);
   return <Layout title={city}>
-    <Head>
-    <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBIwzALxUPNbatRBj3Xi1Uhp0fFzwWNBkE"
-      async
-    ></script>
-    </Head>
+
     {currentCity.map((cityItem) => (
       <div className="city-block" key={cityItem.city}>
+         <MapLoader
+      googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyCp7BwWMHA_ZfhMSTSTs2QxW1_vocqb1k4"
+      loadingElement={<div style={{ height: `100%` }} />}
+    />
         <div className="city-filter container-fluid ">
-<map/>
           <div className="col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2 filter-item " >
             <p  onClick={(e) => toggleType(e, 1)} className={placeType === 1 ? 'filter-name active' : 'filter-name '} >&nbsp;Sightseeing&nbsp;</p>
           </div>
@@ -235,8 +248,14 @@ setFavPlaces([...favPlaces]);
           <p className={allTogether===1 && placeType===1? 'continent-filter-p ' : 'none'}  >&nbsp;Show only sightseeing&nbsp; </p>
           <p className={allTogether===1 && placeType===3? 'continent-filter-p ' : 'none'}  >&nbsp;Show only shopping&nbsp; </p>
         </div>
-                <Map className="fixed" locations={ allTogether===-1?filteredPlacesValue():allPlaces()} latitude={currentCity[0].latitude} longitude={currentCity[0].longitude} zoom={12} />
-                       
+                 <GoogleMapReact
+          bootstrapURLKeys={{ key: "AIzaSyCp7BwWMHA_ZfhMSTSTs2QxW1_vocqb1k4" }}
+          defaultCenter={{lat: currentCity[0].latitude, lng: currentCity[0].longitude}}
+          defaultZoom={12}
+          
+        >
+          {markers(filteredPlacesValue())}
+        </GoogleMapReact> 
               </div>
               <div className="city-places-div col-12 col-sm-12 col-md-12 col-lg-7 col-xl-7">
                 <div className="fixed-div">
