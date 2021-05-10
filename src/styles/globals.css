@@ -775,6 +775,21 @@ border-radius: 10px;
   text-align: center;
   color: '#3f51b5';
 }
+.choose-plan{
+  margin-top: 50px;
+  font-family: SangbleuSans,serif;
+  color: black;
+  font-size: 50px;
+  text-align: center;
+}
+.plan-description{
+  text-align: center;
+}
+.plan-h{
+  margin-top: 20px;
+  font-size: 40px;
+  font-family: 'Courier New', Courier, monospace;
+}
 
 
 
