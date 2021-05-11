@@ -1,5 +1,6 @@
 import Layout from "../../components/Layout/Layout";
 import GoogleMap from "../../components/GoogleMap/GoogleMap";
+import key from "../../components/GoogleApiKey/GoogleMap";
 import Head from "next/head";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -245,7 +246,7 @@ const City = ({ city }) => {
                 <Map className="fixed" locations={ allTogether===-1?filteredPlacesValue():allPlaces()} latitude={currentCity[0].latitude} longitude={currentCity[0].longitude} zoom={12} />
 
                 <GoogleMapReact className={allTogether === 1 ?'none':''}
-          bootstrapURLKeys={{ key: "AIzaSyCp7BwWMHA_ZfhMSTSTs2QxW1_vocqb1k4" }}
+          bootstrapURLKeys={{ key: key }}
           defaultCenter={{lat: currentCity[0].latitude, lng: currentCity[0].longitude}}
           defaultZoom={12}
           
