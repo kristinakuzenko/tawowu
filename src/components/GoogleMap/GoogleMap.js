@@ -47,6 +47,7 @@ class Map extends Component {
           this.setState({
             directions: result
           });
+          
         } else {
           console.error(`error fetching directions ${result}`);
         }

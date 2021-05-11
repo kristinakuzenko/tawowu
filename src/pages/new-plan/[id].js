@@ -1,5 +1,7 @@
+
 import Layout from "../../components/Layout/Layout";
 import GoogleMap from "../../components/GoogleMap/GoogleMap";
+import Key from "../../components/GoogleApiKey/GoogleApiKey";
 import Head from "next/head";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -33,14 +35,6 @@ const NewPlan = ({ city }) => {
     const [places, setPlaces] = useState([]);
     const [favPlaces, setFavPlaces] = useState([]);
     React.useEffect(() => {
-
-
-        Object.keys(localStorage).filter(key => key.indexOf('tawowu-fav') !== -1).forEach((key) => {
-            favPlaces.push(JSON.parse(localStorage.getItem(key)));
-        });
-
-        setFavPlaces([...favPlaces]);
-
         _isMounted = true;
 
         fire.firestore()
@@ -145,6 +139,19 @@ const NewPlan = ({ city }) => {
         e.preventDefault();
         setKeyword(e.target.value);
     };
+
+    const [name, setName] = useState("");
+    const onInputNameChange = (e) => {
+        e.preventDefault();
+        setName(e.target.value);
+    };
+
+    const [budget, setBudget] = useState("");
+    const onInputBudgetChange = (e) => {
+        e.preventDefault();
+        setBudget(e.target.value);
+    };
+
     const filteredPlaces = (type) => {
         const needle = keyword ? keyword.toLowerCase() : '';
         return allFilteredPlaces(type).filter((place) => place.name.toLowerCase().indexOf(needle) !== -1);
@@ -156,13 +163,11 @@ const NewPlan = ({ city }) => {
 
     const addToPlan = (e, value, place) => {
         e.preventDefault();
-        localStorage.setItem(`tawowu-plan-${value}`, JSON.stringify(place));
         favPlaces.push(place);
         setFavPlaces([...favPlaces]);
     }
     const removeFromPlan = (e, value, place) => {
         e.preventDefault();
-        localStorage.removeItem(`tawowu-plan-${value}`);
         const index = favPlaces.indexOf(place);
         favPlaces.splice(index, 1);
         setFavPlaces([...favPlaces]);
@@ -188,9 +193,87 @@ const NewPlan = ({ city }) => {
         e.preventDefault();
         setAllTogether(value);
     }
-  
+
+
+    const [days, setDays] = useState(1);
+
+    const toggleDays = (e, value) => {
+        e.preventDefault();
+        setDays(value);
+    }
+
+    const [byCar, setByCar] = useState(1);
+
+    const toggleByCar = (e, value) => {
+        e.preventDefault();
+        setByCar(value);
+    }
+    const [messageData, setMessageData] = useState("");
+    const checkData = (e) => {
+        e.preventDefault();
+        if(name===""){
+            setName("{}`${byCar}`}");
+        }
+    }
+    const sendData = (e) => {
+        e.preventDefault();
+        const data={
+city:currentCity[0],
+name:name,
+byCar:byCar,
+days:days,
+budget:budget,
+places:favPlaces
+        }
+        localStorage.setItem(`plan-data-${name}`, JSON.stringify(data));
+    }
 
     const allPlaces = () => cityPlaces().filter(place => place.type.indexOf(4) === -1);
+    const calculate = (e) => {
+        const directionsService = new google.maps.DirectionsService();
+        const origin = { lat: currentCity[0].latitude, lng: currentCity[0].longitude };
+        const destination = { lat: currentCity[0].latitude, lng: currentCity[0].longitude };
+        var waypts = [];
+        allPlaces().forEach(place => {
+            stop = new google.maps.LatLng(place.coordinates[0], place.coordinates[1])
+            waypts.push({
+                location: stop,
+                stopover: true
+            });
+        });
+        directionsService.route(
+            {
+                origin: origin,
+                destination: destination,
+                waypoints: waypts,
+                optimizeWaypoints: true,
+                travelMode: google.maps.TravelMode.WALKING
+            },
+            (result, status) => {
+                if (status === google.maps.DirectionsStatus.OK) {
+                    var info = [];
+                    for (let i = 0; i < result.routes[0].legs.length; i++) {
+                        const routeSegment = i + 1;
+                        info.push({
+                            number: routeSegment,
+                            start: result.routes[0].legs[i].start_address,
+                            end: result.routes[0].legs[i].end_address,
+                            distance: result.routes[0].legs[i].distance.text,
+                            time: result.routes[0].legs[i].duration.text
+                        })
+
+                    }
+                    console.log("ggdjsavdjhasdv")
+                    console.log(result.routes[0].legs[0].distance.value);
+                    console.log(result.routes[0].legs[0].duration.value);
+                    console.log(info);
+                } else {
+                    console.error(`error fetching directions ${result}`);
+                }
+            }
+        );
+    }
+
 
 
     const mySortingFunction = (a, b) => a.popularity.localeCompare(b.popularity);
@@ -200,38 +283,64 @@ const NewPlan = ({ city }) => {
             <div className="city-block" key={cityItem.city}>
                 <div>
                     <div className="places-div">
-                        <div className="city-main-caption">
+                        <div onClick={(e) => calculate(e)} className="city-main-caption">
                             Create yor own plan for  {cityItem.city}
                         </div>
-                        <form>
-                            <div class="form-group">
-                                <label for="exampleFormControlTextarea1">Plan name: </label>
-                                <textarea class="form-control" id="exampleFormControlTextarea1" rows="1"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleFormControlSelect1">Select number of days you are staying in {cityItem.city}</label>
-                                <select class="form-control" id="exampleFormControlSelect1">
-                                    <option value="1">1</option>
-                                    <option >2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleFormControlTextarea1">Your budget in US dollars $ for all trip:  </label>
-                                <textarea class="form-control" id="exampleFormControlTextarea1" rows="1"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleFormControlSelect1">Are you travelling by car?</label>
-                                <select class="form-control" id="exampleFormControlSelect1">
-                                    <option>Without car</option>
-                                    <option>By car</option>
-                                </select>
-                            </div>
-                        </form>
 
-                        <div className="city-main-caption">
+                        <div className="">
+                            <h1 className="plan-h"> Plan name:</h1>
+                            <input className="input" placeholder="Enter your plan name"
+                                onChange={onInputNameChange}
+                                value={name} />
+                        </div>
+
+                        <div className="">
+                            <h1 className="plan-h"> Number of days :</h1>
+
+                            <div className="continent-filter filter-type-container col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2 ">
+                                <p onClick={(e) => toggleDays(e, 1)} className={days === 1 ? 'continent-filter-p active' : 'continent-filter-p'}  >&nbsp;1&nbsp; </p>
+                            </div>
+                            <div className="continent-filter filter-type-container  col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                                <p onClick={(e) => toggleDays(e, 2)} className={days === 2 ? 'continent-filter-p active' : 'continent-filter-p'}  >&nbsp;2&nbsp; </p>
+                            </div>
+                            <div className="continent-filter filter-type-container  col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                                <p onClick={(e) => toggleDays(e, 3)} className={days === 3 ? 'continent-filter-p active' : 'continent-filter-p'}  >&nbsp;3&nbsp; </p>
+                            </div>
+                            <div className="continent-filter filter-type-container  col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                                <p onClick={(e) => toggleDays(e, 4)} className={days === 4 ? 'continent-filter-p active' : 'continent-filter-p'}  >&nbsp;4&nbsp; </p>
+                            </div>
+                            <div className="continent-filter filter-type-container  col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                                <p onClick={(e) => toggleDays(e, 5)} className={days === 5 ? 'continent-filter-p active' : 'continent-filter-p'}  >&nbsp;5&nbsp; </p>
+                            </div>
+                            <div className="continent-filter filter-type-container  col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                                <p onClick={(e) => toggleDays(e, 6)} className={days === 6 ? 'continent-filter-p active' : 'continent-filter-p'}  >&nbsp;6&nbsp; </p>
+                            </div>
+                        </div>
+
+                        <div className="fill-data">
+                            <h1 className="plan-h"> How are you travelling?</h1>
+
+                            <div className="continent-filter filter-type-container col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3 ">
+                                <p onClick={(e) => toggleByCar(e, 1)} className={byCar === 1 ? 'continent-filter-p active' : 'continent-filter-p'}  >&nbsp;Public transport&nbsp; </p>
+                            </div>
+                            <div className="continent-filter filter-type-container  col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3 ">
+                                <p onClick={(e) => toggleByCar(e, 2)} className={byCar === 2 ? 'continent-filter-p active' : 'continent-filter-p'}  >&nbsp;By car&nbsp; </p>
+                            </div>
+                            <div className="continent-filter filter-type-container  col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3 ">
+                                <p onClick={(e) => toggleByCar(e, 3)} className={byCar === 2 ? 'continent-filter-p active' : 'continent-filter-p'}  >&nbsp;By bicycle&nbsp; </p>
+                            </div>
+                            <div className="continent-filter filter-type-container  col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3 ">
+                                <p onClick={(e) => toggleByCar(e, 4)} className={byCar === 2 ? 'continent-filter-p active' : 'continent-filter-p'}  >&nbsp;By motorcycle&nbsp; </p>
+                            </div>
+                        </div>
+
+                        <div className="fill-data">
+                            <h1 className="plan-h"> Your budget (optional) :</h1>
+                            <input className="input" placeholder="Enter your budget"
+                                onChange={onInputBudgetChange}
+                                value={budget} />
+                        </div>
+                        <div className="city-main-caption fill-data">
                             Select up to 27 places
                      </div>
 
@@ -262,16 +371,16 @@ const NewPlan = ({ city }) => {
                                     <p className={allTogether === 1 && placeType === 3 ? 'continent-filter-p ' : 'none'}  >&nbsp;Show only shopping&nbsp; </p>
                                 </div>
 
-                                <Map className="fixed" locations={ allTogether===-1?filteredPlacesValue():allPlaces()} latitude={currentCity[0].latitude} longitude={currentCity[0].longitude} zoom={12} />
+                                <Map className="fixed" locations={allTogether === -1 ? filteredPlacesValue() : allPlaces()} latitude={currentCity[0].latitude} longitude={currentCity[0].longitude} zoom={12} />
 
-<GoogleMapReact className={allTogether === 1 ?'none':''}
-bootstrapURLKeys={{ key: "AIzaSyCp7BwWMHA_ZfhMSTSTs2QxW1_vocqb1k4" }}
-defaultCenter={{lat: currentCity[0].latitude, lng: currentCity[0].longitude}}
-defaultZoom={12}
+                                <GoogleMapReact className={allTogether === 1 ? 'none' : ''}
+                                    bootstrapURLKeys={{ key: Key }}
+                                    defaultCenter={{ lat: currentCity[0].latitude, lng: currentCity[0].longitude }}
+                                    defaultZoom={12}
 
->
-{allTogether === -1? markers(filteredPlacesValue()): markers(allPlaces())}
-</GoogleMapReact> 
+                                >
+                                    {allTogether === -1 ? markers(filteredPlacesValue()) : markers(allPlaces())}
+                                </GoogleMapReact>
 
                             </div>
                             <div className="city-places-div col-12 col-sm-12 col-md-12 col-lg-7 col-xl-7">
@@ -414,13 +523,18 @@ defaultZoom={12}
                         </div>
                         <div>
                         </div>
-                        <Link href={`/plan/${city}`}>
-                        <div className="new-plan">
-                            <div className="btn filter-p filter-btn ">
-                                Create new plan
+                        <div  onClick={(e) => sendData(e)} className="new-plan">
+                                <div className="btn filter-p filter-btn ">
+                                    Create new plan
                             </div>
-                        </div>
-                    </Link>
+                            </div>
+                        <Link href={`/plan/${name}`}  >
+                            <div className="new-plan">
+                                <div className="btn filter-p filter-btn ">
+                                    Create new plan
+                            </div>
+                            </div>
+                        </Link>
                     </div>
                 </div>
             </div>
