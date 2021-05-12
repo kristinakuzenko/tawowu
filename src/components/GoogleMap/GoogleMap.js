@@ -22,18 +22,30 @@ class Map extends Component {
 }
 
   componentDidMount() {
+    const geocoder = new google.maps.Geocoder();
     const directionsService = new google.maps.DirectionsService();
     const type=this.state.type;
     const origin = { lat: this.state.city.latitude, lng: this.state.city.longitude};
     const destination = { lat: this.state.city.latitude,lng: this.state.city.longitude };
     var waypts = [];
+    var loc=[];
+    
     this.state.locations.forEach(place => {
+      geocoder.geocode({ address: place.location }, (results, status) => {
+       loc.push({lat:results[0].geometry.location.lat(),lng:results[0].geometry.location.lng()});
+           
+          console.log(results[0].geometry.location.lng());
+
+        
+    });
       stop = new google.maps.LatLng(place.coordinates[0], place.coordinates[1])
       waypts.push({
           location: stop,
           stopover: true
       });
     });
+    console.log("loc");
+    console.log(loc);
     directionsService.route(
       {
         origin: origin,
@@ -47,6 +59,8 @@ class Map extends Component {
           this.setState({
             directions: result
           });
+          localStorage.setItem(`route`, JSON.stringify(result.routes[0].legs));
+          
           
         } else {
           console.error(`error fetching directions ${result}`);

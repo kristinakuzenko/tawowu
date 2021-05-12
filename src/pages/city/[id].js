@@ -1,6 +1,6 @@
 import Layout from "../../components/Layout/Layout";
 import GoogleMap from "../../components/GoogleMap/GoogleMap";
-import key from "../../components/GoogleApiKey/GoogleMap";
+import key from "../../components/GoogleApiKey/GoogleApiKey";
 import Head from "next/head";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

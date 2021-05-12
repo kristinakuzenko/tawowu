@@ -1,6 +1,6 @@
 
 import Layout from "../../components/Layout/Layout";
-import GoogleMap from "../../components/GoogleMap/GoogleMap";
+import MapGoogle from "../../components/GoogleMap/GoogleMap";
 import key from "../../components/GoogleApiKey/GoogleApiKey";
 import Head from "next/head";
 import Link from "next/link";
@@ -12,11 +12,11 @@ import SearchInput from "../../components/SearchInput/SearchInput";
 import fire from '../../config/fire-config';
 import dynamic from 'next/dynamic';
 import React, { useState, useEffect, useRef } from "react";
-import GoogleMapReact from 'google-map-react';
-import DirectionsService from 'google-map-react';
-import DirectionsRenderer from 'google-map-react';
 import MyGreatPlaceWithHover from "../../components/MyPlace/MyPlace";
-import { withScriptjs } from "react-google-maps";
+import {  withGoogleMap,
+    withScriptjs,
+    GoogleMap,
+    DirectionsRenderer } from "react-google-maps";
 
 const markers = (locations, handler) => {
     return locations.map(location => (
@@ -28,19 +28,25 @@ const markers = (locations, handler) => {
         />
     ))
 }
-const MapLoader = withScriptjs(GoogleMap);
+const MapLoader = withScriptjs(MapGoogle);
 const Plan = ({ name }) => {
 
     let _isMounted = false;
     const [info, setInfo] = useState([]);
+    const [r, setR] = useState([]);
     React.useEffect(() => {
 
         Object.keys(localStorage).filter(key => key.indexOf(`plan-data-${name}`) !== -1).forEach((key) => {
             info.push(JSON.parse(localStorage.getItem(key)));
         });
+        Object.keys(localStorage).filter(key => key.indexOf(`route`) !== -1).forEach((key) => {
+            r.push(JSON.parse(localStorage.getItem(key)));
+        });
 
         setInfo([...info]);
-        console.log(info);
+        setR([...r]);
+        console.log("r");
+        console.log(r[0][0]);
 
         return function cleanup() {
             _isMounted = false;
@@ -58,9 +64,11 @@ const Plan = ({ name }) => {
 
     const calculate = (e) => {
         const directionsService = new google.maps.DirectionsService();
+        const geocoder = new google.maps.Geocoder();
         const origin = { lat: info[0].city.latitude, lng: info[0].city.longitude };
         const destination = { lat: info[0].city.latitude, lng: info[0].city.longitude };
         var waypts = [];
+        var coo=[];
         const instr = [];
         info[0].places.forEach(place => {
             stop = new google.maps.LatLng(place.coordinates[0], place.coordinates[1])
@@ -69,6 +77,21 @@ const Plan = ({ name }) => {
                 stopover: true
             });
         });
+        info[0].places.forEach(place => {
+            
+            geocoder.geocode({ address: place.location }, (results, status) => {
+                var loc={lat:results[0].geometry.location.lat(),lng:results[0].geometry.location.lng()};
+                   
+                    coo.push(loc)
+                     console.log(loc);
+                  console.log(results[0].geometry.location.lat());
+                  console.log(results[0].geometry.location.lng());
+        
+                
+            });
+        });
+        console.log("way");
+     console.log(coo);
         directionsService.route(
             {
                 origin: origin,
@@ -93,7 +116,8 @@ const Plan = ({ name }) => {
 
                     }
                     setRoutes([...routes]);
-                    console.log(routes[0]);
+                    console.log("rsult");
+                    console.log(routes);
                 } else {
                     console.error(`error fetching directions ${result}`);
                 }
@@ -102,7 +126,9 @@ const Plan = ({ name }) => {
 
     }
 
-
+const getLoc=(location)=>{
+    const geocoder = new google.maps.Geocoder();
+}
     const calculate2 = () => {
         for (let i = 0; i < routes.length; i++) {
         const directionsService = new google.maps.DirectionsService();
