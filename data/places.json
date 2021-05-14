@@ -10,10 +10,13 @@
         "location": "Carrer de Mallorca, 401, 08013 Barcelona, Spain",
         "price": "10$",
         "tips": "Tips",
-        "transport":"transport",
         "filter":[2],
         "popularity":"1",
-        "coordinates":[41.4036,2.1744]
+        "coordinates":[41.4036,2.1744],
+        "time": 15,
+        "money": 0,
+        "inside":0,
+        "link":"https://sagradafamilia.org/historia-del-temple"
     },
     {
         "city":"Barcelona",
@@ -25,10 +28,13 @@
         "location": "La Rambla, 91, 08001 Barcelona, Spain",
         "price": "10$",
         "tips": "Tips",
-        "transport":"transport",
         "filter":[1],
         "popularity":"1",
-        "coordinates":[41.3817,2.1716]
+        "coordinates":[41.3817,2.1716],
+        "time": 15,
+        "money": 10,
+        "inside":0,
+        "link":"http://www.boqueria.barcelona/home"
     },
     {
         "city":"Barcelona",
@@ -40,10 +46,13 @@
         "location": "Avinguda Diagonal, 3, 08019 Barcelona, Spain",
         "price": "10$",
         "tips": "Tips",
-        "transport":"transport",
         "filter":[1],
         "popularity":"1",
-        "coordinates":[41.4105,2.2168]
+        "coordinates":[41.4105,2.2168],
+        "time": 60,
+        "money": 0,
+        "inside":1,
+        "link":"https://www.diagonalmarcentre.es/en/"
     },
     {
         "city":"Barcelona",
@@ -61,12 +70,15 @@
         "type":[1],
         "description": "Church",
         "location": "Carrer de Montcada, 15-23, 08003 Barcelona, Spain",
-        "price": "10$",
+        "price": "Adult: €12.00. Age 18-25 and 65+: €7.50. Under 18 - free. Audio guide in English - €5.00. ",
         "tips": "Queues can be punishingly long; visit at lunch or shortly before the last entry, or buy your tickets in advance online.",
-        "transport":"transport",
         "filter":[1,2],
         "popularity":"4",
-        "coordinates":[41.3853,2.1809]
+        "coordinates":[41.3853,2.1809],
+        "time": 120,
+        "money": 12,
+        "inside":1,
+        "link":"http://www.museupicasso.bcn.cat/en/"
     },
     {
         "city":"Barcelona",
@@ -76,12 +88,33 @@
         "type":[1],
         "description": "Church",
         "location": "Palau Nacional, Parc de Montjuïc, s/n, 08038 Barcelona, Spain",
-        "price": "10$",
+        "price": "General admission: €12, audioguide: €4",
+        "tips": "tips",
+        "filter":[4,5],
+        "popularity":"5",
+        "coordinates":[41.3684,2.1536],
+        "time": 90,
+        "money": 12,
+        "inside":1,
+        "link":"https://www.museunacional.cat/en"
+    },
+    {
+        "city":"Barcelona",
+        "id":7,
+        "name":"Museu Nacional d'Art de Catalunya Rooftop",
+        "image":"https://kristinakuzenko.github.io/images/nacional-museu.jpeg",
+        "type":[1],
+        "description": "Church",
+        "location": "Palau Nacional, Parc de Montjuïc, s/n, 08038 Barcelona, Spain",
+        "price": "Rooftop Viewpoint: €2 ",
         "tips": "The visit allows you to enjoy a 360-degree view of the city and see the main buildings and monuments that make up the skyline of Barcelona.",
-        "transport":"transport",
         "filter":[4,5],
         "popularity":"3",
-        "coordinates":[41.3684,2.1536]
+        "coordinates":[41.3684,2.1536],
+        "time": 30,
+        "money": 2,
+        "inside":1,
+        "link":"https://www.museunacional.cat/en"
     },
     {
         "city":"Barcelona",
@@ -91,12 +124,14 @@
         "type":[1],
         "description": "Church",
         "location": "Carrer d'Olot, 5, 08024 Barcelona, Spain",
-        "price": "10$",
+        "price": "€10 General ticket ,€7 Age 7 to 12 & 65+ , free children to 6 years ",
         "tips": "Park",
-        "transport":"transport",
         "filter":[3],
         "popularity":"2",
-        "coordinates":[41.4145,2.1527]
+        "coordinates":[41.4145,2.1527],
+        "time": 90,
+        "money": 10,
+        "inside":0
     },
     {
         "city":"Kyiv",
@@ -108,10 +143,13 @@
         "location": "Location",
         "price": "10$",
         "tips": "tips",
-        "transport":"transport",
         "filter":[3],
         "popularity":"1",
-        "coordinates":[50.4529,30.5143]
+        "coordinates":[50.4529,30.5143],
+        "time": 15,
+        "money": 0,
+        "inside":0,
+        "link":""
     }
 ]
 }
