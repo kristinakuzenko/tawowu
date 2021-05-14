@@ -16,9 +16,9 @@ import {
     withGoogleMap,
     withScriptjs,
     GoogleMap,
-    DirectionsRenderer,geocodeByAddress,
+    DirectionsRenderer, geocodeByAddress,
     PlacesAutocomplete
-  } from "react-google-maps";
+} from "react-google-maps";
 
 
 const NewPlan = ({ city }) => {
@@ -174,75 +174,75 @@ const NewPlan = ({ city }) => {
         const origin = { lat: currentCity[0].latitude, lng: currentCity[0].longitude };
         const destination = { lat: currentCity[0].latitude, lng: currentCity[0].longitude };
         var loc = [];
-        favPlaces.forEach(place => loc.push({location:place.location, stopover:true}));
-        
+        favPlaces.forEach(place => loc.push({ location: place.location, stopover: true }));
+
         directionsService.route(
-          {
-            origin: origin,
-            destination: destination,
-            waypoints: loc,
-            optimizeWaypoints: true,
-            travelMode: google.maps.TravelMode[type]
-          },
-          (result, status) => {
-            if (status === google.maps.DirectionsStatus.OK) {
-                console.log("build");
-              this.setState({
-                directions: result
-              });
-              if (type === "WALKING") {
-                
-                var promise2 = result.routes[0].legs.map((route) => () => new Promise((resolve, reject) => {
-    
-                  var origin1 = route.start_address;
-                  var destination1 = route.end_address;
-    
-                  directionsService.route(
-                    {
-                      origin: origin1,
-                      destination: destination1,
-                      travelMode: google.maps.TravelMode.TRANSIT
-                    },
-                    (result, status) => {
-                      if (status === google.maps.DirectionsStatus.OK) {
-                        var instructions=[];
-                        var dist=0;
-                        var time=0;
-                        result.routes[0].legs[0].steps.forEach(step=>{
-                          var instr=``;
-                          instr+=`${step.instructions}  (${step.duration.text}, ${step.distance.text})`;
-                          instructions.push(instr);
-                          dist+=step.distance.value;
-                          time+=step.duration.value;
-                          
+            {
+                origin: origin,
+                destination: destination,
+                waypoints: loc,
+                optimizeWaypoints: true,
+                travelMode: google.maps.TravelMode[type]
+            },
+            (result, status) => {
+                if (status === google.maps.DirectionsStatus.OK) {
+                    console.log("build");
+                    this.setState({
+                        directions: result
+                    });
+                    if (type === "WALKING") {
+
+                        var promise2 = result.routes[0].legs.map((route) => () => new Promise((resolve, reject) => {
+
+                            var origin1 = route.start_address;
+                            var destination1 = route.end_address;
+
+                            directionsService.route(
+                                {
+                                    origin: origin1,
+                                    destination: destination1,
+                                    travelMode: google.maps.TravelMode.TRANSIT
+                                },
+                                (result, status) => {
+                                    if (status === google.maps.DirectionsStatus.OK) {
+                                        var instructions = [];
+                                        var dist = 0;
+                                        var time = 0;
+                                        result.routes[0].legs[0].steps.forEach(step => {
+                                            var instr = ``;
+                                            instr += `${step.instructions}  (${step.duration.text}, ${step.distance.text})`;
+                                            instructions.push(instr);
+                                            dist += step.distance.value;
+                                            time += step.duration.value;
+
+                                        })
+                                        resolve({ instructions: instructions, distance: dist, time: time, start: origin1, end: destination1 });
+                                    } else {
+                                        console.error(`error fetching directions ${result}`);
+                                    }
+                                }
+                            );
+                        }));
+                        var f2 = async (arr) => {
+                            const waypts2 = arr.map(arr => arr());
+                            return await Promise.all(waypts2);
+                        }
+                        f2(promise2).then((r) => {
+                            console.log("r");
+                            console.log(r);
+                            localStorage.removeItem(`routes-transport-${name}`);
+                            localStorage.setItem(`routes-transport-${name}`, JSON.stringify(r));
+
                         })
-                        resolve({instructions:instructions,distance:dist,time:time,start:origin1,end:destination1});
-                         } else {
-                        console.error(`error fetching directions ${result}`);
-                      }
+
                     }
-                  );
-                }));
-                var f2 = async (arr) => {
-                  const waypts2 = arr.map(arr => arr());
-                  return await Promise.all(waypts2);
+                    console.log("result.routes[0].legs");
+                    console.log(result.routes[0].legs);
+                    localStorage.setItem(`route-${name}`, JSON.stringify(result.routes[0].legs));
+                } else {
+                    console.error(`error fetching directions ${result}`);
                 }
-                f2(promise2).then((r) => {
-                  console.log("r");
-                  console.log(r);
-                  localStorage.removeItem(`routes-transport-${name}`);
-                  localStorage.setItem(`routes-transport-${name}`, JSON.stringify(r));
-                     
-                })
-    
-              }
-              console.log("result.routes[0].legs");
-              console.log(result.routes[0].legs);
-              localStorage.setItem(`route-${name}`, JSON.stringify(result.routes[0].legs));
-            } else {
-              console.error(`error fetching directions ${result}`);
             }
-          }
         );
     };
 
@@ -285,66 +285,106 @@ const NewPlan = ({ city }) => {
     const [messageData, setMessageData] = useState("");
     const checkData = (e) => {
         e.preventDefault();
-        if(name===""){
+        if (name === "") {
             setName("{}`${byCar}`}");
         }
     }
     const sendData = (e) => {
         e.preventDefault();
-        const data={
-city:currentCity[0],
-name:name,
-byCar:byCar,
-days:days,
-budget:budget,
-places:favPlaces
+        const data = {
+            city: currentCity[0],
+            name: name,
+            byCar: byCar,
+            days: days,
+            budget: budget,
+            places: favPlaces
         }
         localStorage.setItem(`plan-data-${name}`, JSON.stringify(data));
+    }
+    const createPlan = (name, e) => {
+        e.preventDefault();
+        sendData(e);
+        window.location.href = `/plan/${name} `;
     }
 
     const allPlaces = () => cityPlaces().filter(place => place.type.indexOf(4) === -1);
     const calculate = (e) => {
+        const geocoder = new google.maps.Geocoder();
         const directionsService = new google.maps.DirectionsService();
+        const type = "WALKING";
+        const name = currentCity[0].name;
         const origin = { lat: currentCity[0].latitude, lng: currentCity[0].longitude };
         const destination = { lat: currentCity[0].latitude, lng: currentCity[0].longitude };
-        var waypts = [];
-        allPlaces().forEach(place => {
-            stop = new google.maps.LatLng(place.coordinates[0], place.coordinates[1])
-            waypts.push({
-                location: stop,
-                stopover: true
-            });
-        });
+        var loc = [];
+        allPlaces().forEach(place => loc.push({ location: place.location, stopover: true }));
+    
         directionsService.route(
-            {
-                origin: origin,
-                destination: destination,
-                waypoints: waypts,
-                optimizeWaypoints: true,
-                travelMode: google.maps.TravelMode.WALKING
-            },
-            (result, status) => {
-                if (status === google.maps.DirectionsStatus.OK) {
-                    var info = [];
-                    for (let i = 0; i < result.routes[0].legs.length; i++) {
-                        const routeSegment = i + 1;
-                        info.push({
-                            number: routeSegment,
-                            start: result.routes[0].legs[i].start_address,
-                            end: result.routes[0].legs[i].end_address,
-                            distance: result.routes[0].legs[i].distance.text,
-                            time: result.routes[0].legs[i].duration.text
+          {
+            origin: origin,
+            destination: destination,
+            waypoints: loc,
+            optimizeWaypoints: true,
+            travelMode: google.maps.TravelMode[type]
+          },
+          (result, status) => {
+            if (status === google.maps.DirectionsStatus.OK) {
+              this.setState({
+                directions: result
+              });
+              this.state.callback();
+              if (type === "WALKING") {
+    
+                var promise2 = result.routes[0].legs.map((route) => () => new Promise((resolve, reject) => {
+    
+                  var origin1 = route.start_address;
+                  var destination1 = route.end_address;
+    
+                  directionsService.route(
+                    {
+                      origin: origin1,
+                      destination: destination1,
+                      travelMode: google.maps.TravelMode.TRANSIT
+                    },
+                    (result, status) => {
+                      if (status === google.maps.DirectionsStatus.OK) {
+                        var instructions = [];
+                        var dist = 0;
+                        var time = 0;
+                        result.routes[0].legs[0].steps.forEach(step => {
+                          var instr = ``;
+                          instr += `${step.instructions}  (${step.duration.text}, ${step.distance.text})`;
+                          instructions.push(instr);
+                          dist += step.distance.value;
+                          time += step.duration.value;
+    
                         })
-
+                        resolve({ instructions: instructions, distance: dist, time: time, start: origin1, end: destination1 });
+                      } else {
+                        console.error(`error fetching directions ${result}`);
+                      }
                     }
-                    console.log("ggdjsavdjhasdv")
-                    console.log(result.routes[0].legs[0].distance.value);
-                    console.log(result.routes[0].legs[0].duration.value);
-                    console.log(info);
-                } else {
-                    console.error(`error fetching directions ${result}`);
+                  );
+                }));
+                var f2 = async (arr) => {
+                  const waypts2 = arr.map(arr => arr());
+                  return await Promise.all(waypts2);
                 }
+                f2(promise2).then((r) => {
+                  console.log("r");
+                  console.log(r);
+                  localStorage.removeItem(`routes-transport-${name}`);
+                  localStorage.setItem(`routes-transport-${name}`, JSON.stringify(r));
+    
+                })
+    
+              }
+              console.log("result.routes[0].legs");
+              console.log(result.routes[0].legs);
+              localStorage.setItem(`route-${name}`, JSON.stringify(result.routes[0].legs));
+            } else {
+              console.error(`error fetching directions ${result}`);
             }
+          }
         );
     }
 
@@ -356,100 +396,100 @@ places:favPlaces
         {currentCity.map((cityItem) => (
             <div className="city-block" key={cityItem.city}>
                 <div>
-                    <div className={page===1?"places-div ":"none"}>
+                    <div className={page === 1 ? "places-div " : "none"}>
                         <div >
 
-                        
-                        <div onClick={(e) => calculate(e)} className="city-main-caption">
-                            Create yor own plan for  {cityItem.city}
-                        </div>
-                        <div  onClick={(e) => togglePage(e,2)} className="new-plan">
-                            <div className="btn filter-p filter-btn ">
-                                   Next
-                            </div>
-                            </div>
-                        <div className="">
-                            <h1 className="plan-h"> Plan name:</h1>
-                            <SearchInput
-                      placeholder="Enter your plan name"
-                      onChange={onInputNameChange}
-                      value={name}
-                    />
-                            
-                        </div>
 
-                        <div className="fill-data-day">
-                            <h1 className="plan-h"> Number of days :</h1>
+                            <div onClick={(e) => calculate(e)} className="city-main-caption">
+                                Create yor own plan for  {cityItem.city}
+                            </div>
+                            <div onClick={(e) => togglePage(e, 2)} className="new-plan">
+                                <div className="btn filter-p filter-btn ">
+                                    Next
+                            </div>
+                            </div>
+                            <div className="">
+                                <h1 className="plan-h"> Plan name:</h1>
+                                <SearchInput
+                                    placeholder="Enter your plan name"
+                                    onChange={onInputNameChange}
+                                    value={name}
+                                />
 
-                            <div className="continent-filter filter-type-container col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 ">
-                                <p onClick={(e) => toggleDays(e, 1)} className={days === 1 ? 'continent-filter-p active' : 'continent-filter-p'}  >&nbsp;1&nbsp; </p>
                             </div>
-                            <div className="continent-filter filter-type-container  col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                                <p onClick={(e) => toggleDays(e, 2)} className={days === 2 ? 'continent-filter-p active' : 'continent-filter-p'}  >&nbsp;2&nbsp; </p>
+
+                            <div className="fill-data-day">
+                                <h1 className="plan-h"> Number of days :</h1>
+
+                                <div className="continent-filter filter-type-container col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 ">
+                                    <p onClick={(e) => toggleDays(e, 1)} className={days === 1 ? 'continent-filter-p active' : 'continent-filter-p'}  >&nbsp;1&nbsp; </p>
+                                </div>
+                                <div className="continent-filter filter-type-container  col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                    <p onClick={(e) => toggleDays(e, 2)} className={days === 2 ? 'continent-filter-p active' : 'continent-filter-p'}  >&nbsp;2&nbsp; </p>
+                                </div>
+                                <div className="continent-filter filter-type-container  col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                    <p onClick={(e) => toggleDays(e, 3)} className={days === 3 ? 'continent-filter-p active' : 'continent-filter-p'}  >&nbsp;3&nbsp; </p>
+                                </div>
+
                             </div>
-                            <div className="continent-filter filter-type-container  col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                                <p onClick={(e) => toggleDays(e, 3)} className={days === 3 ? 'continent-filter-p active' : 'continent-filter-p'}  >&nbsp;3&nbsp; </p>
+
+                            <div className="fill-data">
+                                <h1 className="plan-h"> How are you travelling?</h1>
+
+                                <div className="continent-filter filter-type-container col-8 col-sm-8 col-md-4 col-lg-4 col-xl-4 ">
+                                    <p onClick={(e) => toggleByCar(e, "Public transport / walking")} className={byCar === "Public transport / walking" ? 'continent-filter-p active' : 'continent-filter-p'}  >&nbsp;Public transport / walking&nbsp; </p>
+                                </div>
+                                <div className="continent-filter filter-type-container  col-4 col-sm-4 col-md-2 col-lg-2 col-xl-2 ">
+                                    <p onClick={(e) => toggleByCar(e, "Car")} className={byCar === "Car" ? 'continent-filter-p active' : 'continent-filter-p'}  >&nbsp;By car&nbsp; </p>
+                                </div>
+                                <div className="continent-filter filter-type-container  col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3 ">
+                                    <p onClick={(e) => toggleByCar(e, "Bicycle")} className={byCar === "Bicycle" ? 'continent-filter-p active' : 'continent-filter-p'}  >&nbsp;By bicycle&nbsp; </p>
+                                </div>
+                                <div className="continent-filter filter-type-container  col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3 ">
+                                    <p onClick={(e) => toggleByCar(e, "Motorcycle")} className={byCar === "Motorcycle" ? 'continent-filter-p active' : 'continent-filter-p'}  >&nbsp;By motorcycle&nbsp; </p>
+                                </div>
+                                <div className="continent-filter filter-type-container  col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3 ">
+                                    <p onClick={(e) => toggleByCar(e, "Only walking")} className={byCar === "Only walking" ? 'continent-filter-p active' : 'continent-filter-p'}  >&nbsp;Only walking&nbsp; </p>
+                                </div>
                             </div>
-    
+
+                            <div className="fill-data-budget">
+                                <h1 className="plan-h"> Your budget (optional) :</h1>
+                                <SearchInput
+                                    placeholder="Enter your budget"
+                                    onChange={onInputBudgetChange}
+                                    value={budget}
+                                />
+                            </div>
+
                         </div>
-
-                        <div className="fill-data">
-                            <h1 className="plan-h"> How are you travelling?</h1>
-
-                            <div className="continent-filter filter-type-container col-8 col-sm-8 col-md-4 col-lg-4 col-xl-4 ">
-                                <p onClick={(e) => toggleByCar(e, "Public transport / walking")} className={byCar === "Public transport / walking" ? 'continent-filter-p active' : 'continent-filter-p'}  >&nbsp;Public transport / walking&nbsp; </p>
-                            </div>
-                            <div className="continent-filter filter-type-container  col-4 col-sm-4 col-md-2 col-lg-2 col-xl-2 ">
-                                <p onClick={(e) => toggleByCar(e, "Car")} className={byCar === "Car" ? 'continent-filter-p active' : 'continent-filter-p'}  >&nbsp;By car&nbsp; </p>
-                            </div>
-                            <div className="continent-filter filter-type-container  col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3 ">
-                                <p onClick={(e) => toggleByCar(e, "Bicycle")} className={byCar === "Bicycle"? 'continent-filter-p active' : 'continent-filter-p'}  >&nbsp;By bicycle&nbsp; </p>
-                            </div>
-                            <div className="continent-filter filter-type-container  col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3 ">
-                                <p onClick={(e) => toggleByCar(e, "Motorcycle")} className={byCar === "Motorcycle" ? 'continent-filter-p active' : 'continent-filter-p'}  >&nbsp;By motorcycle&nbsp; </p>
-                            </div>
-                            <div className="continent-filter filter-type-container  col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3 ">
-                                <p onClick={(e) => toggleByCar(e, "Only walking")} className={byCar === "Only walking" ? 'continent-filter-p active' : 'continent-filter-p'}  >&nbsp;Only walking&nbsp; </p>
-                            </div>
-                        </div>
-
-                        <div className="fill-data-budget">
-                            <h1 className="plan-h"> Your budget (optional) :</h1>
-                            <SearchInput
-                      placeholder="Enter your budget"
-                      onChange={onInputBudgetChange}
-                      value={budget}
-                    />
-                        </div>
-                        
-                            </div>
                         <div>
                         </div>
-                        
+
                     </div>
 
-                    <div className={page===2?"places-div":"none"}>
-                    <div className="plan-main-caption plan-cap">
+                    <div className={page === 2 ? "places-div" : "none"}>
+                        <div className="plan-main-caption plan-cap">
                             Select from 2 to 27 places
                      </div>
-                     <div className="container-fluid">
+                        <div className="container-fluid">
                             <div className="row ">
-                            <div  onClick={(e) => togglePage(e,1)} className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 new-plan">
-                            <div className="btn filter-p filter-btn ">
-                                   Back
+                                <div onClick={(e) => togglePage(e, 1)} className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 new-plan">
+                                    <div className="btn filter-p filter-btn ">
+                                        Back
                             </div>
+                                </div>
+                                <div onClick={(e) => togglePage(e, 3)} className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 new-plan">
+                                    <div className="btn filter-p filter-btn ">
+                                        Next
                             </div>
-                            <div  onClick={(e) => togglePage(e,3)} className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 new-plan">
-                            <div className="btn filter-p filter-btn ">
-                                   Next
+                                </div>
+                                <div onClick={(e) => checkRoute(e, 3)} className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 new-plan">
+                                    <div className="btn filter-p filter-btn ">
+                                        Check
                             </div>
-                            </div>
-                            <div  onClick={(e) => checkRoute(e,3)} className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 new-plan">
-                            <div className="btn filter-p filter-btn ">
-                                   Check
-                            </div>
-                            </div>
-                            
+                                </div>
+
                             </div>
                         </div>
 
@@ -610,60 +650,58 @@ places:favPlaces
                                     </div>
                                 ))}
                             </div>
-                            </div>
                         </div>
-                        <div className={page===3?"places-div":"none"}>
+                    </div>
+                    <div className={page === 3 ? "places-div" : "none"}>
                         <div className="plan-main-caption plan-cap">
                             Where are you staying?
                      </div>
-                     <div className="container-fluid plan-btn">
+                        <div className="container-fluid plan-btn">
                             <div className="row ">
-                            <div  onClick={(e) => togglePage(e,2)} className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 new-plan">
-                            <div className="btn filter-p filter-btn ">
-                                   Back
+                                <div onClick={(e) => togglePage(e, 2)} className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 new-plan">
+                                    <div className="btn filter-p filter-btn ">
+                                        Back
                             </div>
+                                </div>
+                                <div onClick={(e) => togglePage(e, 4)} className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 new-plan">
+                                    <div className="btn filter-p filter-btn ">
+                                        Skip
                             </div>
-                            <div  onClick={(e) => togglePage(e,4)} className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 new-plan">
-                            <div className="btn filter-p filter-btn ">
-                                   Skip
-                            </div>
-                            </div>
-                            
+                                </div>
+
                             </div>
                         </div>
-                     <Autocomplete latitude={currentCity[0].latitude} longitude={currentCity[0].longitude}/>
-                        </div>
-                        <div className={page===4?"places-div":"none"}>
+                        <Autocomplete latitude={currentCity[0].latitude} longitude={currentCity[0].longitude} />
+                    </div>
+                    <div className={page === 4 ? "places-div" : "none"}>
                         <div className="plan-main-caption plan-cap">
                             Where would you like to end your trip on the last day? (optional)
                      </div>
-                     <div className="container-fluid plan-btn">
+                        <div className="container-fluid plan-btn">
                             <div className="row ">
-                            <div  onClick={(e) => togglePage(e,3)} className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 new-plan">
-                            <div className="btn filter-p filter-btn ">
-                                   Back
+                                <div onClick={(e) => togglePage(e, 3)} className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 new-plan">
+                                    <div className="btn filter-p filter-btn ">
+                                        Back
                             </div>
-                            </div>
+                                </div>
 
-                            <div  onClick={(e) => sendData(e)} className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 new-plan">
-                            <div className="btn filter-p filter-btn ">
-                                   Create plan
+                                <div onClick={(e) => sendData(e)} className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 new-plan">
+                                    <div className="btn filter-p filter-btn ">
+                                        Create plan
                             </div>
-                            </div>
-                            
+                                </div>
+
                             </div>
                         </div>
-                        <Link href={`/plan/${name}`}  >
-                            <div className="new-plan">
-                                <div className="btn filter-p filter-btn ">
-                                    Create  plan
+                        <div onClick={(e) => createPlan(name, e)} className="new-plan">
+                            <div className="btn filter-p filter-btn ">
+                                Create  plan
                             </div>
-                            </div>
-                        </Link>
-                     <Autocomplete latitude={currentCity[0].latitude} longitude={currentCity[0].longitude}/>
-
-
                         </div>
+                        <Autocomplete latitude={currentCity[0].latitude} longitude={currentCity[0].longitude} />
+
+
+                    </div>
                 </div>
             </div>
         ))}

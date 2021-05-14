@@ -43,11 +43,6 @@ export default class MapWorld extends SampleBase {
     change() {
         this.mapInstance.baseLayerIndex = 0;
         this.mapInstance.refresh();
-        let button = document.getElementById('button');
-        button.style.display = 'none';
-        document.getElementById('category').style.visibility = 'hidden';
-        document.getElementById('text').innerHTML = '';
-        document.getElementById('symbol').style.visibility = 'hidden';
     }
     shapeSelected(args) {
         let shape = args.shapeData.continent;
@@ -85,9 +80,8 @@ export default class MapWorld extends SampleBase {
     render() {
         return (
             <div>
-                    <div >Hello</div>
-
-        <MapsComponent id="maps" height="950"  ref={m => this.mapInstance = m} loaded={this.loaded} load={this.load} shapeSelected={this.shapeSelected.bind(this)} zoomSettings={{
+<div onClick={this.change.bind(this)}>Button</div>
+        <MapsComponent id="maps" height="950" background="#eb9f79" ref={m => this.mapInstance = m} loaded={this.loaded} load={this.load} shapeSelected={this.shapeSelected.bind(this)} zoomSettings={{
                         enable: false
                     }}
                         mapsArea={{

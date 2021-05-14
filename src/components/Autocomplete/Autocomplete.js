@@ -35,7 +35,9 @@ const Autocomplete = ({latitude,longitude}) => {
     },
     [handleViewportChange]
   );
-
+const postResult = (r)=>{
+console.log(r);
+}
   return (
     <div style={{ height: "60vh" }}>
       <MapGL
@@ -52,6 +54,7 @@ const Autocomplete = ({latitude,longitude}) => {
           onViewportChange={handleGeocoderViewportChange}
           mapboxApiAccessToken={MAPBOX_TOKEN}
           placeholder= 'Search for your hotel, house...'
+          onResult = {postResult}
           
         />
         
