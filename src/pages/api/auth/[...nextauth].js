@@ -1,24 +1,18 @@
 import NextAuth from 'next-auth';
 import Providers from 'next-auth/providers';
 
-const options = {
-  site: process.env.SITE || 'http://localhost:3000',
-
-  // Configure one or more authentication providers
+export default NextAuth({
   providers: [
     Providers.Google({
       clientId: process.env.GOOGLE_ID,
       clientSecret: process.env.GOOGLE_SECRET,
-    }),
-    
-    Providers.Email({
-      server: process.env.EMAIL_SERVER,
-      from: process.env.EMAIL_FROM,
-    }),
+      authorizationUrl:
+        'https://accounts.google.com/o/oauth2/v2/auth?prompt=consent&access_type=offline&response_type=code',
+     }),
   ],
+  jwt: {
+    encryption: true,
+  },
+  secret: process.env.SECRET,
 
-  // A database is optional, but required to persist accounts in a database
-  database: process.env.DATABASE_URL,
-};
-
-export default (req, res) => NextAuth(req, res, options);
+});

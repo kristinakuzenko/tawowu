@@ -4,7 +4,7 @@
             "city":"Barcelona",
             "name":"1 Day in Barcelona",
             "plan":[{
-                "place":1,
+                "place":"La Sagrada Familia",
                 "description":"15 min walk"
             },
             {

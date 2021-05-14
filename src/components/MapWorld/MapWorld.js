@@ -76,14 +76,18 @@ export default class MapWorld extends SampleBase {
             else if (shape === 'Australia') {
                 this.mapInstance.baseLayerIndex = 6;
                 this.mapInstance.refresh();
-            }
+            } 
         }else{
             window.location.href=`/country/${shape2} `;
         }
         touchmove = false;
     }
     render() {
-        return (<MapsComponent id="maps" height="950" ref={m => this.mapInstance = m} loaded={this.loaded} load={this.load} shapeSelected={this.shapeSelected.bind(this)} zoomSettings={{
+        return (
+            <div>
+                    <div >Hello</div>
+
+        <MapsComponent id="maps" height="950"  ref={m => this.mapInstance = m} loaded={this.loaded} load={this.load} shapeSelected={this.shapeSelected.bind(this)} zoomSettings={{
                         enable: false
                     }}
                         mapsArea={{
@@ -192,6 +196,7 @@ export default class MapWorld extends SampleBase {
                             }}>
                             </LayerDirective>
                         </LayersDirective>
-                    </MapsComponent>);
+                    </MapsComponent>
+                    </div>);
     }
 }

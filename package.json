@@ -40,6 +40,7 @@
     "react-jvectormap": "^0.0.16",
     "react-map-chart": "^2.1.0",
     "react-map-gl": "^6.1.12",
+    "react-map-gl-geocoder": "^2.1.6",
     "react-router-dom": "^5.2.0",
     "react-simple-maps": "^2.3.0",
     "react-tooltip": "^4.2.17",

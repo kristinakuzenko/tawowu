@@ -6,7 +6,7 @@ import africa from '../../map-data/africa.json';
 import europe from '../../map-data/europe.json';
 import northamerica from '../../map-data/north-america.json';
 import southamerica from '../../map-data/south-america.json';
-import oceania from '../../map-data/oceania.json';
+import australia from '../../map-data/oceania.json';
 import world from '../../map-data/world-map.json';
 import { enableRipple } from '@syncfusion/ej2-base';
 enableRipple(true);
@@ -40,7 +40,7 @@ export default class MapContinent extends SampleBase {
         const {continent} = props;
 
         this.state = {continent};
-        this.maps = {asia, europe, northamerica, southamerica, oceania, africa}
+        this.maps = {asia, europe, northamerica, southamerica, australia, africa}
 
         console.log(this.state);
     }
@@ -62,7 +62,7 @@ export default class MapContinent extends SampleBase {
 
                 <div className=' '>
 
-                    <MapsComponent id="maps" height="950" width="1000" ref={m => this.mapInstance = m} loaded={this.loaded} load={this.load} shapeSelected={this.shapeSelected.bind(this)} zoomSettings={{
+                    <MapsComponent id="maps" height="950" width="1830" ref={m => this.mapInstance = m} loaded={this.loaded} load={this.load} shapeSelected={this.shapeSelected.bind(this)} zoomSettings={{
                         enable: false
                     }}
                         mapsArea={{

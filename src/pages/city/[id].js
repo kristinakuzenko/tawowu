@@ -15,7 +15,7 @@ import GoogleMapReact from 'google-map-react';
 import DirectionsService from 'google-map-react';
 import DirectionsRenderer from 'google-map-react';
 import MyGreatPlaceWithHover from "../../components/MyPlace/MyPlace";
-import { withScriptjs } from "react-google-maps";
+import { withScriptjs, PlacesAutocomplete, geocodeByAddress, InfoWindow, Marker } from "react-google-maps";
 
 const markers = (locations, handler) => {
   return locations.map(location => (
@@ -80,6 +80,19 @@ const City = ({ city }) => {
 
   const [activeFilters, setActiveFilters] = useState([]);
   const [activeFilter, setActiveFilterOne] = useState([]);
+
+
+  const [address, setAddress] = useState([]);
+
+  const handleChange =(address)=>{
+    setAddress(address);
+  }
+  const handleSelect = (address) => {
+    geocodeByAddress(address)
+      .then(results => getLatLng(results[0]))
+      .then(latLng => console.log('Success', latLng))
+      .catch(error => console.error('Error', error));
+  };
 
   //filter for camera, art...
   const toggleFilterOne = (e, filterValue) => {
@@ -190,7 +203,27 @@ const City = ({ city }) => {
     setAllTogether(value);
   }
 
-
+  const contentString =
+  '<div id="content">' +
+  '<div id="siteNotice">' +
+  "</div>" +
+  '<h1 id="firstHeading" class="firstHeading">Uluru</h1>' +
+  '<div id="bodyContent">' +
+  "<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large " +
+  "sandstone rock formation in the southern part of the " +
+  "Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) " +
+  "south west of the nearest large town, Alice Springs; 450&#160;km " +
+  "(280&#160;mi) by road. Kata Tjuta and Uluru are the two major " +
+  "features of the Uluru - Kata Tjuta National Park. Uluru is " +
+  "sacred to the Pitjantjatjara and Yankunytjatjara, the " +
+  "Aboriginal people of the area. It has many springs, waterholes, " +
+  "rock caves and ancient paintings. Uluru is listed as a World " +
+  "Heritage Site.</p>" +
+  '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">' +
+  "https://en.wikipedia.org/w/index.php?title=Uluru</a> " +
+  "(last visited June 22, 2009).</p>" +
+  "</div>" +
+  "</div>";
   const allPlaces = () => cityPlaces().filter(place => place.type.indexOf(4) === -1);
 
 
@@ -245,16 +278,8 @@ const City = ({ city }) => {
                 </div>
                 <Map className="fixed" locations={ allTogether===-1?filteredPlacesValue():allPlaces()} latitude={currentCity[0].latitude} longitude={currentCity[0].longitude} zoom={12} />
 
-                <GoogleMapReact className={allTogether === 1 ?'none':''}
-          bootstrapURLKeys={{ key: key }}
-          defaultCenter={{lat: currentCity[0].latitude, lng: currentCity[0].longitude}}
-          defaultZoom={12}
-          
-        >
-          {allTogether === -1? markers(filteredPlacesValue()): markers(allPlaces())}
-        </GoogleMapReact> 
-                
-
+               
+      
 
               </div>
               <div className="city-places-div col-12 col-sm-12 col-md-12 col-lg-7 col-xl-7">

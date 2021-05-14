@@ -1,3 +1,8 @@
+
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
 .navbar{
   background-image: linear-gradient(315deg, #fc935f  0%, #5e2c2c 120%);
    color:rgb(33,37,41)!important;
@@ -790,11 +795,34 @@ border-radius: 10px;
   font-size: 40px;
   font-family: 'Courier New', Courier, monospace;
 }
-
+.plan-btn{
+  padding-bottom: 50px;
+}
 .fill-data{
-  margin-top: 200px;
- }
- 
+  padding-top: 150px;
+}
+.fill-data-budget{
+  padding-top: 200px;
+}
+.fill-data-day{
+  padding-top: 50px;
+}
+.plan-main-caption{
+  font-family: SangbleuSans,serif;
+  color: black;
+  font-size: 50px;
+  z-index: 2;
+  letter-spacing: -.02em;
+  text-align: center;
+}
+.type-cont{
+  padding-top: 20px;
+  padding-bottom: 50px;
+}
+.plan-cap{
+  padding-top: 70px;
+}
+
 
 
 
