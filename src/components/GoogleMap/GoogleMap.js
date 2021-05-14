@@ -5,7 +5,7 @@ import {
   withGoogleMap,
   withScriptjs,
   GoogleMap,
-  DirectionsRenderer,geocodeByAddress,
+  DirectionsRenderer, geocodeByAddress,
   PlacesAutocomplete
 } from "react-google-maps";
 class Map extends Component {
@@ -20,7 +20,7 @@ class Map extends Component {
     const name = props.data[3];
     const callback = props.data[4];
 
-    this.state = { city, locations, type, name, callback  };
+    this.state = { city, locations, type, name, callback };
   }
 
 
@@ -32,8 +32,8 @@ class Map extends Component {
     const origin = { lat: this.state.city.latitude, lng: this.state.city.longitude };
     const destination = { lat: this.state.city.latitude, lng: this.state.city.longitude };
     var loc = [];
-    this.state.locations.forEach(place => loc.push({location:place.location, stopover:true}));
-    
+    this.state.locations.forEach(place => loc.push({ location: place.location, stopover: true }));
+
     directionsService.route(
       {
         origin: origin,
@@ -49,7 +49,7 @@ class Map extends Component {
           });
           this.state.callback();
           if (type === "WALKING") {
-            
+
             var promise2 = result.routes[0].legs.map((route) => () => new Promise((resolve, reject) => {
 
               var origin1 = route.start_address;
@@ -63,19 +63,19 @@ class Map extends Component {
                 },
                 (result, status) => {
                   if (status === google.maps.DirectionsStatus.OK) {
-                    var instructions=[];
-                    var dist=0;
-                    var time=0;
-                    result.routes[0].legs[0].steps.forEach(step=>{
-                      var instr=``;
-                      instr+=`${step.instructions}  (${step.duration.text}, ${step.distance.text})`;
+                    var instructions = [];
+                    var dist = 0;
+                    var time = 0;
+                    result.routes[0].legs[0].steps.forEach(step => {
+                      var instr = ``;
+                      instr += `${step.instructions}  (${step.duration.text}, ${step.distance.text})`;
                       instructions.push(instr);
-                      dist+=step.distance.value;
-                      time+=step.duration.value;
-                      
+                      dist += step.distance.value;
+                      time += step.duration.value;
+
                     })
-                    resolve({instructions:instructions,distance:dist,time:time,start:origin1,end:destination1});
-                     } else {
+                    resolve({ instructions: instructions, distance: dist, time: time, start: origin1, end: destination1 });
+                  } else {
                     console.error(`error fetching directions ${result}`);
                   }
                 }
@@ -90,7 +90,7 @@ class Map extends Component {
               console.log(r);
               localStorage.removeItem(`routes-transport-${name}`);
               localStorage.setItem(`routes-transport-${name}`, JSON.stringify(r));
-                 
+
             })
 
           }
@@ -107,7 +107,7 @@ class Map extends Component {
 
   render() {
 
-  
+
     const GoogleMapExample = withGoogleMap(props => (
 
       <GoogleMap
@@ -118,8 +118,8 @@ class Map extends Component {
           directions={this.state.directions}
 
         />
-                     
-        
+
+
       </GoogleMap>
     ));
 
@@ -129,7 +129,7 @@ class Map extends Component {
           containerElement={<div style={{ height: `500px`, width: "500px" }} />}
           mapElement={<div style={{ height: `100%` }} />}
         />
- 
+
       </div>
     );
   }
