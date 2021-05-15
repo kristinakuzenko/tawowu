@@ -254,7 +254,6 @@ const NewPlan = ({ city }) => {
         const geocoder = new google.maps.Geocoder();
         const directionsService = new google.maps.DirectionsService();
         const type = "WALKING";
-        const name = currentCity[0].name;
         const origin = { lat: currentCity[0].latitude, lng: currentCity[0].longitude };
         const destination = { lat: currentCity[0].latitude, lng: currentCity[0].longitude };
         var loc = [];
@@ -308,7 +307,6 @@ const NewPlan = ({ city }) => {
                   return await Promise.all(waypts2);
                 }
                 f2(promise2).then((r) => {
-                  localStorage.removeItem(`routes-transport-${name}`);
                   localStorage.setItem(`routes-transport-${name}`, JSON.stringify(r));
                   Object.keys(localStorage).filter(key => key.indexOf(`routes-transport-${name}`) !== -1).forEach((key) => {
                     console.log("JSON.parse(localStorage.getItem(key))");

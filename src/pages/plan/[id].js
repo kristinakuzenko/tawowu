@@ -105,7 +105,7 @@ const Plan = ({ name }) => {
                                     {routePlace.map((route) => (
                                         <div>
                                             <div className="plan-description fill-data">
-                                                <div className={route.place.type[0] !== 111 ? "one-place" : "none"} key={route.place.name}>
+                                                <div className={route.place.type[0] !== 1 ? "one-place" : "none"} key={route.place.name}>
                                                     <h1 className="place-name"> {route.place.name} </h1>
                                                     <p className="place-desc">{route.place.description} </p>
                                                     <div className="container-fluid ">
