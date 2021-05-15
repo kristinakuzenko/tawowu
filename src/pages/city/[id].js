@@ -1,5 +1,7 @@
 import Layout from "../../components/Layout/Layout";
+import Map from "../../components/MapPlaces/MapPlaces";
 import GoogleMap from "../../components/GoogleMap/GoogleMap";
+import MapHover from "../../components/MapHover/MapHover";
 import key from "../../components/GoogleApiKey/GoogleApiKey";
 import Head from "next/head";
 import Link from "next/link";
@@ -53,6 +55,8 @@ const City = ({ city }) => {
         }));
         _isMounted && setCities(cities);
       });
+
+
 
     fire.firestore()
       .collection('places')
@@ -277,7 +281,7 @@ const City = ({ city }) => {
                   <p className={allTogether === 1 && placeType === 3 ? 'continent-filter-p ' : 'none'}  >&nbsp;Show only shopping&nbsp; </p>
                 </div>
                 <Map className="fixed" locations={ allTogether===-1?filteredPlacesValue():allPlaces()} latitude={currentCity[0].latitude} longitude={currentCity[0].longitude} zoom={12} />
-
+<MapHover/>
                
       
 

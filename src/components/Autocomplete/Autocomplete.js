@@ -4,6 +4,7 @@ import React, { useState, useRef, useCallback } from "react";
 import { render } from "react-dom";
 import MapGL from "react-map-gl";
 import Geocoder from "react-map-gl-geocoder";
+import { Marker } from "react-google-maps";
 
 // Please be a decent human and don't abuse my Mapbox API token.
 // If you fork this sandbox, replace my API token with your own.
@@ -49,15 +50,16 @@ console.log(r);
         onViewportChange={handleViewportChange}
         mapboxApiAccessToken={MAPBOX_TOKEN}
       >
-          <Geocoder
+          <Geocoder  
+          countries= "es"  
+          autocomplete="true"    
           mapRef={mapRef}
+          onResult = {postResult}
           onViewportChange={handleGeocoderViewportChange}
           mapboxApiAccessToken={MAPBOX_TOKEN}
           placeholder= 'Search for your hotel, house...'
-          onResult = {postResult}
           
         />
-        
       </MapGL>
     </div>
   );

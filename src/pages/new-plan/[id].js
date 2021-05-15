@@ -1,7 +1,9 @@
 
 import Layout from "../../components/Layout/Layout";
 import Autocomplete from "../../components/Autocomplete/Autocomplete";
-import Key from "../../components/GoogleApiKey/GoogleApiKey";
+import MapPlaces from "../../components/MapPlaces/MapPlaces";
+import MapGoogle from "../../components/GoogleMap/GoogleMap";
+import key from "../../components/GoogleApiKey/GoogleApiKey";
 import Head from "next/head";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,7 +13,7 @@ import SearchInput from "../../components/SearchInput/SearchInput";
 //database import
 import fire from '../../config/fire-config';
 import dynamic from 'next/dynamic';
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef,useCallback } from "react";
 import {
     withGoogleMap,
     withScriptjs,
@@ -19,16 +21,26 @@ import {
     DirectionsRenderer, geocodeByAddress,
     PlacesAutocomplete
 } from "react-google-maps";
+import "mapbox-gl/dist/mapbox-gl.css";
+import "react-map-gl-geocoder/dist/mapbox-gl-geocoder.css";
+import { render } from "react-dom";
+import MapGL from "react-map-gl";
+import Geocoder from "react-map-gl-geocoder";
 
+const MAPBOX_TOKEN =
+"pk.eyJ1Ijoia3Jpc3RpbmFrdXplbmtvIiwiYSI6ImNrbnJpZDFtYjBwMG8ybnBmeG82a3Z0ejYifQ.GYQGZmk2Y0sSruGEpupdgw";
 
+const MapLoader = withScriptjs(MapGoogle);
 const NewPlan = ({ city }) => {
     let _isMounted = false;
     const [cities, setCities] = useState([]);
     const [places, setPlaces] = useState([]);
     const [favPlaces, setFavPlaces] = useState([]);
+    const [currentLoc, setCurrentLoc]=useState({})
+    const [myCity, setMyCity]=useState({});
     React.useEffect(() => {
         _isMounted = true;
-
+ 
         fire.firestore()
             .collection('cities')
             .onSnapshot(snap => {
@@ -47,21 +59,21 @@ const NewPlan = ({ city }) => {
                     ...doc.data()
                 }));
                 _isMounted && setPlaces(places);
+
             });
-
-
         return function cleanup() {
             _isMounted = false;
         }
+     
     }, [])
     const Map = dynamic(() => import("../../components/Map/Map"), {
         loading: () => "Loading...",
         ssr: false
     });
 
+
     const currentCity = cities.filter(cityItem => cityItem.city.toLowerCase() === city.toLowerCase());
     const cityPlaces = () => places.filter(place => place.city.toLowerCase() === city.toLowerCase());
-
 
     const [activeFilters, setActiveFilters] = useState([]);
     const [activeFilter, setActiveFilterOne] = useState([]);
@@ -132,6 +144,7 @@ const NewPlan = ({ city }) => {
         setKeyword(e.target.value);
     };
 
+
     const [name, setName] = useState("");
     const onInputNameChange = (e) => {
         e.preventDefault();
@@ -165,86 +178,7 @@ const NewPlan = ({ city }) => {
         setFavPlaces([...favPlaces]);
     }
 
-    const checkRoute = (e) => {
-        e.preventDefault();
-        const geocoder = new google.maps.Geocoder();
-        const directionsService = new google.maps.DirectionsService();
-        const type = "WALKING";
-        const name = name;
-        const origin = { lat: currentCity[0].latitude, lng: currentCity[0].longitude };
-        const destination = { lat: currentCity[0].latitude, lng: currentCity[0].longitude };
-        var loc = [];
-        favPlaces.forEach(place => loc.push({ location: place.location, stopover: true }));
-
-        directionsService.route(
-            {
-                origin: origin,
-                destination: destination,
-                waypoints: loc,
-                optimizeWaypoints: true,
-                travelMode: google.maps.TravelMode[type]
-            },
-            (result, status) => {
-                if (status === google.maps.DirectionsStatus.OK) {
-                    console.log("build");
-                    this.setState({
-                        directions: result
-                    });
-                    if (type === "WALKING") {
-
-                        var promise2 = result.routes[0].legs.map((route) => () => new Promise((resolve, reject) => {
-
-                            var origin1 = route.start_address;
-                            var destination1 = route.end_address;
-
-                            directionsService.route(
-                                {
-                                    origin: origin1,
-                                    destination: destination1,
-                                    travelMode: google.maps.TravelMode.TRANSIT
-                                },
-                                (result, status) => {
-                                    if (status === google.maps.DirectionsStatus.OK) {
-                                        var instructions = [];
-                                        var dist = 0;
-                                        var time = 0;
-                                        result.routes[0].legs[0].steps.forEach(step => {
-                                            var instr = ``;
-                                            instr += `${step.instructions}  (${step.duration.text}, ${step.distance.text})`;
-                                            instructions.push(instr);
-                                            dist += step.distance.value;
-                                            time += step.duration.value;
-
-                                        })
-                                        resolve({ instructions: instructions, distance: dist, time: time, start: origin1, end: destination1 });
-                                    } else {
-                                        console.error(`error fetching directions ${result}`);
-                                    }
-                                }
-                            );
-                        }));
-                        var f2 = async (arr) => {
-                            const waypts2 = arr.map(arr => arr());
-                            return await Promise.all(waypts2);
-                        }
-                        f2(promise2).then((r) => {
-                            console.log("r");
-                            console.log(r);
-                            localStorage.removeItem(`routes-transport-${name}`);
-                            localStorage.setItem(`routes-transport-${name}`, JSON.stringify(r));
-
-                        })
-
-                    }
-                    console.log("result.routes[0].legs");
-                    console.log(result.routes[0].legs);
-                    localStorage.setItem(`route-${name}`, JSON.stringify(result.routes[0].legs));
-                } else {
-                    console.error(`error fetching directions ${result}`);
-                }
-            }
-        );
-    };
+    
 
     const [placeType, setPlaceType] = useState(1);
 
@@ -261,7 +195,12 @@ const NewPlan = ({ city }) => {
         setPlaceType(typeValue);
     }
 
+    const [startChoose, setStartChoose] = useState(1);
 
+    const toggleStartChoose = (e, value) => {
+        e.preventDefault();
+        setStartChoose(value);
+    }
 
     const [days, setDays] = useState(1);
 
@@ -303,12 +242,15 @@ const NewPlan = ({ city }) => {
     }
     const createPlan = (name, e) => {
         e.preventDefault();
+        Object.keys(localStorage).filter(key => key.indexOf(`plan-data-`) !== -1).forEach((key) => {
+            localStorage.removeItem(key);
+        });
         sendData(e);
         window.location.href = `/plan/${name} `;
     }
 
     const allPlaces = () => cityPlaces().filter(place => place.type.indexOf(4) === -1);
-    const calculate = (e) => {
+    const checkRoute = (e) => {
         const geocoder = new google.maps.Geocoder();
         const directionsService = new google.maps.DirectionsService();
         const type = "WALKING";
@@ -316,7 +258,7 @@ const NewPlan = ({ city }) => {
         const origin = { lat: currentCity[0].latitude, lng: currentCity[0].longitude };
         const destination = { lat: currentCity[0].latitude, lng: currentCity[0].longitude };
         var loc = [];
-        allPlaces().forEach(place => loc.push({ location: place.location, stopover: true }));
+        favPlaces.forEach(place => loc.push({ location: place.location, stopover: true }));
     
         directionsService.route(
           {
@@ -328,10 +270,6 @@ const NewPlan = ({ city }) => {
           },
           (result, status) => {
             if (status === google.maps.DirectionsStatus.OK) {
-              this.setState({
-                directions: result
-              });
-              this.state.callback();
               if (type === "WALKING") {
     
                 var promise2 = result.routes[0].legs.map((route) => () => new Promise((resolve, reject) => {
@@ -370,24 +308,72 @@ const NewPlan = ({ city }) => {
                   return await Promise.all(waypts2);
                 }
                 f2(promise2).then((r) => {
-                  console.log("r");
-                  console.log(r);
                   localStorage.removeItem(`routes-transport-${name}`);
                   localStorage.setItem(`routes-transport-${name}`, JSON.stringify(r));
-    
+                  Object.keys(localStorage).filter(key => key.indexOf(`routes-transport-${name}`) !== -1).forEach((key) => {
+                    console.log("JSON.parse(localStorage.getItem(key))");
+                    console.log(JSON.parse(localStorage.getItem(key)));
+                });
                 })
     
               }
-              console.log("result.routes[0].legs");
-              console.log(result.routes[0].legs);
+
               localStorage.setItem(`route-${name}`, JSON.stringify(result.routes[0].legs));
+              Object.keys(localStorage).filter(key => key.indexOf(`route-${name}`) !== -1).forEach((key) => {
+                console.log("JSON.parse(localStorage.getItem(key)) rote");
+                console.log(JSON.parse(localStorage.getItem(key)));
+            });
             } else {
               console.error(`error fetching directions ${result}`);
             }
           }
         );
     }
+    const [viewport, setViewport] = useState({
+        latitude: 41.3851,
+        longitude: 2.1734,
+        zoom: 12
+      });
+      const toggleViewport = (e, value) => {
+        e.preventDefault();
+        setViewport(value);
+    }
+  const mapRef = useRef();
+  const handleViewportChange = useCallback(
+    (newViewport) => setViewport(newViewport),
+    []
+  );
 
+  // if you are happy with Geocoder default settings, you can just use handleViewportChange directly
+  const handleGeocoderViewportChange = useCallback(
+    (newViewport) => {
+      const geocoderDefaultOverrides = { transitionDuration: 1000 };
+
+      return handleViewportChange({
+        ...newViewport,
+        ...geocoderDefaultOverrides
+      });
+    },
+    [handleViewportChange]
+  );
+
+  const [startLoaction, setStartLocation] = useState({location:[41.3851,2.1734],name:"name"});
+
+  const toggleStartLocation= (e, value) => {
+      e.preventDefault();
+      setStartLocation(value);
+  }
+const postResult = (r)=>{
+    console.log("r.result");
+    startLoaction={location:r.result.center,name:r.result.place_name};
+    setStartLocation(startLoaction)
+console.log(startLoaction);
+}
+const toggleSelectingStart = (e, value,start) => {
+    e.preventDefault();
+    toggleViewport(e,value);
+    setStartChoose(start);
+}
 
 
     const mySortingFunction = (a, b) => a.popularity.localeCompare(b.popularity);
@@ -417,6 +403,7 @@ const NewPlan = ({ city }) => {
                                 />
 
                             </div>
+                            
 
                             <div className="fill-data-day">
                                 <h1 className="plan-h"> Number of days :</h1>
@@ -468,7 +455,7 @@ const NewPlan = ({ city }) => {
 
                     </div>
 
-                    <div className={page === 2 ? "places-div" : "none"}>
+                    <div className={page === 4 ? "places-div" : "none"}>
                         <div className="plan-main-caption plan-cap">
                             Select from 2 to 27 places
                      </div>
@@ -479,12 +466,12 @@ const NewPlan = ({ city }) => {
                                         Back
                             </div>
                                 </div>
-                                <div onClick={(e) => togglePage(e, 3)} className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 new-plan">
-                                    <div className="btn filter-p filter-btn ">
-                                        Next
+                                <div onClick={(e) => createPlan(name, e)} className="new-plan">
+                            <div className="btn filter-p filter-btn ">
+                                Create  plan
                             </div>
-                                </div>
-                                <div onClick={(e) => checkRoute(e, 3)} className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 new-plan">
+                        </div>
+                                <div onClick={(e) => checkRoute(e)} className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 new-plan">
                                     <div className="btn filter-p filter-btn ">
                                         Check
                             </div>
@@ -511,7 +498,6 @@ const NewPlan = ({ city }) => {
                         <div className="container-fluid ">
                             <div className=" col-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 map-container">
                                 <Map className="fixed" locations={allPlaces()} latitude={currentCity[0].latitude} longitude={currentCity[0].longitude} zoom={12} />
-
                             </div>
                             <div className="city-places-div col-12 col-sm-12 col-md-12 col-lg-7 col-xl-7">
                                 <div className="fixed-div">
@@ -652,9 +638,45 @@ const NewPlan = ({ city }) => {
                             </div>
                         </div>
                     </div>
+                    <div className={page === 2 ? "places-div" : "none"}>
+                        <div className="plan-main-caption plan-cap">
+                            Choose your start point
+                     </div>
+                     <div className="continent-filter filter-type-container col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 ">
+                                    <p onClick={(e) => toggleStartChoose(e,1)} className={startChoose === 1 ? 'continent-filter-p active' : 'continent-filter-p'}  >&nbsp;Start in the city center&nbsp; </p>
+                                </div>
+                                <div className="continent-filter filter-type-container col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 ">
+                                    <p onClick={(e) => toggleStartChoose(e,2)} className={startChoose === 2 ? 'continent-filter-p active' : 'continent-filter-p'}  >&nbsp;Start from my hotel / location&nbsp; </p>
+                                </div>
+
+                        <div className="container-fluid plan-btn">
+                            <div className="row ">
+                                <div onClick={(e) => togglePage(e, 1)} className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 new-plan">
+                                    <div className="btn filter-p filter-btn ">
+                                        Back
+                            </div>
+                                </div>
+                                <div onClick={(e) => togglePage(e, 3)} className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 new-plan">
+                                    <div className="btn filter-p filter-btn ">
+                                        Next
+                            </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <MapPlaces/>
+                        <div className={startChoose === 1?"help-div":"none"}></div>
+                        <div className={startChoose === 1?"none":""}>
+                        <div className="">
+                            Search for a place below
+                     </div>
+                     <Autocomplete latitude={currentCity[0].latitude} longitude={currentCity[0].longitude} />
+                     
+                        </div>
+                         </div>
                     <div className={page === 3 ? "places-div" : "none"}>
                         <div className="plan-main-caption plan-cap">
-                            Where are you staying?
+                            Where would you like to end your trip on the last day? (optional)
                      </div>
                         <div className="container-fluid plan-btn">
                             <div className="row ">
@@ -663,41 +685,16 @@ const NewPlan = ({ city }) => {
                                         Back
                             </div>
                                 </div>
+
                                 <div onClick={(e) => togglePage(e, 4)} className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 new-plan">
                                     <div className="btn filter-p filter-btn ">
-                                        Skip
+                                        Next
                             </div>
                                 </div>
 
                             </div>
                         </div>
-                        <Autocomplete latitude={currentCity[0].latitude} longitude={currentCity[0].longitude} />
-                    </div>
-                    <div className={page === 4 ? "places-div" : "none"}>
-                        <div className="plan-main-caption plan-cap">
-                            Where would you like to end your trip on the last day? (optional)
-                     </div>
-                        <div className="container-fluid plan-btn">
-                            <div className="row ">
-                                <div onClick={(e) => togglePage(e, 3)} className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 new-plan">
-                                    <div className="btn filter-p filter-btn ">
-                                        Back
-                            </div>
-                                </div>
-
-                                <div onClick={(e) => sendData(e)} className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 new-plan">
-                                    <div className="btn filter-p filter-btn ">
-                                        Create plan
-                            </div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div onClick={(e) => createPlan(name, e)} className="new-plan">
-                            <div className="btn filter-p filter-btn ">
-                                Create  plan
-                            </div>
-                        </div>
+                        
                         <Autocomplete latitude={currentCity[0].latitude} longitude={currentCity[0].longitude} />
 
 

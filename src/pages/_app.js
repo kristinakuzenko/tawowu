@@ -37,6 +37,7 @@ function MyApp({Component,pageProps}) {
                   src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
                   crossorigin="anonymous"
                   />
+                  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCp7BwWMHA_ZfhMSTSTs2QxW1_vocqb1k4&libraries=places"></script>
                
           </Head>
           <Component {...pageProps}/>

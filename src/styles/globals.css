@@ -453,6 +453,7 @@ font-size: 30px;
   display: none;
 }
 .places-div{
+  height: 100%;
   padding-bottom: 50px;
   background-image: linear-gradient( 370deg,#fc935fb9  0%,  #6c3535 150%);
 }
@@ -821,6 +822,9 @@ border-radius: 10px;
 }
 .plan-cap{
   padding-top: 70px;
+}
+.help-div{
+  height: 40vh;
 }
 
 

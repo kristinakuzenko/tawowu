@@ -18,9 +18,8 @@ class Map extends Component {
     const locations = props.data[1];
     const type = props.data[2];
     const name = props.data[3];
-    const callback = props.data[4];
 
-    this.state = { city, locations, type, name, callback };
+    this.state = { city, locations, type, name};
   }
 
 
@@ -47,7 +46,6 @@ class Map extends Component {
           this.setState({
             directions: result
           });
-          this.state.callback();
           if (type === "WALKING") {
 
             var promise2 = result.routes[0].legs.map((route) => () => new Promise((resolve, reject) => {
