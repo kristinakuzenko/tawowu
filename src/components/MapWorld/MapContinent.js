@@ -53,16 +53,10 @@ export default class MapContinent extends SampleBase {
         touchmove = false;
     }
     render() {
-        return (<div className='control-pane'>
-            <style>
-                {SAMPLE_CSS}
-            </style>
-
-            <div className='control-section row'>
-
-                <div className=' '>
-
-                    <MapsComponent id="maps" height="950" width="1830" ref={m => this.mapInstance = m} loaded={this.loaded} load={this.load} shapeSelected={this.shapeSelected.bind(this)} zoomSettings={{
+        return (
+                <div >
+                <div  className="continent-btn">Welcome to <br/>{this.state.continent==="northamerica"?"North America":this.state.continent==="southamerica"?"South America" :this.state.continent.charAt(0).toUpperCase()}{this.state.continent==="northamerica"?"":this.state.continent==="southamerica"?"":this.state.continent.slice(1)}</div>
+                    <MapsComponent id="maps" background="#eb9f79" height="950"  ref={m => this.mapInstance = m} loaded={this.loaded} load={this.load} shapeSelected={this.shapeSelected.bind(this)} zoomSettings={{
                         enable: false
                     }}
                         mapsArea={{
@@ -90,7 +84,6 @@ export default class MapContinent extends SampleBase {
                     </MapsComponent>
                 </div>
 
-            </div>
-        </div>);
+           );
     }
 }

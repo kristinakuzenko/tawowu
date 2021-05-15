@@ -52,11 +52,10 @@ const Continent = ({ continent }) => {
 
   return <Layout title={continent}>
 
-    <div className="continent2">
 
       {myContinent.map((continents) => (
         <div key={continents.id}>
-                    <div className="map">
+                    <div className="map-continent">
       <Map continent={continents.name.toLowerCase().replace(' ', '')} />
       </div>
 
@@ -65,7 +64,6 @@ const Continent = ({ continent }) => {
         </div>
       ))}
 
-    </div>
     <div className="countries container-fluid btn">
       {orderedCountries.map((countries) => (
         <Link href={`/country/${countries.name}`} key={countries.name}>

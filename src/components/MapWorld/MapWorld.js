@@ -22,14 +22,6 @@ export class SampleBase extends React.PureComponent {
 }
 
 let datasource = data;
-// Data ref
-const SAMPLE_CSS = `
-    .control-fluid {
-		padding: 0px !important;
-    }
-    .backLabel:hover {
-        cursor: pointer;
-}`;
 let markers = [
     { name: 'Asia', latitude: 50.32087157990324, longitude: 90.015625 },
     { name: 'Australia', latitude: -23.88583769986199, longitude: 134.296875 },
@@ -38,6 +30,7 @@ let markers = [
     { name: 'North America', latitude: 59.88893689676585, longitude: -109.3359375 },
     { name: 'South America', latitude: -6.64607562172573, longitude: -54.54687499999999 }
 ];
+const a=0;
 let touchmove;
 export default class MapWorld extends SampleBase {
     change() {
@@ -80,7 +73,7 @@ export default class MapWorld extends SampleBase {
     render() {
         return (
             <div>
-<div onClick={this.change.bind(this)}>Button</div>
+<div onClick={this.change.bind(this)} className="world-btn">Back to World</div>
         <MapsComponent id="maps" height="950" background="#eb9f79" ref={m => this.mapInstance = m} loaded={this.loaded} load={this.load} shapeSelected={this.shapeSelected.bind(this)} zoomSettings={{
                         enable: false
                     }}

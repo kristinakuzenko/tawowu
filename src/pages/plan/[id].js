@@ -91,6 +91,7 @@ const Plan = ({ name }) => {
                         <div className="container-fluid ">
                             <div className=" col-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 map-container">
 
+   
                             </div>
                             <div className={info[0].byCar !== "Public transport / walking"? "city-places-div col-12 col-sm-12 col-md-12 col-lg-7 col-xl-7":"none"}>
                                 <div className="fixed-div">
@@ -155,7 +156,7 @@ const Plan = ({ name }) => {
                     </div>
                 </div>
             </div>
-        ))};
+        ))}
    </Layout>;
 
 }

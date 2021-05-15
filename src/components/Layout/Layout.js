@@ -19,7 +19,7 @@ const Layout = ({ children, title = "Tawowu" }) => {
   let _isMounted = false;
   const [countries, setCountries] = useState([]);
   const [continents, setContinents] = useState([]);
-
+  const [session, loading] = useSession();
   React.useEffect(() => {
     _isMounted = true;
 
@@ -46,12 +46,15 @@ const Layout = ({ children, title = "Tawowu" }) => {
             setContinents(continents);
           }
         });
-
+        if(session){
+          const res =  fire.firestore().collection('users').doc(session.user.email).set({name:session.user.name});
+          console.log(session.user);
+        }
+        
     return function cleanup() {
       _isMounted = false;
     }
   }, [])
-  const [session, loading] = useSession();
   const orderedCountries = orderBy(countries);
   return (
     <div className="layout-main">
@@ -68,11 +71,15 @@ const Layout = ({ children, title = "Tawowu" }) => {
       <header className="header">
         <nav className="navbar navbar-expand-lg navbar-dark fixed-top">
           <div className="">
+          {session && (
+            <>
+            <Link href={`/plans`} class="nav-link user">
+                <li className="nav-link"><img className="user-image " src={session.user.image} /></li>
+            </Link>
+            </>
+          )}
             <Link href={`/my-places`} class="nav-link user">
               <span type="button" className="nav-link search" ><FontAwesomeIcon icon={faHeart}></FontAwesomeIcon> </span>
-            </Link>
-            <Link href={`/plans`} class="nav-link user">
-              <span type="button" className="nav-link search" ><FontAwesomeIcon icon={faUser}></FontAwesomeIcon> </span>
             </Link>
             <Link href="/"><a className="navbar-brand logo" >t a w o w u <span className="sr-only">(current)</span></a></Link>
             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -95,44 +102,33 @@ const Layout = ({ children, title = "Tawowu" }) => {
                     </ul>
                   </li>
                 ))}
-<p>
           {!session && (
-            <a
-              href="/api/auth/signin"
-              onClick={(e) => {
-                e.preventDefault();
-                signin();
-              }}
-            >
-              <button className="signInButton">Sign in</button>
-            </a>
+            <li className="nav-item login">
+
+            <a className="nav-link" href="/api/auth/signin"
+          onClick={(e) => {
+            e.preventDefault();
+            signin();
+            
+          }}>Sign in </a>
+                                
+          </li>
+
+
           )}
           {session && (
             <>
-              <Link href="/profile">
-                <a>
-                  <span
-                    style={{ backgroundImage: `url(${session.user.image})` }}
-                    className="avatar"
-                  />
-                </a>
-              </Link>
-              <span className="email">{session.user.email}</span>
-              <a
-                href="/api/auth/signout"
+<li className="nav-item login">
+              
+                  <a className="nav-link" href="/api/auth/signout"
                 onClick={(e) => {
                   e.preventDefault();
                   signout();
-                }}
-              >
-                <button className="signOutButton">Sign out</button>
-              </a>
-            </>
-          )}
-        </p>
-                <li className="nav-item">
-                  <a className="nav-link" href="#">About </a>
+                }}>Sign out </a>
                 </li>
+                   </>
+          )}
+                
 
               </ul>
             </div>
