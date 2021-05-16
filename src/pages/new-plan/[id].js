@@ -1,8 +1,8 @@
-
 import Layout from "../../components/Layout/Layout";
 import Autocomplete from "../../components/Autocomplete/Autocomplete";
 import MapPlaces from "../../components/MapPlaces/MapPlaces";
 import MapGoogle from "../../components/GoogleMap/GoogleMap";
+import { signin, signout, useSession } from 'next-auth/client';
 import key from "../../components/GoogleApiKey/GoogleApiKey";
 import Head from "next/head";
 import Link from "next/link";
@@ -32,6 +32,8 @@ const MAPBOX_TOKEN =
 
 const MapLoader = withScriptjs(MapGoogle);
 const NewPlan = ({ city }) => {
+    const [session, loading] = useSession();
+
     let _isMounted = false;
     const [cities, setCities] = useState([]);
     const [places, setPlaces] = useState([]);
@@ -230,23 +232,37 @@ const NewPlan = ({ city }) => {
     }
     const sendData = (e) => {
         e.preventDefault();
+        const route=[];
+        const route_transport=[]
+        Object.keys(localStorage).filter(key => key.indexOf(`route-${name}`) !== -1).forEach((key) => {
+            route.push(JSON.parse(localStorage.getItem(key)));
+        });
+        Object.keys(localStorage).filter(key => key.indexOf(`routes-transport-${name}`) !== -1).forEach((key) => {
+            route_transport.push(JSON.parse(localStorage.getItem(key)));
+        });
         const data = {
             city: currentCity[0],
             name: name,
             byCar: byCar,
             days: days,
             budget: budget,
-            places: favPlaces
+            places: favPlaces,
+            route:route,
+            route_transport:route_transport
         }
         localStorage.setItem(`plan-data-${name}`, JSON.stringify(data));
+        console.log(data);
     }
     const createPlan = (name, e) => {
         e.preventDefault();
-        Object.keys(localStorage).filter(key => key.indexOf(`plan-data-`) !== -1).forEach((key) => {
-            localStorage.removeItem(key);
-        });
-        sendData(e);
-        window.location.href = `/plan/${name} `;
+        if (session) {
+            var washingtonRef =  fire.firestore().collection("users").doc(session.user.email);
+            washingtonRef.update({
+                routes: fire.firestore.FieldValue.arrayUnion({name:1,l:"kk"})
+            });
+          }
+        //sendData(e);
+        //window.location.href = `/plan/${name} `;
     }
 
     const allPlaces = () => cityPlaces().filter(place => place.type.indexOf(4) === -1);
@@ -309,16 +325,12 @@ const NewPlan = ({ city }) => {
                 f2(promise2).then((r) => {
                   localStorage.setItem(`routes-transport-${name}`, JSON.stringify(r));
                   Object.keys(localStorage).filter(key => key.indexOf(`routes-transport-${name}`) !== -1).forEach((key) => {
-                    console.log("JSON.parse(localStorage.getItem(key))");
                     console.log(JSON.parse(localStorage.getItem(key)));
                 });
                 })
-    
               }
-
               localStorage.setItem(`route-${name}`, JSON.stringify(result.routes[0].legs));
               Object.keys(localStorage).filter(key => key.indexOf(`route-${name}`) !== -1).forEach((key) => {
-                console.log("JSON.parse(localStorage.getItem(key)) rote");
                 console.log(JSON.parse(localStorage.getItem(key)));
             });
             } else {
