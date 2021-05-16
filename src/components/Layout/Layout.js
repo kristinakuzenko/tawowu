@@ -2,59 +2,59 @@ import Head from "next/head";
 import Link from "next/link";
 import React from 'react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
-import styles from './layout.module.css';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import fire from '../../config/fire-config';
 import { signin, signout, useSession } from 'next-auth/client';
-
 
 const orderBy = (countries) => {
   return countries.sort((a, b) => (a.name > b.name ? 1 : -1));
 };
+const continents=[{name:"Africa"},{name:"Asia"},{name:"Australia"},{name:"Europe"},{name:"North America"},{name:"South America"}];
+ 
 const Layout = ({ children, title = "Tawowu" }) => {
 
   let _isMounted = false;
   const [countries, setCountries] = useState([]);
-  const [continents, setContinents] = useState([]);
+  const [users, setUsers] = useState([]);
   const [session, loading] = useSession();
   React.useEffect(() => {
     _isMounted = true;
 
     fire.firestore()
-        .collection('countries')
-        .onSnapshot(snap => {
-          const countries = snap.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-          }));
-          if (_isMounted) {
-            setCountries(countries);
-          }
-        });
-
-    fire.firestore()
-        .collection('continents')
-        .onSnapshot(snap => {
-          const continents = snap.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-          }));
-          if (_isMounted) {
-            setContinents(continents);
-          }
-        });
-        if(session){
-          const res =  fire.firestore().collection('users').doc(session.user.email).set({name:session.user.name});
-          console.log(session.user);
+      .collection('countries')
+      .onSnapshot(snap => {
+        const countries = snap.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        if (_isMounted) {
+          setCountries(countries);
         }
-        
+      });
+  
+
     return function cleanup() {
       _isMounted = false;
     }
   }, [])
+
+  if (session) {
+    fire.firestore().collection('users').doc(session.user.email).get()
+    .then((docSnapshot) => {
+      if (docSnapshot.exists) {
+        fire.firestore().collection('users').doc('id')
+          .onSnapshot((doc) => {
+            //console.log("jjj")
+          });
+      }else{
+        const res = fire.firestore().collection('users').doc(session.user.email).set({ name: session.user.name, routes:[] });
+       // console.log(fire.firestore().collection('users').doc(session.user.email));
+      }
+    });
+
+  }
+
   const orderedCountries = orderBy(countries);
   return (
     <div className="layout-main">
@@ -62,8 +62,8 @@ const Layout = ({ children, title = "Tawowu" }) => {
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
         <link
-            rel="stylesheet"
-            href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         />
         <title>{title}</title>
 
@@ -71,13 +71,13 @@ const Layout = ({ children, title = "Tawowu" }) => {
       <header className="header">
         <nav className="navbar navbar-expand-lg navbar-dark fixed-top">
           <div className="">
-          {session && (
-            <>
-            <Link href={`/plans`} class="nav-link user">
-                <li className="nav-link"><img className="user-image " src={session.user.image} /></li>
-            </Link>
-            </>
-          )}
+            {session && (
+              <>
+                <Link href={`/plans`} class="nav-link user">
+                  <li className="nav-link"><img className="user-image " src={session.user.image} /></li>
+                </Link>
+              </>
+            )}
             <Link href={`/my-places`} class="nav-link user">
               <span type="button" className="nav-link search" ><FontAwesomeIcon icon={faHeart}></FontAwesomeIcon> </span>
             </Link>
@@ -98,38 +98,31 @@ const Layout = ({ children, title = "Tawowu" }) => {
                           <li><a className="dropdown-item btn"> {countries.name}</a></li>
                         </Link>
                       ))}
-
                     </ul>
                   </li>
                 ))}
-          {!session && (
-            <li className="nav-item login">
-
-            <a className="nav-link" href="/api/auth/signin"
-          onClick={(e) => {
-            e.preventDefault();
-            signin();
-            
-          }}>Sign in </a>
-                                
-          </li>
-
-
-          )}
-          {session && (
-            <>
-<li className="nav-item login">
-              
-                  <a className="nav-link" href="/api/auth/signout"
-                onClick={(e) => {
-                  e.preventDefault();
-                  signout();
-                }}>Sign out </a>
-                </li>
-                   </>
-          )}
-                
-
+                {!session && (
+                  <li className="nav-item login">
+                    <a className="nav-link" href="/api/auth/signin"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        signin();
+                      }}>Sign in
+                    </a>
+                  </li>
+                )}
+                {session && (
+                  <>
+                    <li className="nav-item login">
+                      <a className="nav-link" href="/api/auth/signout"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          signout();
+                        }}>Sign out
+                      </a>
+                    </li>
+                  </>
+                )}
               </ul>
             </div>
           </div>
@@ -141,11 +134,10 @@ const Layout = ({ children, title = "Tawowu" }) => {
           <div className="modal-content">
             <input className="input-search" type="text" placeholder=" Search for cities, countries, ..." ></input>
             {continents.map((continent) => (
-                <Link href={`/continent/${continent.name} `} key={continent.name}>
-                  <p className="btn modal-item">{continent.name}</p>
-                </Link>
+              <Link href={`/continent/${continent.name} `} key={continent.name}>
+                <p className="btn modal-item">{continent.name}</p>
+              </Link>
             ))}
-
             <br></br>
             <p className="btn  modal-item">About</p>
             <br></br>
@@ -158,12 +150,9 @@ const Layout = ({ children, title = "Tawowu" }) => {
 
       <footer className="footer">
         Thank you for using Tawowu!
-          </footer>
-
+      </footer>
     </div>
   );
 };
 
 export default Layout;
-
-

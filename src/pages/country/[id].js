@@ -13,14 +13,14 @@ const Country = ({ country }) => {
     _isMounted = true;
 
     fire.firestore()
-        .collection('cities')
-        .onSnapshot(snap => {
-          const cities = snap.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-          }));
-          _isMounted && setCities(cities);
-        });
+      .collection('cities')
+      .onSnapshot(snap => {
+        const cities = snap.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        _isMounted && setCities(cities);
+      });
 
     Object.keys(localStorage).filter(key => key.indexOf('tawowu-fav') !== -1).forEach((key) => {
       console.log(JSON.parse(localStorage.getItem(key)));
@@ -83,14 +83,11 @@ const Country = ({ country }) => {
             />
           </div>
           <div className="container-fluid cities">
-
             <div className="row">
               {filteredCities().map((city) => (
-
                 <Link href={`/city/${city.city}`} key={city.city}>
                   <div className="city-descr col-6 col-sm-6 col-md-6 col-lg-6 col-xl-4" key={city.city}>
                     <img className="city-icon" src={city.icon} />
-
                     <h1 className="country-city">{city.city}</h1>
                     <p className="country-desc">{city.description}</p>
                   </div>

@@ -1,7 +1,8 @@
 const MainPage = ({ ...rest }) => {
        return (
               <div>
-                     <div className="main-block ">        </div>
+                     <div className="main-block "> 
+                     </div>
                      <div className="main-header">
                             <div>
                                    <span>Welcome </span>
@@ -12,9 +13,6 @@ const MainPage = ({ ...rest }) => {
                                    <span>travel </span>
                                    <span>world</span>
                             </div>
-
-                            <h2><button type="button" className="btn discover">Discover the World</button></h2>
-
                      </div>
                      <div id="container"></div>
               </div>

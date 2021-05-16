@@ -206,27 +206,6 @@ const City = ({ city }) => {
     setAllTogether(value);
   }
 
-  const contentString =
-  '<div id="content">' +
-  '<div id="siteNotice">' +
-  "</div>" +
-  '<h1 id="firstHeading" class="firstHeading">Uluru</h1>' +
-  '<div id="bodyContent">' +
-  "<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large " +
-  "sandstone rock formation in the southern part of the " +
-  "Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) " +
-  "south west of the nearest large town, Alice Springs; 450&#160;km " +
-  "(280&#160;mi) by road. Kata Tjuta and Uluru are the two major " +
-  "features of the Uluru - Kata Tjuta National Park. Uluru is " +
-  "sacred to the Pitjantjatjara and Yankunytjatjara, the " +
-  "Aboriginal people of the area. It has many springs, waterholes, " +
-  "rock caves and ancient paintings. Uluru is listed as a World " +
-  "Heritage Site.</p>" +
-  '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">' +
-  "https://en.wikipedia.org/w/index.php?title=Uluru</a> " +
-  "(last visited June 22, 2009).</p>" +
-  "</div>" +
-  "</div>";
   const allPlaces = () => cityPlaces().filter(place => place.type.indexOf(4) === -1);
 
 
@@ -243,14 +222,11 @@ const City = ({ city }) => {
           <div className="col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2 filter-item ">
             <p onClick={(e) => toggleType(e, 2)} className={placeType === 2 ? 'filter-name active' : 'filter-name '}>&nbsp;Food&nbsp;</p>
           </div>
-          <div className="col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2 filter-item ">
+          <div className="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3 filter-item ">
             <p onClick={(e) => toggleType(e, 3)} className={placeType === 3 ? 'filter-name active' : 'filter-name '} >&nbsp;Shopping&nbsp;</p>
           </div>
-          <div className="col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2 filter-item ">
+          <div className="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3 filter-item ">
             <p onClick={(e) => toggleType(e, 4)} className={placeType === 4 ? 'filter-name active' : 'filter-name '} >&nbsp;Transport&nbsp;</p>
-          </div>
-          <div className="col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2 filter-item ">
-            <p onClick={(e) => toggleType(e, 5)} className={placeType === 5 ? 'filter-name active' : 'filter-name '}>&nbsp;Activities&nbsp;</p>
           </div>
           <Link href={`/trip-plans/${city}`}>
           <div className="col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2 filter-item ">
@@ -281,9 +257,6 @@ const City = ({ city }) => {
                 </div>
                 <Map className="fixed" locations={ allTogether===-1?filteredPlacesValue():allPlaces()} latitude={currentCity[0].latitude} longitude={currentCity[0].longitude} zoom={12} />
 
-               
-      
-
               </div>
               <div className="city-places-div col-12 col-sm-12 col-md-12 col-lg-7 col-xl-7">
                 <div className="fixed-div">
@@ -295,26 +268,24 @@ const City = ({ city }) => {
                     />
                   </div>
                   <div className="container-fluid ">
-                    <div className={placeType === 1 ? 'icon-container ' : 'icon-container active'} >
-
-                      <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  ">
+                    <div className={placeType === 1 ? 'icon-container row' : 'icon-container active'} >
+                      <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-3 col-xl-2  ">
                         <img className={activeFilter[0] === 1 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Art" src="../art.png" onClick={(e) => toggleFilterOne(e, 1)} />
                       </div>
-
-                      <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  ">
+                      <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-3 col-xl-2  ">
                         <img className={activeFilter[0] === 2 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Insta places" src="../camera.png" onClick={(e) => toggleFilterOne(e, 2)} />
                       </div>
-                      <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2  ">
+                      <div className="btn icon-div col-6 col-sm-6 col-md-4 col-lg-3 col-xl-2  ">
                         <img className={activeFilter[0] === 3 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Parks / outdoors" src="../park.png" onClick={(e) => toggleFilterOne(e, 3)} />
                       </div>
-                      <div className="btn icon-div col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2  ">
+                      <div className="btn icon-div col-6 col-sm-6 col-md-6 col-lg-3 col-xl-2  ">
                         <img className={activeFilter[0] === 4 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Museums" src="../museum.png" onClick={(e) => toggleFilterOne(e, 4)} />
                       </div>
-                      <div className="btn icon-div col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2  ">
+                      <div className="btn icon-div col-6 col-sm-6 col-md-6 col-lg-3 col-xl-2  ">
                         <img className={activeFilter[0] === 5 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Viewpoints" src="../view.png" onClick={(e) => toggleFilterOne(e, 5)} />
                       </div>
                       <div data-toggle="modal" data-target="#filterModal" className="btn filter-btn icon-div col-6 col-sm-6 col-md-12 col-lg-2 col-xl-2  ">
-                        <p className="filter-p">Filter</p>
+                        <p className="filter-p">&nbsp;Filter&nbsp;</p>
                       </div>
                       <div className="modal fade " id="filterModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div className="modal-dialog">
@@ -349,7 +320,7 @@ const City = ({ city }) => {
                         <img className={activeFilter[0] === 5 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Confectionery" src="../cupcake.png" onClick={(e) => toggleFilterOne(e, 5)} />
                       </div>
                       <div className="btn filter-btn icon-div col-6 col-sm-6 col-md-12 col-lg-2 col-xl-2  ">
-                        <p className="filter-p">Filter</p>
+                        <p className="filter-p">&nbsp;Filter&nbsp;</p>
                       </div>
                     </div>
                     <div className={placeType === 3 ? 'icon-container ' : 'icon-container active'}>
@@ -369,7 +340,7 @@ const City = ({ city }) => {
                         <img className={activeFilter[0] === 5 ? 'small-icon active' : 'small-icon'} data-toggle="tooltip" data-placement="bottom" title="Outlet" src="../outlet.png" onClick={(e) => toggleFilterOne(e, 5)} />
                       </div>
                       <div className="btn filter-btn icon-div col-6 col-sm-6 col-md-12 col-lg-2 col-xl-2  ">
-                        <p className="filter-p">Filter</p>
+                        <p className="filter-p">&nbsp;Filter&nbsp;</p>
                       </div>
                     </div>
                   </div>
