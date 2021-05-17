@@ -27,13 +27,11 @@ import { render } from "react-dom";
 import MapGL from "react-map-gl";
 import Geocoder from "react-map-gl-geocoder";
 
-const MAPBOX_TOKEN =
-"pk.eyJ1Ijoia3Jpc3RpbmFrdXplbmtvIiwiYSI6ImNrbnJpZDFtYjBwMG8ybnBmeG82a3Z0ejYifQ.GYQGZmk2Y0sSruGEpupdgw";
-
 const MapLoader = withScriptjs(MapGoogle);
 const NewPlan = ({ city }) => {
     const [session, loading] = useSession();
-
+    const [addressStart, setAddressStart] = useState("");
+    const [addressEnd, setAddressEnd] = useState("");
     let _isMounted = false;
     const [cities, setCities] = useState([]);
     const [places, setPlaces] = useState([]);
@@ -76,6 +74,7 @@ const NewPlan = ({ city }) => {
 
     const currentCity = cities.filter(cityItem => cityItem.city.toLowerCase() === city.toLowerCase());
     const cityPlaces = () => places.filter(place => place.city.toLowerCase() === city.toLowerCase());
+
 
     const [activeFilters, setActiveFilters] = useState([]);
     const [activeFilter, setActiveFilterOne] = useState([]);
@@ -204,6 +203,13 @@ const NewPlan = ({ city }) => {
         setStartChoose(value);
     }
 
+    const [endChoose, setEndChoose] = useState(1);
+
+    const toggleEndChoose = (e, value) => {
+        e.preventDefault();
+        setEndChoose(value);
+    }
+
     const [days, setDays] = useState(1);
 
     const toggleDays = (e, value) => {
@@ -213,178 +219,402 @@ const NewPlan = ({ city }) => {
     const [page, setPage] = useState(1);
 
     const togglePage = (e, value) => {
+        console.log(addressStart);
         e.preventDefault();
         setPage(value);
     }
 
     const [byCar, setByCar] = useState("Public transport / walking");
+    const [byCarType, setByCarType] = useState("WALKING");
 
     const toggleByCar = (e, value) => {
         e.preventDefault();
         setByCar(value);
+        if(value==="Car"){
+            setByCarType("DRIVING");
+        }else if(value==="Bicycle"){
+            setByCarType("BICYCLING");
+        }else {
+            setByCarType("TWO_WHEELER");
+        }
     }
+   
     const [messageData, setMessageData] = useState("");
-    const checkData = (e) => {
+    const validateName = (e) => {
         e.preventDefault();
-        if (name === "") {
-            setName("{}`${byCar}`}");
+        setMessageData("");
+        if(name===""){
+            setMessageData("Please, enter plan name");
+        }else{
+            if(session){
+                JSON.parse(localStorage.getItem(`user-plans-${session.user.email}`)).forEach(item=>{
+                    if(name===item.name){
+                        setMessageData("You already have this plan name");
+                    }else{
+                        togglePage(e, 2);
+                    }
+                })
+            }
         }
-    }
-    const sendData = (e) => {
-        e.preventDefault();
-        const route=[];
-        const route_transport=[]
-        Object.keys(localStorage).filter(key => key.indexOf(`route-${name}`) !== -1).forEach((key) => {
-            route.push(JSON.parse(localStorage.getItem(key)));
-        });
-        Object.keys(localStorage).filter(key => key.indexOf(`routes-transport-${name}`) !== -1).forEach((key) => {
-            route_transport.push(JSON.parse(localStorage.getItem(key)));
-        });
-        const data = {
-            city: currentCity[0],
-            name: name,
-            byCar: byCar,
-            days: days,
-            budget: budget,
-            places: favPlaces,
-            route:route,
-            route_transport:route_transport
-        }
-        localStorage.setItem(`plan-data-${name}`, JSON.stringify(data));
-        console.log(data);
-    }
+        console.log(messageData);
+        
+        
+    
+}
+
+const [distance, setDistance] = useState(0);
+const [time, setTime] = useState(0);
+const [price, setPrice] = useState(0);
+const [messageDataValidate, setMessageDataValidate] = useState("");
+
     const createPlan = (name, e) => {
         e.preventDefault();
-        if (session) {
+       if (session) {
+        setMessageDataValidate("");
+            const route=[];
+            const route_transport=[]
+            route.push(JSON.parse(localStorage.getItem(`route-${name}`)));
+            route_transport.push(JSON.parse(localStorage.getItem(`routes-transport-${name}`)));
+            console.log(route_transport[0]);
+            let dist=0;
+            let time=0;
+            let price=0;
+            if(route_transport[0]===null){
+                route[0].forEach(item=>{
+                    dist+=item.distance.value;
+                    time+=item.duration.value;
+                     //setDistance(dist);
+                     console.log(time);
+                 });
+            }else{
+                route_transport[0].forEach(item=>{
+                    dist+=item.distance;
+                    time+=item.time;
+                     //setDistance(dist);
+                     console.log(time);
+                })
+            }
+            //console.log(favPlaces);
+           favPlaces.forEach(item=>{
+                time+=item.time*60;
+                price+=item.money;
+                console.log(price);
+            });
+            if(time>36000*days){
+                setMessageDataValidate("Ooops, you have selected too many sightseeing places.\n Please, delete some places to continue.");
+                console.log("time") ;
+            }else if(budget!==""&&price>parseInt(budget)){
+                setMessageDataValidate("Ooops, you have selected too many sightseeing places for your budget.\n Please, delete some places or change your budget to continue.");
+                console.log("money") ;
+            }else{
+                setMessageDataValidate("")  ;
+                
+                const routes=JSON.parse(localStorage.getItem(`user-plans-${session.user.email}`));
+            const data = {
+                start: addressStart,
+                end:addressEnd,
+                city: currentCity[0],
+                name: name,
+                byCar: byCar,
+                days: days,
+                budget: budget,
+                price: price,
+                time:time,
+                dist:dist,
+                places: favPlaces,
+                route:route,
+                route_transport:route_transport
+            }
+            routes.push(data);
+            //console.log(JSON.stringify(routes));
+            localStorage.setItem(`plan-data-${name}`, JSON.stringify(data));
+            //write to database
             var washingtonRef =  fire.firestore().collection("users").doc(session.user.email);
             washingtonRef.update({
-                routes: fire.firestore.FieldValue.arrayUnion({name:1,l:"kk"})
+                routes: JSON.stringify(routes)
             });
+            }
+            
+
+
           }
-        //sendData(e);
-        //window.location.href = `/plan/${name} `;
+     if(messageDataValidate===""){
+        window.location.href = `/plan/${name} `;
+     }
     }
 
     const allPlaces = () => cityPlaces().filter(place => place.type.indexOf(4) === -1);
+
+
     const checkRoute = (e) => {
-        const geocoder = new google.maps.Geocoder();
+        setMessageDataValidate("");
+        if(favPlaces.length>27){
+            setMessageDataValidate("Ooops, you have selected too many sightseeing places.\n Please, delete some places to continue.");
+        } else{
         const directionsService = new google.maps.DirectionsService();
-        const type = "WALKING";
-        const origin = { lat: currentCity[0].latitude, lng: currentCity[0].longitude };
-        const destination = { lat: currentCity[0].latitude, lng: currentCity[0].longitude };
+        const type = byCarType;
+        const defaultLoc = { lat: currentCity[0].latitude, lng: currentCity[0].longitude };
         var loc = [];
         favPlaces.forEach(place => loc.push({ location: place.location, stopover: true }));
-    
-        directionsService.route(
-          {
-            origin: origin,
-            destination: destination,
-            waypoints: loc,
-            optimizeWaypoints: true,
-            travelMode: google.maps.TravelMode[type]
-          },
-          (result, status) => {
-            if (status === google.maps.DirectionsStatus.OK) {
-              if (type === "WALKING") {
-    
-                var promise2 = result.routes[0].legs.map((route) => () => new Promise((resolve, reject) => {
-    
-                  var origin1 = route.start_address;
-                  var destination1 = route.end_address;
-    
-                  directionsService.route(
-                    {
-                      origin: origin1,
-                      destination: destination1,
-                      travelMode: google.maps.TravelMode.TRANSIT
-                    },
-                    (result, status) => {
-                      if (status === google.maps.DirectionsStatus.OK) {
-                        var instructions = [];
-                        var dist = 0;
-                        var time = 0;
-                        result.routes[0].legs[0].steps.forEach(step => {
-                          var instr = ``;
-                          instr += `${step.instructions}  (${step.duration.text}, ${step.distance.text})`;
-                          instructions.push(instr);
-                          dist += step.distance.value;
-                          time += step.duration.value;
-    
-                        })
-                        resolve({ instructions: instructions, distance: dist, time: time, start: origin1, end: destination1 });
-                      } else {
-                        console.error(`error fetching directions ${result}`);
+        if(startChoose===1&&endChoose===1){
+            directionsService.route(
+                {
+                  origin: defaultLoc,
+                  destination: defaultLoc,
+                  waypoints: loc,
+                  optimizeWaypoints: true,
+                  travelMode: google.maps.TravelMode[type]
+                },
+                (result, status) => {
+                  if (status === google.maps.DirectionsStatus.OK) {
+                    if (type === "WALKING"&& byCar==="Public transport / walking") {
+          
+                      var promise2 = result.routes[0].legs.map((route) => () => new Promise((resolve, reject) => {
+          
+                        var origin1 = route.start_address;
+                        var destination1 = route.end_address;
+          
+                        directionsService.route(
+                          {
+                            origin: origin1,
+                            destination: destination1,
+                            travelMode: google.maps.TravelMode.TRANSIT
+                          },
+                          (result, status) => {
+                            if (status === google.maps.DirectionsStatus.OK) {
+                              var instructions = [];
+                              var dist = 0;
+                              var time = 0;
+                              result.routes[0].legs[0].steps.forEach(step => {
+                                var instr = ``;
+                                instr += `${step.instructions}  (${step.duration.text}, ${step.distance.text})`;
+                                instructions.push(instr);
+                                dist += step.distance.value;
+                                time += step.duration.value;
+          
+                              })
+                              resolve({ instructions: instructions, distance: dist, time: time, start: origin1, end: destination1 });
+                            } else {
+                              console.error(`error fetching directions ${result}`);
+                            }
+                          }
+                        );
+                      }));
+                      var f2 = async (arr) => {
+                        const waypts2 = arr.map(arr => arr());
+                        return await Promise.all(waypts2);
                       }
+                      f2(promise2).then((r) => {
+                        localStorage.setItem(`routes-transport-${name}`, JSON.stringify(r));
+                        console.log(JSON.parse(localStorage.getItem(`routes-transport-${name}`)));
+                        
+                        //console.log(time);
+                      })
                     }
-                  );
-                }));
-                var f2 = async (arr) => {
-                  const waypts2 = arr.map(arr => arr());
-                  return await Promise.all(waypts2);
+                    localStorage.setItem(`route-${name}`, JSON.stringify(result.routes[0].legs));
+                    Object.keys(localStorage).filter(key => key.indexOf(`route-${name}`) !== -1).forEach((key) => {
+                      console.log(JSON.parse(localStorage.getItem(key)));
+                  });
+                  } else {
+                    console.error(`error fetching directions ${result}`);
+                  }
                 }
-                f2(promise2).then((r) => {
-                  localStorage.setItem(`routes-transport-${name}`, JSON.stringify(r));
-                  Object.keys(localStorage).filter(key => key.indexOf(`routes-transport-${name}`) !== -1).forEach((key) => {
-                    console.log(JSON.parse(localStorage.getItem(key)));
-                });
-                })
-              }
-              localStorage.setItem(`route-${name}`, JSON.stringify(result.routes[0].legs));
-              Object.keys(localStorage).filter(key => key.indexOf(`route-${name}`) !== -1).forEach((key) => {
-                console.log(JSON.parse(localStorage.getItem(key)));
-            });
-            } else {
-              console.error(`error fetching directions ${result}`);
-            }
-          }
-        );
+              );
+        }else if(startChoose===1&&endChoose!==1){
+            directionsService.route(
+                {
+                  origin: defaultLoc,
+                  destination: addressEnd,
+                  waypoints: loc,
+                  optimizeWaypoints: true,
+                  travelMode: google.maps.TravelMode[type]
+                },
+                (result, status) => {
+                  if (status === google.maps.DirectionsStatus.OK) {
+                    if (type === "WALKING"&& byCar==="Public transport / walking") {
+          
+                      var promise2 = result.routes[0].legs.map((route) => () => new Promise((resolve, reject) => {
+          
+                        var origin1 = route.start_address;
+                        var destination1 = route.end_address;
+          
+                        directionsService.route(
+                          {
+                            origin: origin1,
+                            destination: destination1,
+                            travelMode: google.maps.TravelMode.TRANSIT
+                          },
+                          (result, status) => {
+                            if (status === google.maps.DirectionsStatus.OK) {
+                              var instructions = [];
+                              var dist = 0;
+                              var time = 0;
+                              result.routes[0].legs[0].steps.forEach(step => {
+                                var instr = ``;
+                                instr += `${step.instructions}  (${step.duration.text}, ${step.distance.text})`;
+                                instructions.push(instr);
+                                dist += step.distance.value;
+                                time += step.duration.value;
+          
+                              })
+                              resolve({ instructions: instructions, distance: dist, time: time, start: origin1, end: destination1 });
+                            } else {
+                              console.error(`error fetching directions ${result}`);
+                            }
+                          }
+                        );
+                      }));
+                      var f2 = async (arr) => {
+                        const waypts2 = arr.map(arr => arr());
+                        return await Promise.all(waypts2);
+                      }
+                      f2(promise2).then((r) => {
+                        localStorage.setItem(`routes-transport-${name}`, JSON.stringify(r));
+                        Object.keys(localStorage).filter(key => key.indexOf(`routes-transport-${name}`) !== -1).forEach((key) => {
+                          console.log(JSON.parse(localStorage.getItem(key)));
+                      });
+                      })
+                    }
+                    localStorage.setItem(`route-${name}`, JSON.stringify(result.routes[0].legs));
+                    Object.keys(localStorage).filter(key => key.indexOf(`route-${name}`) !== -1).forEach((key) => {
+                      console.log(JSON.parse(localStorage.getItem(key)));
+                  });
+                  } else {
+                    console.error(`error fetching directions ${result}`);
+                  }
+                }
+              );
+        } else if(startChoose!==1&&endChoose===1){
+            directionsService.route(
+                {
+                  origin: addressStart,
+                  destination: defaultLoc,
+                  waypoints: loc,
+                  optimizeWaypoints: true,
+                  travelMode: google.maps.TravelMode[type]
+                },
+                (result, status) => {
+                  if (status === google.maps.DirectionsStatus.OK) {
+                    if (type === "WALKING"&& byCar==="Public transport / walking") {
+          
+                      var promise2 = result.routes[0].legs.map((route) => () => new Promise((resolve, reject) => {
+          
+                        var origin1 = route.start_address;
+                        var destination1 = route.end_address;
+          
+                        directionsService.route(
+                          {
+                            origin: origin1,
+                            destination: destination1,
+                            travelMode: google.maps.TravelMode.TRANSIT
+                          },
+                          (result, status) => {
+                            if (status === google.maps.DirectionsStatus.OK) {
+                              var instructions = [];
+                              var dist = 0;
+                              var time = 0;
+                              result.routes[0].legs[0].steps.forEach(step => {
+                                var instr = ``;
+                                instr += `${step.instructions}  (${step.duration.text}, ${step.distance.text})`;
+                                instructions.push(instr);
+                                dist += step.distance.value;
+                                time += step.duration.value;
+          
+                              })
+                              resolve({ instructions: instructions, distance: dist, time: time, start: origin1, end: destination1 });
+                            } else {
+                              console.error(`error fetching directions ${result}`);
+                            }
+                          }
+                        );
+                      }));
+                      var f2 = async (arr) => {
+                        const waypts2 = arr.map(arr => arr());
+                        return await Promise.all(waypts2);
+                      }
+                      f2(promise2).then((r) => {
+                        localStorage.setItem(`routes-transport-${name}`, JSON.stringify(r));
+                        Object.keys(localStorage).filter(key => key.indexOf(`routes-transport-${name}`) !== -1).forEach((key) => {
+                          console.log(JSON.parse(localStorage.getItem(key)));
+                      });
+                      })
+                    }
+                    localStorage.setItem(`route-${name}`, JSON.stringify(result.routes[0].legs));
+                    Object.keys(localStorage).filter(key => key.indexOf(`route-${name}`) !== -1).forEach((key) => {
+                      console.log(JSON.parse(localStorage.getItem(key)));
+                  });
+                  } else {
+                    console.error(`error fetching directions ${result}`);
+                  }
+                }
+              );
+        } else {
+            directionsService.route(
+                {
+                  origin: defaultLoc,
+                  destination: defaultLoc,
+                  waypoints: loc,
+                  optimizeWaypoints: true,
+                  travelMode: google.maps.TravelMode[type]
+                },
+                (result, status) => {
+                  if (status === google.maps.DirectionsStatus.OK) {
+                    if (type === "WALKING" && byCar==="Public transport / walking") {
+          
+                      var promise2 = result.routes[0].legs.map((route) => () => new Promise((resolve, reject) => {
+          
+                        var origin1 = route.start_address;
+                        var destination1 = route.end_address;
+          
+                        directionsService.route(
+                          {
+                            origin: origin1,
+                            destination: destination1,
+                            travelMode: google.maps.TravelMode.TRANSIT
+                          },
+                          (result, status) => {
+                            if (status === google.maps.DirectionsStatus.OK) {
+                              var instructions = [];
+                              var dist = 0;
+                              var time = 0;
+                              result.routes[0].legs[0].steps.forEach(step => {
+                                var instr = ``;
+                                instr += `${step.instructions}  (${step.duration.text}, ${step.distance.text})`;
+                                instructions.push(instr);
+                                dist += step.distance.value;
+                                time += step.duration.value;
+          
+                              })
+                              resolve({ instructions: instructions, distance: dist, time: time, start: origin1, end: destination1 });
+                            } else {
+                              console.error(`error fetching directions ${result}`);
+                            }
+                          }
+                        );
+                      }));
+                      var f2 = async (arr) => {
+                        const waypts2 = arr.map(arr => arr());
+                        return await Promise.all(waypts2);
+                      }
+                      f2(promise2).then((r) => {
+                        localStorage.setItem(`routes-transport-${name}`, JSON.stringify(r));
+                        Object.keys(localStorage).filter(key => key.indexOf(`routes-transport-${name}`) !== -1).forEach((key) => {
+                          console.log(JSON.parse(localStorage.getItem(key)));
+                      });
+                      })
+                    }
+                    localStorage.setItem(`route-${name}`, JSON.stringify(result.routes[0].legs));
+                    Object.keys(localStorage).filter(key => key.indexOf(`route-${name}`) !== -1).forEach((key) => {
+                      console.log(JSON.parse(localStorage.getItem(key)));
+                  });
+                  } else {
+                    console.error(`error fetching directions ${result}`);
+                  }
+                }
+              );
+        }
     }
-    const [viewport, setViewport] = useState({
-        latitude: 41.3851,
-        longitude: 2.1734,
-        zoom: 12
-      });
-      const toggleViewport = (e, value) => {
-        e.preventDefault();
-        setViewport(value);
     }
-  const mapRef = useRef();
-  const handleViewportChange = useCallback(
-    (newViewport) => setViewport(newViewport),
-    []
-  );
-
-  // if you are happy with Geocoder default settings, you can just use handleViewportChange directly
-  const handleGeocoderViewportChange = useCallback(
-    (newViewport) => {
-      const geocoderDefaultOverrides = { transitionDuration: 1000 };
-
-      return handleViewportChange({
-        ...newViewport,
-        ...geocoderDefaultOverrides
-      });
-    },
-    [handleViewportChange]
-  );
-
-  const [startLoaction, setStartLocation] = useState({location:[41.3851,2.1734],name:"name"});
-
-  const toggleStartLocation= (e, value) => {
-      e.preventDefault();
-      setStartLocation(value);
-  }
-const postResult = (r)=>{
-    console.log("r.result");
-    startLoaction={location:r.result.center,name:r.result.place_name};
-    setStartLocation(startLoaction)
-console.log(startLoaction);
-}
-const toggleSelectingStart = (e, value,start) => {
-    e.preventDefault();
-    toggleViewport(e,value);
-    setStartChoose(start);
-}
-
 
     const mySortingFunction = (a, b) => a.popularity.localeCompare(b.popularity);
     return <Layout title={city}>
@@ -399,7 +629,7 @@ const toggleSelectingStart = (e, value,start) => {
                             <div onClick={(e) => calculate(e)} className="city-main-caption">
                                 Create yor own plan for  {cityItem.city}
                             </div>
-                            <div onClick={(e) => togglePage(e, 2)} className="new-plan">
+                            <div onClick={(e) => validateName(e)} className="new-plan">
                                 <div className="btn filter-p filter-btn ">
                                     Next
                             </div>
@@ -414,21 +644,6 @@ const toggleSelectingStart = (e, value,start) => {
 
                             </div>
                             
-
-                            <div className="fill-data-day">
-                                <h1 className="plan-h"> Number of days :</h1>
-
-                                <div className="continent-filter filter-type-container col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 ">
-                                    <p onClick={(e) => toggleDays(e, 1)} className={days === 1 ? 'continent-filter-p active' : 'continent-filter-p'}  >&nbsp;1&nbsp; </p>
-                                </div>
-                                <div className="continent-filter filter-type-container  col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                                    <p onClick={(e) => toggleDays(e, 2)} className={days === 2 ? 'continent-filter-p active' : 'continent-filter-p'}  >&nbsp;2&nbsp; </p>
-                                </div>
-                                <div className="continent-filter filter-type-container  col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                                    <p onClick={(e) => toggleDays(e, 3)} className={days === 3 ? 'continent-filter-p active' : 'continent-filter-p'}  >&nbsp;3&nbsp; </p>
-                                </div>
-
-                            </div>
 
                             <div className="fill-data">
                                 <h1 className="plan-h"> How are you travelling?</h1>
@@ -467,11 +682,11 @@ const toggleSelectingStart = (e, value,start) => {
 
                     <div className={page === 4 ? "places-div" : "none"}>
                         <div className="plan-main-caption plan-cap">
-                            Select from 2 to 27 places
+                            Select up to 27 places
                      </div>
                         <div className="container-fluid">
                             <div className="row ">
-                                <div onClick={(e) => togglePage(e, 1)} className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 new-plan">
+                                <div onClick={(e) => togglePage(e, 3)} className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 new-plan">
                                     <div className="btn filter-p filter-btn ">
                                         Back
                             </div>
@@ -674,20 +889,27 @@ const toggleSelectingStart = (e, value,start) => {
 
                             </div>
                         </div>
-                        <MapPlaces/>
+                        
                         <div className={startChoose === 1?"help-div":"none"}></div>
                         <div className={startChoose === 1?"none":""}>
-                        <div className="">
-                            Search for a place below
-                     </div>
-                     <Autocomplete latitude={currentCity[0].latitude} longitude={currentCity[0].longitude} />
+                             <div className="help-div">
+                             <MapPlaces handleSetAddress={(a)=>setAddressStart(a)} addressStart={addressStart}/>
+                             
+                             </div>
                      
                         </div>
                          </div>
-                    <div className={page === 3 ? "places-div" : "none"}>
+                         <div className={page === 3 ? "places-div" : "none"}>
                         <div className="plan-main-caption plan-cap">
-                            Where would you like to end your trip on the last day? (optional)
+                            Where you want to end your trip?
                      </div>
+                     <div className="continent-filter filter-type-container col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 ">
+                                    <p onClick={(e) => toggleEndChoose(e,1)} className={endChoose === 1 ? 'continent-filter-p active' : 'continent-filter-p'}  >&nbsp;Use my start location&nbsp; </p>
+                                </div>
+                                <div className="continent-filter filter-type-container col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 ">
+                                    <p onClick={(e) => toggleEndChoose(e,2)} className={endChoose === 2 ? 'continent-filter-p active' : 'continent-filter-p'}  >&nbsp;Custom end location&nbsp; </p>
+                                </div>
+
                         <div className="container-fluid plan-btn">
                             <div className="row ">
                                 <div onClick={(e) => togglePage(e, 2)} className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 new-plan">
@@ -695,7 +917,6 @@ const toggleSelectingStart = (e, value,start) => {
                                         Back
                             </div>
                                 </div>
-
                                 <div onClick={(e) => togglePage(e, 4)} className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 new-plan">
                                     <div className="btn filter-p filter-btn ">
                                         Next
@@ -705,10 +926,15 @@ const toggleSelectingStart = (e, value,start) => {
                             </div>
                         </div>
                         
-                        <Autocomplete latitude={currentCity[0].latitude} longitude={currentCity[0].longitude} />
-
-
-                    </div>
+                        <div className={endChoose === 1?"help-div":"none"}></div>
+                        <div className={endChoose === 1?"none":""}>
+                             <div className="help-div">
+                             <MapPlaces handleSetAddress={(a)=>setAddressEnd(a)} addressEnd={addressEnd}/>
+                             
+                             </div>
+                     
+                        </div>
+                         </div>
                 </div>
             </div>
         ))}

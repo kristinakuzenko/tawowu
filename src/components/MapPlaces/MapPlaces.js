@@ -1,77 +1,29 @@
-import React from 'react';
-import PlacesAutocomplete, {
-  geocodeByAddress,
-  getLatLng,
-} from 'react-google-places-autocomplete';
- 
+import React, { useState } from 'react';
+import GooglePlacesAutocomplete, { geocodeByAddress } from 'react-google-places-autocomplete';
+import apiKey from '../GoogleApiKey/GoogleApiKey';
+
 class LocationSearchInput extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { address: '' };
-    this.handleSelect=this.handleSelect.bind(this);
+    this.setValue = this.setValue.bind(this);
   }
- 
-  handleChange = address => {
-    console.log(address);
-    this.setState({ address });
-    
-  };
- 
-  handleSelect = (e) => {
-    
-    this.setState({ address });
-  console.log(e.target.value);
-    geocodeByAddress(e.target.value)
-      .then(results => {
-        const loc =getLatLng(results[0]);
-        console.log(loc);
-        return loc;
 
-      })
-      .then(latLng => console.log('Success', latLng))
-      .catch(error => console.error('Error', error));
+  setValue = (value) => {
+    console.log(value);
+    this.props.handleSetAddress(value.label);
+    
   };
- 
+
   render() {
     return (
-      <PlacesAutocomplete
-        value={this.state.address}
-        //onChange={this.handleChange}
-        onSelect={(e)=>{this.handleSelect(e)}}
-      >
-        {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-          <div>
-            <input
-              {...getInputProps({
-                placeholder: 'Search Places ...',
-                className: 'location-search-input',
-              })}
-            />
-            <div className="autocomplete-dropdown-container">
-              {loading && <div>Loading...</div>}
-              {suggestions.map(suggestion => {
-                const className = suggestion.active
-                  ? 'suggestion-item--active'
-                  : 'suggestion-item';
-                // inline style for demonstration purpose
-                const style = suggestion.active
-                  ? { backgroundColor: '#fafafa', cursor: 'pointer' }
-                  : { backgroundColor: '#ffffff', cursor: 'pointer' };
-                return (
-                  <div
-                    {...getSuggestionItemProps(suggestion, {
-                      className,
-                      style,
-                    })}
-                  >
-                    <span>{suggestion.description}</span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-      </PlacesAutocomplete>
+      <div className="autocomplete">
+        <GooglePlacesAutocomplete
+          apiKey={apiKey} 
+          selectProps={{
+            value: this.props.address,
+            onChange: this.setValue,
+          }} />
+      </div>
     );
   }
 }

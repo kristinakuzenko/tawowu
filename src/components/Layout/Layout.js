@@ -3,6 +3,7 @@ import Link from "next/link";
 import React from 'react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { useState } from 'react';
 import fire from '../../config/fire-config';
 import { signin, signout, useSession } from 'next-auth/client';
@@ -43,12 +44,15 @@ const Layout = ({ children, title = "Tawowu" }) => {
     fire.firestore().collection('users').doc(session.user.email).get()
     .then((docSnapshot) => {
       if (docSnapshot.exists) {
-        fire.firestore().collection('users').doc('id')
+        fire.firestore().collection('users').doc(session.user.email)
           .onSnapshot((doc) => {
-            //console.log("jjj")
+            
+            localStorage.setItem(`user-plans-${session.user.email}`, doc.data().routes);
+            console.log(JSON.parse(localStorage.getItem(`user-plans-${session.user.email}`)));
+  
           });
       }else{
-        const res = fire.firestore().collection('users').doc(session.user.email).set({ name: session.user.name, routes:[] });
+        const res = fire.firestore().collection('users').doc(session.user.email).set({});
        // console.log(fire.firestore().collection('users').doc(session.user.email));
       }
     });
@@ -73,8 +77,15 @@ const Layout = ({ children, title = "Tawowu" }) => {
           <div className="">
             {session && (
               <>
-                <Link href={`/plans`} class="nav-link user">
+                <Link href={`/my-plans`} class="nav-link user">
                   <li className="nav-link"><img className="user-image " src={session.user.image} /></li>
+                </Link>
+              </>
+            )}
+            {!session && (
+              <>
+                <Link href={`/my-plans`} class="nav-link user">
+                  <span type="button" className="nav-link search" ><FontAwesomeIcon icon={faUser}></FontAwesomeIcon> </span>
                 </Link>
               </>
             )}

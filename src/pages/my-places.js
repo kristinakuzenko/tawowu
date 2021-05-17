@@ -65,12 +65,6 @@ const MyPlaces = () => {
         <div className="fav-city-main-caption">
           All your favorites
         </div>
-        <div className={activeCity === "" ? 'col-6 col-sm-6 col-md-8 col-lg-9 col-xl-9' : 'none'}>
-                  <h1 className="choose-city">
-                    Choose city!
-                  </h1>
-
-                </div>
         <div className={favoriteCities().length !== -1&& favoriteCities().length !==1 ? 'container-fluid' : 'none'}>
           {favoriteCities().map((city) => (
             <div className="myPlaces-div" key={city}>

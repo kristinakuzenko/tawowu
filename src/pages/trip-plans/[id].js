@@ -219,14 +219,15 @@ const Plans = ({ city }) => {
                             <div className="row  plans-div">
                                 <div className="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 plan-col">
                                     <div className=" one-plan">
-                                        <img className="image-plan " src="{place.image}" />
-                                        <div className="plan-header">
+                                        <div className="place-name">
                                             Barcelona
                                     </div>
                                         <div className="">
-                                            <h1>Places to visit: 20</h1>
-                                            <h1>Days: 2</h1>
-                                            <h1>Money to spend: 20$</h1>
+                                            <h1 className="place-h">Places to visit: 20</h1>
+                                            <h1 className="place-h">Days: 1</h1>
+                                            <h1 className="place-h">Money to spend: 20$</h1>
+                                            <h1 className="place-h">Distance: 10km</h1>
+                                            <h1 className="place-h">Travel type: public transport</h1>
                                             <div className="btn show-plan-p show-plan-btn ">
                                                 Show
                                             </div>

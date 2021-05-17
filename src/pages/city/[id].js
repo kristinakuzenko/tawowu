@@ -366,8 +366,6 @@ const City = ({ city }) => {
                         <h1 className="place-p">{place.price}</h1>
                         <h1 className="place-h">Location</h1>
                         <h1 className="place-p">{place.location}</h1>
-                        <h1 className="place-h">Transport</h1>
-                        <h1 className="place-p">{place.transport}</h1>
                       </div>
 
                       <div className={placeType === 2 ? 'col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8' : 'none'}>
@@ -375,15 +373,11 @@ const City = ({ city }) => {
                         <h1 className="place-p">{place.price}</h1>
                         <h1 className="place-h">Location</h1>
                         <h1 className="place-p">{place.location}</h1>
-                        <h1 className="place-h">Transport</h1>
-                        <h1 className="place-p">{place.transport}</h1>
                       </div>
 
                       <div className={placeType === 3 ? 'col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8' : 'none'}>
                         <h1 className="place-h">Location</h1>
                         <h1 className="place-p">{place.location}</h1>
-                        <h1 className="place-h">Transport</h1>
-                        <h1 className="place-p">{place.transport}</h1>
                       </div>
 
                       <div className={placeType === 4 ? 'col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8' : 'none'}>
@@ -401,42 +395,7 @@ const City = ({ city }) => {
             <div>
             </div>
           </div>
-          <div className={placeType === 6 ? 'places-div' : 'none'}>
 
-          <div className="container-fluid">
-          <Link href={`/new-plan/${city}`}>
-                        <div className="new-plan">
-                            <div className="btn filter-p filter-btn ">
-                                Create new plan
-                            </div>
-                        </div>
-                    </Link>
-            <div className="choose-plan">
-              ... or choose plan from existing :
-            </div>
-                        <div className="myPlans-div" key="{city}">
-                            <div className="row  plans-div">
-                                <div className="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 plan-col">
-                                    <div className=" one-plan">
-                                        <img className="image-plan " src="{place.image}" />
-                                        <div className="plan-header">
-                                            Barcelona
-                                    </div>
-                                        <div className="">
-                                            <h1>Places to visit: 20</h1>
-                                            <h1>Days: 2</h1>
-                                            <h1>Money to spend: 20$</h1>
-                                            <div className="btn show-plan-p show-plan-btn ">
-                                                Show
-                                            </div>
-                                        </div>
-                                     
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-          </div>
         </div>
       </div>
     ))}
