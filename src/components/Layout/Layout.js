@@ -46,10 +46,12 @@ const Layout = ({ children, title = "Tawowu" }) => {
       if (docSnapshot.exists) {
         fire.firestore().collection('users').doc(session.user.email)
           .onSnapshot((doc) => {
-            
-            localStorage.setItem(`user-plans-${session.user.email}`, doc.data().routes);
-            console.log(JSON.parse(localStorage.getItem(`user-plans-${session.user.email}`)));
-  
+         
+            if(doc.data().routes!==undefined){
+              localStorage.setItem(`user-plans-${session.user.email}`, doc.data().routes);
+              
+            }
+           
           });
       }else{
         const res = fire.firestore().collection('users').doc(session.user.email).set({});

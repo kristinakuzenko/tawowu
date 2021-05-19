@@ -247,6 +247,7 @@ const NewPlan = ({ city }) => {
             setMessageData("Please, enter plan name");
         }else{
             if(session){
+                if(localStorage.getItem(`user-plans-${session.user.email}`)!==null){
                 JSON.parse(localStorage.getItem(`user-plans-${session.user.email}`)).forEach(item=>{
                     if(name===item.name){
                         setMessageData("You already have this plan name");
@@ -254,12 +255,11 @@ const NewPlan = ({ city }) => {
                         togglePage(e, 2);
                     }
                 })
+            }else{
+                togglePage(e, 2);
+            }
             }
         }
-        console.log(messageData);
-        
-        
-    
 }
 
 const [distance, setDistance] = useState(0);
@@ -272,7 +272,7 @@ const [messageDataValidate, setMessageDataValidate] = useState("");
        if (session) {
         setMessageDataValidate("");
             const route=[];
-            const route_transport=[]
+            const route_transport=[];
             route.push(JSON.parse(localStorage.getItem(`route-${name}`)));
             route_transport.push(JSON.parse(localStorage.getItem(`routes-transport-${name}`)));
             console.log(route_transport[0]);
@@ -284,55 +284,64 @@ const [messageDataValidate, setMessageDataValidate] = useState("");
                     dist+=item.distance.value;
                     time+=item.duration.value;
                      //setDistance(dist);
-                     console.log(time);
                  });
             }else{
                 route_transport[0].forEach(item=>{
                     dist+=item.distance;
                     time+=item.time;
                      //setDistance(dist);
-                     console.log(time);
                 })
             }
-            //console.log(favPlaces);
            favPlaces.forEach(item=>{
                 time+=item.time*60;
                 price+=item.money;
-                console.log(price);
             });
             if(time>36000*days){
                 setMessageDataValidate("Ooops, you have selected too many sightseeing places.\n Please, delete some places to continue.");
-                console.log("time") ;
+                
             }else if(budget!==""&&price>parseInt(budget)){
                 setMessageDataValidate("Ooops, you have selected too many sightseeing places for your budget.\n Please, delete some places or change your budget to continue.");
-                console.log("money") ;
+               
             }else{
                 setMessageDataValidate("")  ;
-                
-                const routes=JSON.parse(localStorage.getItem(`user-plans-${session.user.email}`));
-            const data = {
-                start: addressStart,
-                end:addressEnd,
-                city: currentCity[0],
-                name: name,
-                byCar: byCar,
-                days: days,
-                budget: budget,
-                price: price,
-                time:time,
-                dist:dist,
-                places: favPlaces,
-                route:route,
-                route_transport:route_transport
-            }
-            routes.push(data);
-            //console.log(JSON.stringify(routes));
-            localStorage.setItem(`plan-data-${name}`, JSON.stringify(data));
-            //write to database
-            var washingtonRef =  fire.firestore().collection("users").doc(session.user.email);
-            washingtonRef.update({
-                routes: JSON.stringify(routes)
-            });
+                const data = {
+                    start: addressStart,
+                    end:addressEnd,
+                    city: currentCity[0],
+                    name: name,
+                    byCar: byCar,
+                    days: days,
+                    budget: budget,
+                    price: price,
+                    time:time,
+                    dist:dist,
+                    places: favPlaces,
+                    route:route,
+                    route_transport:route_transport
+                };
+
+                if(localStorage.getItem(`user-plans-${session.user.email}`)!==null){
+                    console.log("lll")
+                    const routes=JSON.parse(localStorage.getItem(`user-plans-${session.user.email}`));
+                    routes.push(data);
+                    //console.log(JSON.stringify(routes));
+                    localStorage.setItem(`plan-data-${name}`, JSON.stringify(data));
+                    //write to database
+                    var washingtonRef =  fire.firestore().collection("users").doc(session.user.email);
+                    washingtonRef.update({
+                        routes: JSON.stringify(routes)
+                    });
+                }else{
+                    const routes=[];
+                    routes.push(data);
+                  
+                    localStorage.setItem(`plan-data-${name}`, JSON.stringify(data));
+                    //write to database
+                    var washingtonRef =  fire.firestore().collection("users").doc(session.user.email);
+                    washingtonRef.update({
+                        routes: JSON.stringify(routes)
+                    });
+                }
             }
             
 

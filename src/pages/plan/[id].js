@@ -24,7 +24,6 @@ import { signin, signout, useSession } from 'next-auth/client';
 const MapLoader = withScriptjs(MapGoogle);
 const Plan = ({ name }) => {
     const [session, loading] = useSession();
-    let _isMounted = false;
     const [info, setInfo] = useState([]);
     const [routePlace, setRoutePlace] = useState([]);
     const [start, setStart] = useState([]);
@@ -37,7 +36,7 @@ const r = JSON.parse(localStorage.getItem(`user-plans-${session.user.email}`));
       }
   })
   start.push(info[0].route[0][0]);
-  if(info[0].route_transport[0]!==undefined ){
+  if(info[0].route_transport[0]!==null ){
       start2.push({route:info[0].route[0][0],instructions: info[0].route_transport[0][0]});
       info[0].route_transport[0].shift();
   }
@@ -54,7 +53,7 @@ for (let i = 0; i < info[0].route[0].length; i++) {
           start_place = p;
       }
   })
-  if(info[0].route_transport[0]===undefined ){
+  if(info[0].route_transport[0]===null ){
 
   routePlace.push({ data: info[0].route[0][i], place: start_place })
   }else{
@@ -75,7 +74,7 @@ for (let i = 0; i < info[0].route[0].length; i++) {
     return <Layout title={name}>
         {info.map((cityItem) => (
 
-            <div className="city-block" key={name}>
+            <div className="city-block" key={cityItem}>
                 <div>
                     <div className="places-div">
                         <div className="city-main-caption">
@@ -93,10 +92,7 @@ for (let i = 0; i < info[0].route[0].length; i++) {
                         <div className="container-fluid ">
                             <div className=" col-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 map-container">
 
-                                                            <MapLoader className="fixed" data={[info[0].city, info[0].places, "WALKING",name]}
-                                        googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${key}&libraries=places`}
-                                        loadingElement={<div style={{ height: `100%` }} />}
-                                    />
+
    
                             </div>
                             <div className={info[0].byCar !== "Public transport / walking"? "city-places-div col-12 col-sm-12 col-md-12 col-lg-7 col-xl-7":"none"}>
@@ -115,9 +111,9 @@ for (let i = 0; i < info[0].route[0].length; i++) {
                                     
 
                                     {routePlace.map((route) => (
-                                        <div>
+                                        <div key={route}>
                                             <div className="plan-description ">
-                                                <div className="one-place"key={route.place.name}>
+                                                <div className="one-place">
                                                     <h1 className="place-name"> {route.place.name} </h1>
                                                     <p className="place-desc">{route.place.description} </p>
                                                     <div className="container-fluid ">
@@ -161,11 +157,11 @@ for (let i = 0; i < info[0].route[0].length; i++) {
                                     
                                    
 
-                                    {info[0].route_transport[0]!==undefined &&routePlace.map((route) => (
-                                         <div className="fixed-div">
+                                    {info[0].route_transport[0]!==null &&routePlace.map((route) => (
+                                         <div className="fixed-div" key={route}>
                                         <div>
                                             <div className="plan-description ">
-                                                <div className="one-place"key={route.place.name}>
+                                                <div className="one-place">
                                                     <h1 className="place-name"> {route.place.name} </h1>
                                                     <p className="place-desc">{route.place.description} </p>
                                                     <div className="container-fluid ">
