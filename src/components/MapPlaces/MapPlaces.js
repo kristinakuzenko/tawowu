@@ -19,6 +19,10 @@ class LocationSearchInput extends React.Component {
       <div className="autocomplete">
         <GooglePlacesAutocomplete
           apiKey={apiKey} 
+          options={{
+            types: ["(regions)"],
+            componentRestrictions: { country: "us" },
+          }}
           selectProps={{
             value: this.props.address,
             onChange: this.setValue,

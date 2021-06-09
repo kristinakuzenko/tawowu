@@ -3,19 +3,27 @@
         {
             "city":"Barcelona",
             "name":"1 Day in Barcelona",
+            "money":"100$",
+            "tips":"We recommend to buy daily transport ticket",
+            "days":1,
+            "places":3,
+            "photo":"https://kristinakuzenko.github.io/images/sagrada.jpg",
+            "type":"Public transport",
             "plan":[{
                 "place":"La Sagrada Familia",
-                "description":"15 min walk"
+                "description":"15 min walk",
+                "number":1
             },
             {
-                "place":2,
-                "description":"take bus"
+                "place":"Museu Picasso",
+                "description":"take bus",
+                "number":2
             },
             {
-                "place":3,
-                "description":"get by metro"
+                "place":"Museu Nacional d'Art de Catalunya Rooftop",
+                "description":"get by metro",
+                "number":3
             }]
-
         }
     ]
     }

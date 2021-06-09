@@ -29,20 +29,20 @@ const markers = (locations, handler) => {
 const MapLoader = withScriptjs(GoogleMap);
 const Plans = ({ city }) => {
   let _isMounted = false;
+  const [routes, setRoutes] = useState([]);
   const [cities, setCities] = useState([]);
-  const [places, setPlaces] = useState([]);
-  const [favPlaces, setFavPlaces] = useState([]);
+
   React.useEffect(() => {
-
-
-    Object.keys(localStorage).filter(key => key.indexOf('tawowu-fav') !== -1).forEach((key) => {
-      favPlaces.push(JSON.parse(localStorage.getItem(key)));
-    });
-
-    setFavPlaces([...favPlaces]);
-
     _isMounted = true;
-
+    fire.firestore()
+      .collection('routes')
+      .onSnapshot(snap => {
+        const routes = snap.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        _isMounted && setRoutes(routes);
+      });
     fire.firestore()
       .collection('cities')
       .onSnapshot(snap => {
@@ -53,191 +53,58 @@ const Plans = ({ city }) => {
         _isMounted && setCities(cities);
       });
 
-    fire.firestore()
-      .collection('places')
-      .onSnapshot(snap => {
-        const places = snap.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
-        _isMounted && setPlaces(places);
-      });
-
-
     return function cleanup() {
       _isMounted = false;
     }
   }, [])
-  const Map = dynamic(() => import("../../components/Map/Map"), {
-    loading: () => "Loading...",
-    ssr: false
-  });
-
   const currentCity = cities.filter(cityItem => cityItem.city.toLowerCase() === city.toLowerCase());
-  const cityPlaces = () => places.filter(place => place.city.toLowerCase() === city.toLowerCase());
+  const cityRoutes = () => routes.filter(route => route.city.toLowerCase() === city.toLowerCase());
 
-
-  const [activeFilters, setActiveFilters] = useState([]);
-  const [activeFilter, setActiveFilterOne] = useState([]);
-
-  //filter for camera, art...
-  const toggleFilterOne = (e, filterValue) => {
-    e.preventDefault();
-    const index = activeFilter.indexOf(filterValue);
-    const index2 = activeFilters.indexOf(filterValue);
-    if (index > -1) {
-      activeFilter.splice(index, 1);
-    } else {
-      activeFilter.splice(0, activeFilter.length);
-      activeFilter.push(filterValue);
-    }
-    setActiveFilterOne([...activeFilter])
-  }
-
-  const sixFiltersPlaces = (type) => {
-    let result = [...cityPlaces().filter(place => place.type.indexOf(type) !== -1)];
-    if (activeFilter.length > 0) {
-      activeFilter.forEach(filter => {
-        result = result.filter(pl => pl.filter.indexOf(filter) !== -1)
-        //result = result.filter(pl=>pl[filter.name].indexOf(filter.value)!==-1)
-      })
-    }
-    return result;
-
-  }
-
-  //filters for everything
-  const toggleFilter = (e, filterValue) => {
-    e.preventDefault();
-    const index = activeFilters.indexOf(filterValue);
-    if (index !== -1) {
-      activeFilters.splice(index, 1);
-      setActiveFilters([...activeFilters])
-    } else {
-      activeFilters.push(filterValue);
-      setActiveFilters([...activeFilters])
-      /*const filter={
-        name:"filter",
-        value:3
-      }*/
-
-    }
-  }
-  const clearAll = (e) => {
-    e.preventDefault();
-    activeFilters.splice(0, activeFilters.length);
-    setActiveFilters([...activeFilters]);
-  }
-
-  const allFilteredPlaces = (type) => {
-    let result = [...sixFiltersPlaces(type)];
-    if (activeFilters.length > 0) {
-      activeFilters.forEach(filter => {
-        result = result.filter(pl => pl.filter.indexOf(filter) !== -1)
-        //result = result.filter(pl=>pl[filter.name].indexOf(filter.value)!==-1)
-      })
-    }
-    return result;
-  }
-
-  const [keyword, setKeyword] = useState("");
-  const onInputChange = (e) => {
-    e.preventDefault();
-    setKeyword(e.target.value);
-  };
-  const filteredPlaces = (type) => {
-    const needle = keyword ? keyword.toLowerCase() : '';
-    return allFilteredPlaces(type).filter((place) => place.name.toLowerCase().indexOf(needle) !== -1);
-  };
-  const filteredPlacesValue = () => {
-    const needle = keyword ? keyword.toLowerCase() : '';
-    return filteredPlaces(placeType).filter((place) => place.type.indexOf(4) === -1);
-  };
-
-  const addToFavorites = (e, value, place) => {
-    e.preventDefault();
-    localStorage.setItem(`tawowu-fav-${value}`, JSON.stringify(place));
-    favPlaces.push(place);
-    setFavPlaces([...favPlaces]);
-  }
-  const removeFromFavorites = (e, value, place) => {
-    e.preventDefault();
-    localStorage.removeItem(`tawowu-fav-${value}`);
-    const index = favPlaces.indexOf(place);
-    favPlaces.splice(index, 1);
-    setFavPlaces([...favPlaces]);
-  }
-
-  const [placeType, setPlaceType] = useState(1);
-
-  const toggleType = (e, typeValue) => {
-    e.preventDefault();
-    if (placeType !== typeValue) {
-      activeFilter.splice(0, activeFilter.length);
-      activeFilters.splice(0, activeFilters.length);
-      setActiveFilterOne([...activeFilter]);
-      setActiveFilters([...activeFilters]);
-      setKeyword("");
-      setAllTogether(-1);
-    }
-    setPlaceType(typeValue);
-  }
-  const [allTogether, setAllTogether] = useState(-1);
-
-  const toggleAllTogether = (e, value) => {
-    e.preventDefault();
-    setAllTogether(value);
-  }
-
-
-  const allPlaces = () => cityPlaces().filter(place => place.type.indexOf(4) === -1);
-
-
-  const mySortingFunction = (a, b) => a.popularity.localeCompare(b.popularity);
   return <Layout title={city}>
 
     {currentCity.map((cityItem) => (
       <div className="city-block" key={cityItem.city}>
-
-
-
         <div>
           <div className="places-div">
 
-          <div className="container-fluid">
-          <Link href={`/new-plan/${city}`}>
-                        <div className="new-plan">
-                            <div className="btn filter-p filter-btn ">
-                                Create new plan
+            <div className="container-fluid">
+              <Link href={`/new-plan/${city}`}>
+                <div className="new-plan">
+                  <div className="btn filter-p filter-btn ">
+                    Create new plan
                             </div>
-                        </div>
-                    </Link>
-            <div className="choose-plan">
-              ... or choose plan from existing :
+                </div>
+              </Link>
+              <div className="choose-plan">
+                ... or choose plan from existing :
             </div>
-                        <div className="myPlans-div" key="{city}">
-                            <div className="row  plans-div">
-                                <div className="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 plan-col">
-                                    <div className=" one-plan">
-                                        <div className="place-name">
-                                            Barcelona
-                                    </div>
-                                        <div className="">
-                                            <h1 className="place-h">Places to visit: 20</h1>
-                                            <h1 className="place-h">Days: 1</h1>
-                                            <h1 className="place-h">Money to spend: 20$</h1>
-                                            <h1 className="place-h">Distance: 10km</h1>
-                                            <h1 className="place-h">Travel type: public transport</h1>
-                                            <div className="btn show-plan-p show-plan-btn ">
-                                                Show
-                                            </div>
-                                        </div>
-                                     
-                                    </div>
-                                </div>
-                            </div>
+              {cityRoutes().map((route) => (
+                <div className="myPlans-div" key="{city}">
+                  <div className="row plans-div">
+                    <div className="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 plan-col">
+                      <div className="one-plan">
+                        <div className="place-name">
+                          {route.name}
                         </div>
+                        <div className="">
+                          <h1 className="place-h">Money to spend: {route.money}</h1>
+                          <h1 className="place-h">Days: {route.days}</h1>
+                          <h1 className="place-h">Travel type: {route.type}</h1>
+                          <h1 className="place-h">Places to visit: {route.places}</h1>
+
+                          <Link href={`/default-plan/${route.name}`}>
+                            <div className="btn show-plan-p show-plan-btn ">
+                              Show
+                            </div>
+                          </Link>
+                        </div>
+
+                      </div>
                     </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>

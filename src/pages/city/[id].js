@@ -87,7 +87,7 @@ const City = ({ city }) => {
 
   const [address, setAddress] = useState([]);
 
-  const handleChange =(address)=>{
+  const handleChange = (address) => {
     setAddress(address);
   }
   const handleSelect = (address) => {
@@ -229,9 +229,9 @@ const City = ({ city }) => {
             <p onClick={(e) => toggleType(e, 4)} className={placeType === 4 ? 'filter-name active' : 'filter-name '} >&nbsp;Transport&nbsp;</p>
           </div>
           <Link href={`/trip-plans/${city}`}>
-          <div className="col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2 filter-item ">
-            <p  className={placeType === 6 ? 'filter-name active' : 'filter-name '}>&nbsp;Trip plans&nbsp;</p>
-          </div>
+            <div className="col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2 filter-item ">
+              <p className={placeType === 6 ? 'filter-name active' : 'filter-name '}>&nbsp;Trip plans&nbsp;</p>
+            </div>
           </Link>
 
 
@@ -240,10 +240,10 @@ const City = ({ city }) => {
         <div>
 
 
-          <div className={placeType === 5 ? 'none' : 'places-div'}>
+          <div className={placeType === 4 ? 'none' : 'places-div'}>
 
             <div className="container-fluid ">
-              <div className=" col-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 map-container">
+              <div className={placeType === 4 ? ' none' : 'col-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 map-container'} >
                 <div className="city-main-caption">
                   {cityItem.city}
                 </div>
@@ -255,11 +255,11 @@ const City = ({ city }) => {
                   <p className={allTogether === 1 && placeType === 1 ? 'continent-filter-p ' : 'none'}  >&nbsp;Show only sightseeing&nbsp; </p>
                   <p className={allTogether === 1 && placeType === 3 ? 'continent-filter-p ' : 'none'}  >&nbsp;Show only shopping&nbsp; </p>
                 </div>
-                <Map className="fixed" locations={ allTogether===-1?filteredPlacesValue():allPlaces()} latitude={currentCity[0].latitude} longitude={currentCity[0].longitude} zoom={12} />
+                <Map className="fixed" locations={allTogether === -1 ? filteredPlacesValue() : allPlaces()} latitude={currentCity[0].latitude} longitude={currentCity[0].longitude} zoom={12} />
 
               </div>
-              <div className="city-places-div col-12 col-sm-12 col-md-12 col-lg-7 col-xl-7">
-                <div className="fixed-div">
+              <div className=" col-12 col-sm-12 col-md-12 col-lg-7 col-xl-7">
+                <div>
                   <div className={placeType === 4 ? ' none' : 'input-city'}>
                     <SearchInput
                       placeholder="Search for a place"
@@ -345,57 +345,68 @@ const City = ({ city }) => {
                     </div>
                   </div>
                 </div>
-                {filteredPlaces(placeType).filter(place => place.type.indexOf(placeType) !== -1).sort(mySortingFunction).map((place) => (
-                  <div className="one-place" key={place.name}>
-                    <h1 className="place-name"> {place.name} </h1>
-                    <p className="place-desc">{place.description} </p>
-                    <div className="container-fluid ">
-                      <div className="image-city-div col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                        <img className="image-city " src={place.image} />
+                <div className="city-places-div">
+                  {filteredPlaces(placeType).filter(place => place.type.indexOf(placeType) !== -1).sort(mySortingFunction).map((place) => (
+                    <div className="one-place" key={place.name}>
+                      <h1 className="place-name"> {place.name} </h1>
+                      <p className="place-desc">{place.description} </p>
+                      <div className="container-fluid ">
+                        <div className="image-city-div col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                          <img className="image-city " src={place.image} />
+                        </div>
+
+                        <div className={placeType !== 4 && favPlaces.indexOf(place) === -1 ? 'btn filter-p filter-btn ' : 'none'} onClick={(e) => addToFavorites(e, place.name, place)}>
+                          Add to favorites
+                      </div>
+                        <div className={placeType !== 4 && favPlaces.indexOf(place) !== -1 ? 'btn filter-p filter-btn ' : 'none'} onClick={(e) => removeFromFavorites(e, place.name, place)}>
+                          Remove from favorites
                       </div>
 
-                      <div className={placeType !== 4 && favPlaces.indexOf(place) === -1 ? 'btn filter-p filter-btn ' : 'none'} onClick={(e) => addToFavorites(e, place.name, place)}>
-                        Add to favorites
-                      </div>
-                      <div className={placeType !== 4 && favPlaces.indexOf(place) !== -1 ? 'btn filter-p filter-btn ' : 'none'} onClick={(e) => removeFromFavorites(e, place.name, place)}>
-                        Remove from favorites
+                        <div className={placeType === 1 ? 'place-div col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8' : 'none'} >
+                          <h1 className="place-h">Price </h1>
+                          <h1 className="place-p">{place.price}</h1>
+                          <h1 className="place-h">Location</h1>
+                          <h1 className="place-p">{place.location}</h1>
+                        </div>
+
+                        <div className={placeType === 2 ? 'place-div col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8' : 'none'}>
+                          <h1 className="place-h">&nbsp; Average bill price</h1>
+                          <h1 className="place-p">{place.price}</h1>
+                          <h1 className="place-h">Location</h1>
+                          <h1 className="place-p">{place.location}</h1>
+                        </div>
+
+                        <div className={placeType === 3 ? 'place-div col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8' : 'none'}>
+                          <h1 className="place-h">Location</h1>
+                          <h1 className="place-p">{place.location}</h1>
+                        </div>
+
+
                       </div>
 
-                      <div className={placeType === 1 ? 'col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8' : 'none'} >
-                        <h1 className="place-h">Price </h1>
-                        <h1 className="place-p">{place.price}</h1>
-                        <h1 className="place-h">Location</h1>
-                        <h1 className="place-p">{place.location}</h1>
-                      </div>
+                      <h1 className={placeType !== 4 ? 'place-h-tips' : 'none'}>Tips</h1>
+                      <h1 className={placeType !== 4 ? 'place-p' : 'none'}>{place.tips}</h1>
 
-                      <div className={placeType === 2 ? 'col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8' : 'none'}>
-                        <h1 className="place-h">&nbsp; Average bill price</h1>
-                        <h1 className="place-p">{place.price}</h1>
-                        <h1 className="place-h">Location</h1>
-                        <h1 className="place-p">{place.location}</h1>
-                      </div>
-
-                      <div className={placeType === 3 ? 'col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8' : 'none'}>
-                        <h1 className="place-h">Location</h1>
-                        <h1 className="place-p">{place.location}</h1>
-                      </div>
-
-                      <div className={placeType === 4 ? 'col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8' : 'none'}>
-                        <h1 className="place-p">{place.price}</h1>
-                      </div>
                     </div>
-
-                    <h1 className={placeType !== 4 ? 'place-h' : 'none'}>Tips</h1>
-                    <h1 className={placeType !== 4 ? 'place-p' : 'none'}>{place.tips}</h1>
-
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
             <div>
             </div>
           </div>
-
+          <div className={placeType !== 4 ? 'none' : 'places-div'}>
+          <div className='transport-div'>
+            {filteredPlaces(placeType).filter(place => place.type.indexOf(placeType) !== -1).sort(mySortingFunction).map((place) => (
+              <div className="transport-item">
+                 <h1 className="place-name"> {place.name} </h1>
+                <h1 className="place-p">{place.price}</h1>
+                </div>
+               
+              
+            ))}
+            </div>
+          </div>
         </div>
       </div>
     ))}

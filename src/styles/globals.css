@@ -345,12 +345,10 @@ font-size: 30px;
   height: 70px;
 }
 .country-page{
-  
   background-image: linear-gradient( 370deg,#fc935fb9  0%, #5e2c2c 120%);
 }
 .country-page2{
   background-image: linear-gradient(370deg,  #fc935f  0%, #5e2c2c 120%);
-
   min-height: calc(100vh - 50px);
 }
 
@@ -369,12 +367,23 @@ font-size: 30px;
   margin-bottom: 50px;
   margin-top: 60px;
 }
-
+.image-city-plan{
+  width: 45vh;
+  height: 37vh;
+  margin-bottom: 50px;
+  margin-top: 60px;
+}
 .city-main-img{
   background: url('../../public/background.jpg');
   filter: blur(3px);
   -webkit-filter: blur(3px);
   height: 50vh;
+  width: 100%;
+}
+.plan-main-img{
+  filter: blur(3px);
+  -webkit-filter: blur(3px);
+  height: 40vh;
   width: 100%;
 }
 .city-main-caption{
@@ -385,6 +394,7 @@ font-size: 30px;
   letter-spacing: -.02em;
   text-align: center;
 }
+
 .fav-city-main-caption{
   font-family: SangbleuSans,serif;
   color: white;
@@ -454,17 +464,17 @@ font-size: 30px;
   display: none;
 }
 .places-div{
-  height: 100%;
+  min-height: 88vh;
   padding-bottom: 50px;
   background-image: linear-gradient( 370deg,#fc935fb9  0%,  #6c3535 150%);
 }
 .one-place{
+  border-bottom: 3px solid black;
   text-align: center;
   padding-top: 50px;
   padding-left: 50px;
-  padding-right: 50px;
- 
-  
+  padding-bottom: 50px;
+  padding-right: 50px; 
 }
 .filter-btn{
   color: black;
@@ -495,12 +505,13 @@ font-size: 30px;
   box-shadow:0 0 50px #faddcf;  
 }
 .icon-container{
-margin: 40px 50px 150px 50px;
+margin: 40px 50px 50px 50px;
 }
 .icon-container.active{
   display: none;
-  }
-  .place-name{
+}
+.place-name{
+  padding-top: 30px;
   font-size: 40px;
   font-family: 'Courier New', Courier, monospace;
   font-weight: 600;
@@ -509,8 +520,21 @@ margin: 40px 50px 150px 50px;
   font-size: 20px;
   font-family: Arial, Helvetica, sans-serif;
 }
+.place-details{
+  margin-top: 90px;
+  font-size: 30px;
+  cursor: pointer;
+  font-family: 'Courier New', Courier, monospace;
+}
+.place-details:hover{
+  text-decoration: underline;
+}
 .place-h{
   margin-top: 30px;
+  font-size: 30px;
+  font-family: 'Courier New', Courier, monospace;
+}
+.place-h-tips{
   font-size: 30px;
   font-family: 'Courier New', Courier, monospace;
 }
@@ -641,7 +665,7 @@ margin: 40px 50px 150px 50px;
   position: fixed;
 }
 .city-places-div{
-  height:86vh; 
+  height:61vh; 
   margin-top: 10px;
   overflow-y: scroll;
   -ms-overflow-style: none;  /* IE and Edge */
@@ -791,6 +815,7 @@ border-radius: 10px;
   text-align: center;
 }
 .plan-description{
+  border-bottom: 3px solid black;
   text-align: center;
 }
 .plan-h{
@@ -877,18 +902,78 @@ border-radius: 10px;
   width: 50%;
   color: #4d2121;
 }
+.place-div{
+  padding-left: 100px;
+}
+.transport-div{
+  min-height: 76vh;
+  width: 100%;
+  text-align: center;
+}
+.transport-item{
+  padding-top: 50px;
+  padding-bottom: 50px;
+  border-bottom: 3px solid black;
+}
+.route{
+  text-align: center;
+}
+.plan-one-place{
+  padding-bottom: 20px;
+  border-bottom: 3px solid black;
+}
+.plan-top{
+  padding-top: 30px;
+}
+.route-tips{
+  text-align: center;
+}
+.border-plan{
+  border-top-left-radius: 37px 140px;
+  border-top-right-radius: 23px 130px;
+  border-bottom-left-radius: 110px 19px;
+  border-bottom-right-radius: 120px 24px;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  display: block;
+  position: relative;
+  border: solid 3px black;
+  padding: 40px 60px;
+  max-width: 80vh;
+  width: 70%;
+  margin: 100px auto 0;
+  font-size: 17px;
+  line-height: 28px;
+  transform: rotate(-1deg);
+  box-shadow: 3px 15px 8px -10px rgba(0, 0, 0, 0.3);
+  transition: all 0.13s ease-in;
+}
+.border-plan:hover {
+  transform: translateY(-20px) rotate(4deg);
+  box-shadow: 3px 15px 8px -10px rgba(0, 0, 0, 0.3);
+}
+.box{
+  padding-top: 5px;
+  text-align: center;
+  margin:25px;
+  height:max-content;
+  width:max-content;
+  border: solid black;
+  border-color: black;
+  float:left; 
+  border-width: 3px 4px 3px 5px;
+  border-radius:95% 4% 92% 5%/4% 95% 6% 95%;
+}
+.detail-plan{
+  margin-top: 100px;
+text-align: center;
+}
+.place-image{
+  width:40vw;
+}
+.info-place{
+  padding-top: 60px;
+}
+.place-page{
+  text-align: center;
+  padding-left: 10vw;
+}
