@@ -319,7 +319,7 @@ const [messageDataValidate, setMessageDataValidate] = useState("");
                     route:route,
                     route_transport:route_transport
                 };
-
+                const res = fire.firestore().collection('user-routes').doc(`${session.user.email}-${name}`).set({});
                 if(localStorage.getItem(`user-plans-${session.user.email}`)!==null){
                     console.log("lll")
                     const routes=JSON.parse(localStorage.getItem(`user-plans-${session.user.email}`));
@@ -343,9 +343,6 @@ const [messageDataValidate, setMessageDataValidate] = useState("");
                     });
                 }
             }
-            
-
-
           }
      if(messageDataValidate===""){
         window.location.href = `/plan/${name} `;
