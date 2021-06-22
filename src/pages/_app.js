@@ -5,9 +5,11 @@ import { config } from "@fortawesome/fontawesome-svg-core";
 import { Provider } from 'next-auth/client';
 import key from "../components/GoogleApiKey/GoogleApiKey";
 import Head from 'next/head'
+import { appWithTranslation } from 'next-i18next';
 config.autoAddCss = false; // Tell Font Awesome to skip adding the CSS automatically since it's being imported above
 
-function MyApp({ Component, pageProps }) {
+
+const MyApp=({ Component, pageProps }) =>{
     const { session } = pageProps;
     return (
         <>
@@ -43,4 +45,4 @@ function MyApp({ Component, pageProps }) {
     );
 }
 
-export default MyApp;
+export default appWithTranslation(MyApp);

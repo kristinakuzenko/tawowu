@@ -44,6 +44,22 @@ const DefaultPlan = ({ name }) => {
         }
     }, [])
     const currentPlace = places.filter(place => place.name.toLowerCase() === name.toLowerCase());
+    const checkRoute = (e) => {
+        const service = new google.maps.places.PlacesService( document.getElementById('map'));
+        service.getDetails(
+                {
+                    placeId: 'ChIJ68aBlEKuEmsRHUA9oME5Zh0'
+                },
+                (result, status) => {
+                  if (status === google.maps.places.PlacesServiceStatus.OK) {
+                    localStorage.setItem(`infoPlace-${name}`, JSON.stringify(result));
+                    Object.keys(localStorage).filter(key => key.indexOf(`infoPlace-${name}`) !== -1).forEach((key) => {
+                      console.log(JSON.parse(localStorage.getItem(key)));
+                  });
+                  } 
+                }
+              );
+    }
 
     return <Layout title={name}>
 
@@ -51,9 +67,10 @@ const DefaultPlan = ({ name }) => {
             <div className="city-block" key={place}>
                 <div>
                     <div className="places-div">
-                    <div className="city-main-caption info-place">
+                    <div onClick={(e) => checkRoute(e)} className="city-main-caption info-place">
                         {place.name}
                     </div>
+                    <div id="map"></div>
                     <div className="container-fluid info-place ">
                         <div className="col-12 col-sm-12 col-md-5 col-lg-5 col-xl-5 ">
                         <img className="place-image" src={place.image} />
