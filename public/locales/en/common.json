@@ -1,3 +1,13 @@
 {
-    "h": "Welcome to Tawowu travel world"
+    "main-h-1": "Welcome to Tawowu",
+    "main-h-2": "travel world",
+    "change-language":"Change language",
+    "africa":"Africa",
+    "asia":"Asia",
+    "australia":"Australia",
+    "europe":"Europe",
+    "northa":"North America",
+    "southa":"South America",
+    "signin":"Sing in",
+    "signout":"Sign out"
 }

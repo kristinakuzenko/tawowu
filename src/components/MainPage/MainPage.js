@@ -1,17 +1,20 @@
+import { useTranslation } from 'next-i18next'
+
 const MainPage = ({ ...rest }) => {
+       const { t } = useTranslation('common')
        return (
               <div>
                      <div className="main-block "> 
                      </div>
                      <div className="main-header">
                             <div>
-                                   <span>Welcome </span>
-                                   <span>to </span>
-                                   <span>Tawowu </span>
+                                   <span>{t('main-h-1')}</span>
                             </div>
                             <div>
-                                   <span>travel </span>
-                                   <span>world</span>
+                                   <span>{t('main-h-2')}</span>
+                            </div>
+                            <div className="btn filter-p filter-btn ">
+                            {t('change-language')}
                             </div>
                      </div>
                      <div id="container"></div>

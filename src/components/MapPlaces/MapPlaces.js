@@ -21,7 +21,7 @@ class LocationSearchInput extends React.Component {
           apiKey={apiKey} 
           options={{
             types: ["(regions)"],
-            componentRestrictions: { country: "us" },
+            componentRestrictions: { country: "sp" },
           }}
           selectProps={{
             value: this.props.address,

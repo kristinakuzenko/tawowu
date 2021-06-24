@@ -969,6 +969,7 @@ text-align: center;
 }
 .place-image{
   width:40vw;
+  height: 70vh;
 }
 .info-place{
   padding-top: 60px;
@@ -977,3 +978,10 @@ text-align: center;
   text-align: center;
   padding-left: 10vw;
 }
+.alert{
+  font-family: SangbleuSans,serif;
+  margin-left: 360px;
+  font-size: 20px;
+  color: #cc0000;
+}
+

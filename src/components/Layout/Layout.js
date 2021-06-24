@@ -7,6 +7,7 @@ import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { useState } from 'react';
 import fire from '../../config/fire-config';
 import { signin, signout, useSession } from 'next-auth/client';
+import { useTranslation } from 'next-i18next'
 
 const orderBy = (countries) => {
   return countries.sort((a, b) => (a.name > b.name ? 1 : -1));
@@ -14,7 +15,7 @@ const orderBy = (countries) => {
 const continents=[{name:"Africa"},{name:"Asia"},{name:"Australia"},{name:"Europe"},{name:"North America"},{name:"South America"}];
  
 const Layout = ({ children, title = "Tawowu" }) => {
-
+  const { t } = useTranslation('common')
   let _isMounted = false;
   const [countries, setCountries] = useState([]);
   const [users, setUsers] = useState([]);
@@ -103,7 +104,7 @@ const Layout = ({ children, title = "Tawowu" }) => {
                 {continents.map((continent) => (
                   <li className="nav-item dropdown" key={continent.name}>
                     <Link href={`/continent/${continent.name} `} key={continent.name}>
-                      <a className="nav-link " data-toggle="dropdown"> {continent.name} </a>
+                      <a className="nav-link " data-toggle="dropdown"> {t(continent.name)} </a>
                     </Link>
                     <ul className="dropdown-menu  " id="navbarResponsive">
                       {countries.filter((country) => country.continent.toLowerCase() == continent.name.toLowerCase()).map((countries) => (
@@ -120,7 +121,7 @@ const Layout = ({ children, title = "Tawowu" }) => {
                       onClick={(e) => {
                         e.preventDefault();
                         signin();
-                      }}>Sign in
+                      }}>{t("signin")}
                     </a>
                   </li>
                 )}
@@ -131,7 +132,7 @@ const Layout = ({ children, title = "Tawowu" }) => {
                         onClick={(e) => {
                           e.preventDefault();
                           signout();
-                        }}>Sign out
+                        }}>{t("signout")}
                       </a>
                     </li>
                   </>

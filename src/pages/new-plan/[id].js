@@ -647,7 +647,7 @@ const [messageDataValidate, setMessageDataValidate] = useState("");
                                     onChange={onInputNameChange}
                                     value={name}
                                 />
-
+                        <h1 className="alert"> {messageData}</h1>
                             </div>
                             
 

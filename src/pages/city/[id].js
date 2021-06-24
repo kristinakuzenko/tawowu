@@ -348,7 +348,9 @@ const City = ({ city }) => {
                 <div className="city-places-div">
                   {filteredPlaces(placeType).filter(place => place.type.indexOf(placeType) !== -1).sort(mySortingFunction).map((place) => (
                     <div className="one-place" key={place.name}>
+                      <Link href={`/place/${place.name}`}>
                       <h1 className="place-name"> {place.name} </h1>
+                      </Link>
                       <p className="place-desc">{place.description} </p>
                       <div className="container-fluid ">
                         <div className="image-city-div col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
